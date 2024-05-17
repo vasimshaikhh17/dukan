@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide === slides.length - 1 ? 0 : prevSlide + 1));
-    }, 7000); // Change 5000 to adjust the interval (5 seconds)
+    }, 5000); // Change 5000 to adjust the interval (5 seconds)
     return () => clearInterval(interval);
   }, [slides.length]);
 
@@ -94,16 +94,16 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: false
     },
-  
+
     {
       id: 2,
       name: "Basic Tee",
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: true
     },
     {
       id: 3,
@@ -111,7 +111,7 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: true
     },
     {
       id: 4,
@@ -119,7 +119,7 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: true
     },
     {
       id: 5,
@@ -127,7 +127,7 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: false
     },
     {
       id: 6,
@@ -135,7 +135,7 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: false
     },
     {
       id: 7,
@@ -143,7 +143,8 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#", inWishlist: true
+
     },
     {
       id: 8,
@@ -151,9 +152,10 @@ const Home = () => {
       color: "Black",
       price: "$35",
       imageSrc: "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg",
-      link: "#"
+      link: "#",
+      inWishlist: true
     },
-  
+
   ];
 
 
@@ -167,50 +169,52 @@ const Home = () => {
 
       {/* // --------------------image Slider ----------------------------- */}
 
-      <div className="relative w-full">
-        {/* Carousel wrapper */}
-        <div className="relative h-56 overflow-hidden  md:h-96">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'
-                }`}
-            >
-              <img
-                src={slide}
-                className="w-full h-full object-cover object-top"
-                alt={`Slide ${index + 1}`}
-              />
-            </div>
-          ))}
-        </div>
-
-        {/* Controllers */}
-        <button
-          className="absolute top-1/2 transform -translate-y-1/2 left-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
-          onClick={goToPrevSlide}
-        >
-          <i className="ri-arrow-left-s-line text-lg font-bold"></i>
-        </button>
-        <button
-          className="absolute top-1/2 transform -translate-y-1/2 right-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
-          onClick={goToNextSlide}
-        >
-          <i className="ri-arrow-right-s-line text-lg font-bold"></i>
-        </button>
-
-        {/* Dots */}
-        <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
-          {slides.map((_, index) => (
-            <button
-              key={index}
-              className={`w-3 h-3 rounded-full bg-gray-400 ${index === currentSlide ? 'bg-gray-800' : ''
-                }`}
-              onClick={() => goToSlide(index)}
+         <div className="relative w-full pt-16">
+      {/* Carousel wrapper */}
+      <div className="relative h-56 overflow-hidden md:h-96">
+        {slides.map((slide, index) => (
+          <div
+            key={index}
+            className={`absolute w-full h-full transition-opacity duration-700 ease-in-out ${
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <img
+              src={slide}
+              className="w-full h-full object-cover object-top"
+              alt={`Slide ${index + 1}`}
             />
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
+
+      {/* Controllers */}
+      <button
+        className="absolute top-1/2 transform -translate-y-1/2 left-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
+        onClick={goToPrevSlide}
+      >
+        <i className="ri-arrow-left-s-line text-lg font-bold"></i>
+      </button>
+      <button
+        className="absolute top-1/2 transform -translate-y-1/2 right-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
+        onClick={goToNextSlide}
+      >
+        <i className="ri-arrow-right-s-line text-lg font-bold"></i>
+      </button>
+
+      {/* Dots */}
+      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            className={`w-3 h-3 rounded-full bg-gray-400 ${
+              index === currentSlide ? "bg-gray-800" : ""
+            }`}
+            onClick={() => goToSlide(index)}
+          />
+        ))}
+      </div>
+    </div>
       {/* // --------------------image Slider ----------------------------- */}
 
 
@@ -245,31 +249,37 @@ const Home = () => {
       {/* ...................................product----------------------------- */}
 
       <div className="bg-white">
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center">Our Latest Collection</h2>
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
-            <div className="group relative" key={product.id}>
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none  lg:h-80 transform transition-transform duration-300 ease-in-out group-hover:scale-105">
-                <img src={product.imageSrc} alt={`Front of men's ${product.name} in ${product.color}.`} className="h-full w-full object-cover object-center lg:h-full lg:w-full" />
-              </div>
-              <div className="mt-4 flex justify-between">
-                <div>
-                  <h3 className="text-sm text-gray-700">
-                    <Link href={product.link}>
-                      <span aria-hidden="true" className="absolute inset-0"></span>
-                      {product.name}
-                    </Link>
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+          <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center">Our Latest Collection</h2>
+          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+            {products.map((product) => (
+              <div className="group relative" key={product.id}>
+                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80 transform transition-transform duration-300 ease-in-out group-hover:scale-105">
+                  <img src={product.imageSrc} alt={`Front of men's ${product.name} in ${product.color}.`} className="h-full w-full object-cover object-center lg:h-full lg:w-full" />
                 </div>
-                <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                <div className="mt-4 flex justify-between">
+                  <div>
+                    <h3 className="text-sm text-gray-700">
+                      <Link to={`/product/${product.id}`}>
+                        <span aria-hidden="true" className="absolute inset-0"></span>
+                        {product.name}
+                      </Link>
+                    </h3>
+                    <p className="mt-1 text-sm text-gray-500">{product.color}</p>
+                  </div>
+                  <div className="flex items-center">
+                    <p className="text-sm font-medium text-gray-900">{product.price}</p>
+                    <button onClick={() => toggleWishlist(product.id)} className={`ml-4 flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 focus:outline-none ${product.inWishlist ? 'text-red-500' : 'text-gray-500'}`}>
+                      <i className={`${product.inWishlist ? 'ri-heart-fill' : 'ri-heart-line'}`}></i>
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-               ))}
-               </div>
-             </div>
-           </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ...................................product----------------------------- */}
 
     </>

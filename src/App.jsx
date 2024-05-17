@@ -4,17 +4,24 @@ import Login from "./Components/Login";
 import SignUp from "./Components/SignUp";
 import ForgotPassword from "./Components/ForgotPassword";
 import Home from "./Components/Home";
-import Nav from "./Components/Nav";
+import Navbar from "./Components/Navbar/Navbar"
+import Cart from "./Components/Cart";
+import Details from "./Components/Details";
 
 const App = () => {
   return (
     <>
-    {/* <Nav/> */}
+    <Navbar/>
       <Routes>
+        
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path='/forgotpassword' element={<ForgotPassword/>}/>
+        <Route path='/cart' element={<Cart/>}/>
+        <Route path='/details' element={<Details/>}/>
+
+        
       </Routes>
     </>
   );

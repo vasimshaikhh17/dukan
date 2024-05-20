@@ -229,7 +229,6 @@ const Home = () => {
                 <div key={index} className="flex flex-col items-center">
                   <div className={`w-16 h-16 rounded-full cursor-pointer `}>
 
-                    {/*${circle.color}*/}
                     <img
                       src={circle.image}
                       alt={circle.name}

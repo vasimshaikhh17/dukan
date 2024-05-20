@@ -7,6 +7,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
+  const user = JSON.parse( localStorage.getItem("userData"));
   const handleLinkClick = () => {
     setOpen(false);
   };
@@ -28,12 +29,14 @@ const Navbar = () => {
             <input
               type="text"
               className="w-full px-2 py-1 border border-gray-800 rounded pl-10"
-              placeholder="Search..."
+              placeholder="What are you looking for...  "
             />
             <i className="ri-search-line absolute left-3 top-1 text-gray-400"></i>
           </div>
           <div className="flex gap-5 items-center">
-            <i className="ri-heart-line text-2xl"></i>
+            <Link to="/wishlist">
+              <i className="ri-heart-line text-2xl"></i>
+            </Link>
             <Link to="/cart">
               <i className="ri-shopping-cart-2-line text-2xl"></i>
             </Link>
@@ -41,12 +44,28 @@ const Navbar = () => {
               className="ri-search-line lg:hidden text-2xl"
               onClick={() => setSearchOpen(!searchOpen)}
             ></i>
-            <Link
-              to="/login"
-              className="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
-            >
-              Login
-            </Link>
+            {user === null || 0 ? (
+              <Link
+                to="/login"
+                className="bg-transparent hover:bg-blue-500 text-blue-700 hover:text-white py-1 px-2 border border-blue-500 hover:border-transparent rounded"
+              >
+                Login
+              </Link>
+            ) : (
+              <>
+
+<div className="relative tooltip ">
+  <i className="ri-user-line text-2xl cursor-pointer"></i>
+  <div className="absolute newtooltip hidden bg-gray-800 text-white text-xs py-1 px-2 rounded shadow-lg  -translate-x-1/2 transform transition-opacity duration-300 ">
+  {user.firstname}&nbsp;{user.lastname}
+  </div>
+</div>
+
+
+              </>
+
+
+            )}
             <div
               className="text-3xl md:hidden z-50"
               onClick={() => setOpen(!open)}
@@ -82,7 +101,7 @@ const Navbar = () => {
             <input
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded pl-10"
-              placeholder="Search..."
+              placeholder="What are you looking for..."
             />
             <i className="ri-search-line absolute left-3 top-2 text-gray-400"></i>
           </div>

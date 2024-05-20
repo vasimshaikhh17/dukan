@@ -1,8 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/logo.gif";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignUp = () => {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    mobile: "",
+    password: "",
+  });
+  const spinner = (
+    <div
+      class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black"
+      role="status"
+    >
+      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+        Loading...
+      </span>
+    </div>
+  );
+  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+  const [disable, setDisable] = useState(false);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // console.log(formData,'fd  ')
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setMsg(spinner);
+    setDisable(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/user/register",
+        {
+          firstname: formData.firstname,
+          lastname: formData.lastname,
+          email: formData.email,
+          mobile: formData.mobile,
+          password: formData.password,
+        }
+      );
+      if (response.data.success) {
+        // console.log(response.data)
+        toast.success("Registration successful!");
+        setMsg(response.data.msg);
+        navigate("/login");
+      } else {
+        toast.error("User already registered. Please login.");
+      }
+    } catch (error) {
+      // console.error("Error signing up:", error);
+      toast.error("User already registered. Please login.");
+      setMsg("Invalid Credentials");
+      setDisable(false);
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen flex flex-col justify-center items-center">
@@ -11,18 +71,38 @@ const SignUp = () => {
           <h2 className="text-center text-2xl font-bold text-gray-800 mb-8">
             Sign Up
           </h2>
-          <form>
-            <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Enter your name"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
-              />
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4 flex gap-4">
+              <div className="w-1/2">
+                <label htmlFor="firstname" className="block text-gray-700">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstname"
+                  name="firstname"
+                  value={formData.firstname}
+                  onChange={handleChange}
+                  placeholder="Enter your first name"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                  required
+                />
+              </div>
+              <div className="w-1/2">
+                <label htmlFor="lastname" className="block text-gray-700">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastname"
+                  name="lastname"
+                  value={formData.lastname}
+                  onChange={handleChange}
+                  placeholder="Enter your last name"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                  required
+                />
+              </div>
             </div>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700">
@@ -32,8 +112,26 @@ const SignUp = () => {
                 type="email"
                 id="email"
                 name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Enter your email"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                required
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="mobile" className="block text-gray-700">
+                Mobile
+              </label>
+              <input
+                type="text"
+                id="mobile"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                placeholder="Enter your mobile number"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                required
               />
             </div>
             <div className="mb-4">
@@ -44,40 +142,34 @@ const SignUp = () => {
                 type="password"
                 id="password"
                 name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Enter your password"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
+                required
               />
             </div>
-            {/* <div className="mb-4">
-              <label htmlFor="confirmPassword" className="block text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                placeholder="Confirm your password"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
-              />
-            </div> */}
             <div className="mb-6">
               <button
+              disabled={disable}
                 type="submit"
-                className="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700"
+                className={`  w-full  text-white py-2 px-4 rounded-lg  focus:outline-none  ${ disable ? 'bg-gray-600' : 'bg-indigo-600 focus:bg-indigo-700 hover:bg-indigo-700'}`}
               >
                 Sign Up
               </button>
+              <div className="text-center my-3">{msg}</div>
             </div>
           </form>
           <div className="mt-4 text-center">
             <p className="text-gray-700">
               Already have an account?{" "}
-              <Link to={'/login'} className="text-indigo-600 hover:underline">
+              <Link to={"/login"} className="text-indigo-600 hover:underline">
                 Login
               </Link>
             </p>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

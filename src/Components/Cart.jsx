@@ -3,150 +3,251 @@ import React from 'react'
 const Cart = () => {
   return (
     <>
-  {/* component */}
-  <div className="flex flex-col md:flex-row w-screen h-full px-14 py-14">
-    {/* My Cart */}
-    <div className="w-full flex flex-col h-fit gap-4 p-4 ">
-      <p className="text-blue-900 text-xl font-extrabold">My cart</p>
-      {/* Product */}
-      <div className="flex flex-col p-4 text-lg font-semibold shadow-md border rounded-sm">
-        <div className="flex flex-col md:flex-row gap-3 justify-between">
-          {/* Product Information */}
-          <div className="flex flex-row gap-6 items-center">
-            <div className="w-28 h-28">
-              <img
-                className="w-full h-full"
-                src="https://static.netshoes.com.br/produtos/tenis-adidas-coreracer-masculino/09/NQQ-4635-309/NQQ-4635-309_zoom1.jpg?ts=1675445414&ims=544x"
-              />
+
+
+      <section className='pt-14'>
+        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 ">
+          <div className="mx-auto max-w-3xl">
+            <header className="text-center">
+              <h1 className="text-xl font-bold text-gray-900 sm:text-3xl">Your Cart</h1>
+            </header>
+
+            <div className="mt-8">
+              <ul className="space-y-4">
+                <li className="flex items-center gap-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+                    alt=""
+                    className="size-16 rounded object-cover"
+                  />
+
+                  <div>
+                    <h3 className="text-sm text-gray-900">Basic Tee 6-Pack</h3>
+
+                    <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
+                      <div>
+                        <dt className="inline">Size:</dt>
+                        <dd className="inline">XXS</dd>
+                      </div>
+
+                      <div>
+                        <dt className="inline">Color:</dt>
+                        <dd className="inline">White</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="flex flex-1 items-center justify-end gap-2">
+                    <form>
+                      <label htmlFor="Line1Qty" className="sr-only"> Quantity </label>
+
+                      <input
+                        type="number"
+                        min="1"
+                        value="1"
+                        id="Line1Qty"
+                        className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+                    </form>
+
+                    <button className="text-gray-600 transition hover:text-red-600">
+                      <span className="sr-only">Remove item</span>
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </li>
+
+                <li className="flex items-center gap-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+                    alt=""
+                    className="size-16 rounded object-cover"
+                  />
+
+                  <div>
+                    <h3 className="text-sm text-gray-900">Basic Tee 6-Pack</h3>
+
+                    <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
+                      <div>
+                        <dt className="inline">Size:</dt>
+                        <dd className="inline">XXS</dd>
+                      </div>
+
+                      <div>
+                        <dt className="inline">Color:</dt>
+                        <dd className="inline">White</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="flex flex-1 items-center justify-end gap-2">
+                    <form>
+                      <label htmlFor="Line2Qty" className="sr-only"> Quantity </label>
+
+                      <input
+                        type="number"
+                        min="1"
+                        value="1"
+                        id="Line2Qty"
+                        className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+                    </form>
+
+                    <button className="text-gray-600 transition hover:text-red-600">
+                      <span className="sr-only">Remove item</span>
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </li>
+
+                <li className="flex items-center gap-4">
+                  <img
+                    src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=830&q=80"
+                    alt=""
+                    className="size-16 rounded object-cover"
+                  />
+
+                  <div>
+                    <h3 className="text-sm text-gray-900">Basic Tee 6-Pack</h3>
+
+                    <dl className="mt-0.5 space-y-px text-[10px] text-gray-600">
+                      <div>
+                        <dt className="inline">Size:</dt>
+                        <dd className="inline">XXS</dd>
+                      </div>
+
+                      <div>
+                        <dt className="inline">Color:</dt>
+                        <dd className="inline">White</dd>
+                      </div>
+                    </dl>
+                  </div>
+
+                  <div className="flex flex-1 items-center justify-end gap-2">
+                    <form>
+                      <label htmlFor="Line3Qty" className="sr-only"> Quantity </label>
+
+                      <input
+                        type="number"
+                        min="1"
+                        value="1"
+                        id="Line3Qty"
+                        className="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+                    </form>
+
+                    <button className="text-gray-600 transition hover:text-red-600">
+                      <span className="sr-only">Remove item</span>
+
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </li>
+              </ul>
+
+              <div className="mt-8 flex justify-end border-t border-gray-100 pt-8">
+                <div className="w-screen max-w-lg space-y-4">
+                  <dl className="space-y-0.5 text-sm text-gray-700">
+                    <div className="flex justify-between">
+                      <dt>Subtotal</dt>
+                      <dd>£250</dd>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <dt>VAT</dt>
+                      <dd>£25</dd>
+                    </div>
+
+                    <div className="flex justify-between">
+                      <dt>Discount</dt>
+                      <dd>-£20</dd>
+                    </div>
+
+                    <div className="flex justify-between !text-base font-medium">
+                      <dt>Total</dt>
+                      <dd>£200</dd>
+                    </div>
+                  </dl>
+
+                  <div className="flex justify-end">
+                    <span
+                      className="inline-flex items-center justify-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-indigo-700"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="-ms-1 me-1.5 h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"
+                        />
+                      </svg>
+
+                      <p className="whitespace-nowrap text-xs">2 Discounts Applied</p>
+                    </span>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <a
+                      href="#"
+                      className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
+                    >
+                      Checkout
+                    </a>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="flex flex-col gap-1">
-              <p className="text-lg text-gray-800 font-semibold">
-                Adidas Coreracer Men's Shoes
-              </p>
-              <p className="text-xs text-gray-600 font-semibold">
-                Color: <span className="font-normal">Black + Zinc</span>
-              </p>
-              <p className="text-xs text-gray-600 font-semibold">
-                Size: <span className="font-normal">42</span>
-              </p>
-            </div>
-          </div>
-          {/* Price Information */}
-          <div className="self-center text-center">
-            <p className="text-gray-600 font-normal text-sm line-through">
-              $99.99
-              <span className="text-emerald-500 ml-2">(-50% OFF)</span>
-            </p>
-            <p className="text-gray-800 font-normal text-xl">$49.99</p>
-          </div>
-          {/* Remove Product Icon */}
-          <div className="self-center">
-            <button className="">
-              <svg
-                className=""
-                height="24px"
-                width="24px"
-                id="Layer_1"
-                style={{ enableBackground: "new 0 0 512 512" }}
-                version="1.1"
-                viewBox="0 0 512 512"
-                xmlSpace="preserve"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-              >
-                <g>
-                  <path d="M400,113.3h-80v-20c0-16.2-13.1-29.3-29.3-29.3h-69.5C205.1,64,192,77.1,192,93.3v20h-80V128h21.1l23.6,290.7   c0,16.2,13.1,29.3,29.3,29.3h141c16.2,0,29.3-13.1,29.3-29.3L379.6,128H400V113.3z M206.6,93.3c0-8.1,6.6-14.7,14.6-14.7h69.5   c8.1,0,14.6,6.6,14.6,14.7v20h-98.7V93.3z M341.6,417.9l0,0.4v0.4c0,8.1-6.6,14.7-14.6,14.7H186c-8.1,0-14.6-6.6-14.6-14.7v-0.4   l0-0.4L147.7,128h217.2L341.6,417.9z" />
-                  <g>
-                    <rect height={241} width={14} x={249} y={160} />
-                    <polygon points="320,160 305.4,160 294.7,401 309.3,401" />
-                    <polygon points="206.5,160 192,160 202.7,401 217.3,401" />
-                  </g>
-                </g>
-              </svg>
-            </button>
           </div>
         </div>
-        {/* Product Quantity */}
-        <div className="flex flex-row self-center gap-1">
-          <button className="w-5 h-5 self-center rounded-full border border-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#d1d5db"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M5 12h14" />
-            </svg>
-          </button>
-          <input
-            type="text"
-            readOnly="readonly"
-            defaultValue={1}
-            className="w-8 h-8 text-center text-gray-900 text-sm outline-none border border-gray-300 rounded-sm"
-          />
-          <button className="w-5 h-5 self-center rounded-full border border-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill=""
-              stroke="#9ca3af"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 5v14M5 12h14" />
-            </svg>
-          </button>
-        </div>
-      </div>
-    </div>
-    {/* Purchase Resume */}
-    <div className="flex flex-col w-full md:w-2/3 h-fit gap-4 p-4">
-      <p className="text-blue-900 text-xl font-extrabold">Purchase Resume</p>
-      <div className="flex flex-col p-4 gap-4 text-lg font-semibold shadow-md border rounded-sm">
-        <div className="flex flex-row justify-between">
-          <p className="text-gray-600">Subtotal (2 Items)</p>
-          <p className="text-end font-bold">$99.98</p>
-        </div>
-        <hr className="bg-gray-200 h-0.5" />
-        <div className="flex flex-row justify-between">
-          <p className="text-gray-600">Freight</p>
-          <div>
-            <p className="text-end font-bold">$3.90</p>
-            <p className="text-gray-600 text-sm font-normal">
-              Arrives on Jul 16
-            </p>
-          </div>
-        </div>
-        <hr className="bg-gray-200 h-0.5" />
-        <div className="flex flex-row justify-between">
-          <p className="text-gray-600">Discount Coupon</p>
-          <a className="text-gray-500 text-base underline" href="#">
-            Add
-          </a>
-        </div>
-        <hr className="bg-gray-200 h-0.5" />
-        <div className="flex flex-row justify-between">
-          <p className="text-gray-600">Total</p>
-          <div>
-            <p className="text-end font-bold">$103.88</p>
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <button className="transition-colors text-sm bg-blue-600 hover:bg-blue-700 p-2 rounded-sm w-full text-white text-hover shadow-md">
-            FINISH
-          </button>
-          <button className="transition-colors text-sm bg-white border border-gray-600 p-2 rounded-sm w-full text-gray-700 text-hover shadow-md">
-            ADD MORE PRODUCTS
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</>
+      </section>
+    </>
 
   )
 }

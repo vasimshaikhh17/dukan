@@ -7,6 +7,9 @@ import Home from "./Components/Home";
 import Navbar from "./Components/Navbar/Navbar"
 import Cart from "./Components/Cart";
 import Details from "./Components/Details";
+import Wishlist from "./Components/Wishlist";
+import Footer from "./Components/Footer";
+import ResetPassword from "./Components/ResetPassword";
 
 const App = () => {
   return (
@@ -20,9 +23,12 @@ const App = () => {
         <Route path='/forgotpassword' element={<ForgotPassword/>}/>
         <Route path='/cart' element={<Cart/>}/>
         <Route path='/details' element={<Details/>}/>
+        <Route path='/wishlist' element={<Wishlist/>}/>
+        <Route path='/reset-password/:token' element={<ResetPassword/>}/>
 
         
       </Routes>
+      <Footer/>
     </>
   );
 };

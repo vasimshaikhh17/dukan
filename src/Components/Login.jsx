@@ -43,10 +43,15 @@ const Login = () => {
       });
 
       if (response.data) {
+        // console.log(response.data)
         toast.success(response.data.msg);
         setMsg(response.data.msg)
         localStorage.setItem('userData', JSON.stringify(response.data));
-        navigate('/')
+        if(response.data.role === 'admin'){
+              navigate('/admin')
+        }else{
+            navigate('/')
+        }
       } else {
         toast.error("Invalid Credentials");
       }

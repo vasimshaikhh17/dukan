@@ -3,20 +3,14 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
+    'node_modules/flowbite-react/lib/esm/**/*.js'
   ],
   theme: {
     extend: {
       colors: {
-        'body-bg': '#F7FBFC',
-        'secondary-bg' :"#ffffff",
-        'btn-bg': '#769FCD',
-        'btn-hover':"#B9D7EA",
-        'border-color':"#D6E6F2",
-        'primary-text':"#000000",
-        'secondary-text': "#B4B4B8"
-      },
-
-  
+        "dark-purple": "#081A51",
+        "light-white": "rgba(255,255,255,0.17)",
+      },  
     },
   },
   plugins: [

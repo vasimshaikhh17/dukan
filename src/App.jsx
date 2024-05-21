@@ -10,7 +10,9 @@ import Details from "./Components/Details";
 import Wishlist from "./Components/Wishlist";
 import Footer from "./Components/Footer";
 import ResetPassword from "./Components/ResetPassword";
-import Admin from "./Components/admin/Admin"
+import Admin from "./Components/admin/dashboard/Admin"
+import Users from "./Components/admin/users/Users";
+import UserDetails from "./Components/admin/users/UserDetails";
 
 const App = () => {
   return (
@@ -24,7 +26,16 @@ const App = () => {
         <Route path="/details" element={<Details />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+
+        {/* -----------------------admin routes----------------------- */}
+
         <Route path="/admin" element={<Admin />} />
+        <Route path="/admin/users" element ={<Users/>} />
+        <Route path="/admin/user/:id" element={<UserDetails/>}/>
+
+
+        {/* -----------------------admin routes----------------------- */}
       </Routes>
       {/*  */}
     </>

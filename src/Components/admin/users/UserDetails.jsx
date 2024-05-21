@@ -2,6 +2,8 @@ import React,{useEffect, useState} from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import AdminLayout from '../layout/AdminLayout'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const user = {
   firstname: "Vasim",
@@ -47,31 +49,48 @@ const UserDetails = ()=>{
       console.log(response)
       if(response.data){
         setData(response?.data?.getUser)
-      }else{
-
       }
     }catch(error){
-      alert("hey")
+      toast.error("Something went Wrong");
     }
-    // console.log(response)
   }
 
   const blockUser = async()=>{
     try{
-      const response = await axios.put(`http://localhost:5000/api/user/block-user/${params?.id}`,
-      { headers: {
+      const response = await axios.put(`http://localhost:5000/api/user/block-user/${params.id}`,
+      {},
+      { 
+        headers: {
         'Content-Type': 'application/json',
         Authorization:`Bearer ${bearerToken.token}`
-      },})
-      console.log(response)
+      },
+    }
+  )
       if(response.data){
-        setData(response?.data?.getUser)
-      }else{
-
+        toast.success("User Blocked Successfully")
+        getUserData()
       }
     }catch(error){
-      alert("hey")
-      console.log(error)
+      toast.error("Something went Wrong");
+    }
+  }
+  const unBlockUser = async()=>{
+    try{
+      const response = await axios.put(`http://localhost:5000/api/user/unblock-user/${params.id}`,
+      {},
+      { 
+        headers: {
+        'Content-Type': 'application/json',
+        Authorization:`Bearer ${bearerToken.token}`
+      },
+    }
+  )
+  if(response.data){
+    toast.success("User UnBlocked Successfully")
+    getUserData()
+  }
+    }catch(error){
+      toast.error("Something went Wrong");
     }
   }
   
@@ -87,7 +106,7 @@ const UserDetails = ()=>{
             <p className="text-gray-600 mt-2"><strong>Email:</strong> {data?.email}</p>
             <p className="text-gray-600 mt-2"><strong>Mobile:</strong> {data?.mobile}</p>
             <p className="text-gray-600 mt-2"><strong>Role:</strong> {data?.role}</p>
-            <button onClick={blockUser} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">{data?.isBlocked?"Unblock":"Block"}</button>
+            <button onClick={data?.isBlocked ? unBlockUser : blockUser} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">{data?.isBlocked?"Unblock":"Block"}</button>
           </div>
           
           {/* Address Box */}
@@ -140,6 +159,7 @@ const UserDetails = ()=>{
         </div>
       </div>
       </AdminLayout>
+      <ToastContainer />
 </>
           
   )

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../../assets/logo.png";
+// import Logo from "../../assets/logo.png";
 import NavLinks from "./NavLinks";
 
 const Navbar = () => {
@@ -16,7 +16,7 @@ const Navbar = () => {
     <>
       <nav className="bg-white fixed top-0 w-full z-50 shadow-md h-16 py-2 md:px-10">
         <div className="flex items-center font-medium justify-between">
-          <img src={Logo} alt="logo" className="md:cursor-pointer h-9 z-50" />
+          {/* <img src={Logo} alt="logo" className="md:cursor-pointer h-9 z-50" /> */}
           <ul className="md:flex hidden uppercase items-center gap-8 font-[Poppins]">
             <li>
               <Link to="/" className="inline-block">

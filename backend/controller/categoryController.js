@@ -102,7 +102,7 @@ export const deleteCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoId(id);
   try {
-    const deleteProductCategory = await categoryModels.findByIdAndDelete(id);
+    const deleteProductCategory = await Category.findByIdAndDelete(id);
     res.json(deleteProductCategory);
   } catch (error) {
     throw new Error("Error in Delete Product API!");
@@ -114,7 +114,7 @@ export const fetchSingleCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoId(id);
   try {
-    const getCategory = await categoryModels.findById(id);
+    const getCategory = await Category.findById(id);
     res.json(getCategory);
   } catch (error) {
     throw new Error("Single Category API!");
@@ -124,7 +124,7 @@ export const fetchSingleCategory = asyncHandler(async (req, res) => {
 // Fetch All Products Category
 export const fetchAllCategory = asyncHandler(async (req, res) => {
   try {
-    const getAllCategory = await categoryModels.find();
+    const getAllCategory = await Category.find();
     res.json(getAllCategory);
   } catch (error) {
     throw new Error("Error in Get All Category API!");

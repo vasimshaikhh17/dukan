@@ -42,7 +42,7 @@ router
   .get("/:id", authMiddleware, isAdmin, getAUser)
   .get("/refresh", handleRefreshToken)
   .get("/logout", logout)
-  .delete("/:id", deleteAUser)
+  .delete("/:id",authMiddleware, isAdmin, deleteAUser)
   .delete("/empty-cart", authMiddleware, emtyCart)
   .put(
     "/order/update-order-status/:id",

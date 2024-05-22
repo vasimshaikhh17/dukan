@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../layout/AdminLayout'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -34,7 +34,7 @@ const UserDetails = ()=>{
   const bearerToken = JSON.parse(localStorage.getItem('userData'))
   const params = useParams()
   const [msg,setMsg] = useState("")
-
+  const navigate = useNavigate()
   // console.log(params)
 
  
@@ -110,6 +110,30 @@ const UserDetails = ()=>{
       setMsg("Spmething went wrong")
     }
   }
+
+  const deleteUser= async()=>{
+    setMsg(<Spinner/>)
+    try{
+      const response = await axios.delete(`https://dukaan-ds92.onrender.com/api/user/${params.id}`,
+      {},
+      { 
+        headers: {
+        'Content-Type': 'application/json',
+        Authorization:`Bearer ${bearerToken.token}`
+      },
+    }
+  )
+  // console.log(response)
+  if(response.data){
+    toast.success("User Deleted Successfully")
+    setMsg("")
+    navigate('/admin/users')
+  }
+    }catch(error){
+      toast.error("Something went Wrong");
+      setMsg("Spmething went wrong")
+    }
+  }
   
 
   return (
@@ -127,6 +151,7 @@ const UserDetails = ()=>{
             <p className="text-gray-600 mt-2"><strong>Role:</strong> {data?.role}</p>
   
             <button onClick={data?.isBlocked ? unBlockUser : blockUser} className="mt-4 px-4 py-2 bg-red-500 text-white rounded">{data?.isBlocked?"Unblock":"Block"}</button>
+            <button onClick={deleteUser} className="mt-4 mx-4 px-4 py-2 bg-red-500 text-white rounded">Delete User</button>
           </div>
          :   <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">{msg}</div> }
           

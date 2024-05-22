@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../layout/Layout";
 import AllCategories from "./Navbar/AllCategories";
+import axios from "axios";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const bearerToken = JSON.parse(localStorage.getItem('userData'))
+
   const slides = [
     "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-1-.jpg&w=1200&q=75",
     "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-2_1_.jpg&w=1200&q=75", // Add more image URLs as needed
@@ -18,6 +21,20 @@ const Home = () => {
     }, 5000); // Change 5000 to adjust the interval (5 seconds)
     return () => clearInterval(interval);
   }, [slides.length]);
+
+useEffect(()=>{
+  getAllCategory()
+},[])
+  const getAllCategory = async()=>{
+    const response = await axios.get('https://dukaan-ds92.onrender.com/api/category/getAll',
+      { headers: {
+        'Content-Type': 'application/json',
+        // Authorization:`Bearer ${bearerToken.token}`
+      },})
+
+      console.log(response)
+  }
+
 
   const goToSlide = (index) => {
     setCurrentSlide(index);

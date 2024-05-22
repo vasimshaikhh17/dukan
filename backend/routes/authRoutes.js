@@ -21,6 +21,7 @@ import {
   createOrder,
   getOrders,
   updateOrderStatus,
+  saveUserAddress,
 } from "../controller/userController.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -50,6 +51,7 @@ router
     updateOrderStatus
   )
   .put("/edit-user", authMiddleware, updateAUser)
+  .put("/save-address", authMiddleware, saveUserAddress)
   .put("/block-user/:id", authMiddleware, isAdmin, blockUser)
   .put("/unblock-user/:id", authMiddleware, isAdmin, unBlockUser);
 

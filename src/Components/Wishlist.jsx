@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Layout from "../layout/Layout";
 // import { HeartIcon, ShoppingCartIcon, TrashIcon } from "@heroicons/react/outline";
 
 const wishlistItems = [
@@ -22,7 +23,8 @@ const wishlistItems = [
 
 const Wishlist = () => {
   return (
-    <div className="bg-gray-100 min-h-screen p-5 pt-20">
+    <Layout>
+<div className="bg-gray-100 min-h-screen p-5 pt-20">
       <div className="container mx-auto">
         <h1 className="text-3xl font-semibold mb-5">My Wishlist</h1>
         <ul className="space-y-4">
@@ -58,6 +60,9 @@ const Wishlist = () => {
         </ul>
       </div>
     </div>
+
+    </Layout>
+    
   );
 };
 

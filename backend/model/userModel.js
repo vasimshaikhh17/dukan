@@ -36,10 +36,10 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     cart: {
-      type: Array,
-      default: [],
+      type: String,
+      //default: [],
     },
-    address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
+    address: [String],
     wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     refreshToken: {
       type: String,

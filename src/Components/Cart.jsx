@@ -1,11 +1,12 @@
 import React from 'react'
+import Layout from '../layout/Layout'
 
 const Cart = () => {
   return (
     <>
 
-
-      <section className='pt-14'>
+<Layout>
+<section className='pt-14'>
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 ">
           <div className="mx-auto max-w-3xl">
             <header className="text-center">
@@ -247,6 +248,9 @@ const Cart = () => {
           </div>
         </div>
       </section>
+  
+</Layout>
+    
     </>
 
   )

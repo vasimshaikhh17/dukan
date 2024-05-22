@@ -86,6 +86,26 @@ export const getAUser = asyncHandler(async (req, res) => {
   // console.log(id, "id");
 });
 
+//Save User Address
+export const saveUserAddress = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  validateMongoDbId(_id);
+  try {
+    const updateAddress = await User.findByIdAndUpdate(
+      _id,
+      {
+        address: req?.body?.address,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updateAddress);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 // Delete Users
 export const deleteAUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -289,10 +309,10 @@ export const userCart = asyncHandler(async (req, res) => {
       object.color = cart[i].color;
       let getPrice = await Product.findById(cart[i]._id).select("price").exec();
       object.price = getPrice.price;
-      Product.push(object);
+      products.push(object);
     }
     let cartTotal = 0;
-    for (let i = 0; i < Product.length; i++) {
+    for (let i = 0; i < products.length; i++) {
       cartTotal = cartTotal + products[i].price * products[i].count;
     }
 

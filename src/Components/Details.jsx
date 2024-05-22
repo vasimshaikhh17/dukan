@@ -1,108 +1,123 @@
-
-
-import React from 'react'
+import React, { useState } from 'react';
+import Layout from '../layout/Layout';
 
 const Details = () => {
+  const product = {
+    name: 'Sample Product',
+    price: '$99.99',
+    description: 'This is a sample product description.',
+    images: [
+      'https://m.media-amazon.com/images/I/71GMyeIiaNL._SY741_.jpg',
+      'https://m.media-amazon.com/images/I/71RYNK1iGPL._SY741_.jpg',
+      'https://m.media-amazon.com/images/I/71sTv352CGL._SY741_.jpg',
+     'https://m.media-amazon.com/images/I/71SN6Ri2iLL._SY741_.jpg',
+      'https://m.media-amazon.com/images/I/71oZba+s3BL._SY741_.jpg'
+    ],
+    features: [
+      'Feature 1',
+      'Feature 2',
+      'Feature 3',
+      'Feature 4'
+    ],
+    details: {
+      'Material composition': 'Cotton',
+      'Pattern': 'Tie Dye',
+      'Fit type': 'Loose Fit',
+      'Sleeve type': 'Half Sleeve',
+      'Collar style': 'Collarless',
+      'Length': 'Long Length',
+      'Country of Origin': 'India'
+    },
+    about: [
+      'Care Instructions: Hand Wash Only; Fit Type: Loose Fit',
+      'Sleeve type: Half sleeve with stylish casual oversize design for Women',
+      'Design and style: Trending Color combination all over printed design with gives extra ordinary casual look',
+      'Pairing: This t-shirt is easy to be paired with your Jeans, skinny leggings, jeggings and shorts, etc.',
+      'Please refer size chart before buying for perfect fitting.'
+    ],
+    additional: {
+      'Manufacturer': 'Rohan Creation, Rohan Creation, Ahmedabad',
+      'Packer': 'Rohan Creation, Ahmedabad',
+      'Item Weight': '200 g',
+      'Item Dimensions LxWxH': '27 x 25 x 2.5 Centimeters',
+      'Net Quantity': '1.00 count',
+      'Generic Name': 'T-Shirt'
+    }
+  };
+
+  const [mainImage, setMainImage] = useState(product.images[0]);
+  const [selectedSize, setSelectedSize] = useState('');
+
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 py-24">
-  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="flex flex-col md:flex-row -mx-4">
-      <div className="md:flex-1 px-4">
-        <div className="h-[460px] rounded-lg bg-gray-300 dark:bg-gray-700 mb-4">
-          <img
-            className="w-full h-full object-cover"
-            src="https://cdn.pixabay.com/photo/2020/05/22/17/53/mockup-5206355_960_720.jpg"
-            alt="Product Image"
-          />
-        </div>
-        <div className="flex -mx-2 mb-4">
-          <div className="w-1/2 px-2">
-            <button className="w-full bg-gray-900 dark:bg-gray-600 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 dark:hover:bg-gray-700">
+    <Layout>
+      <div className="max-w-6xl mx-auto p-4 pt-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col md:flex-row">
+            <div className="flex flex-col space-y-2 mb-4 md:mb-0 md:mr-4">
+              {product.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt={`Product thumbnail ${index}`}
+                  className="w-20 h-20 object-cover rounded-lg cursor-pointer transform hover:scale-110 transition-transform duration-200"
+                  onClick={() => setMainImage(image)}
+                />
+              ))}
+            </div>
+            <div className="flex-1">
+              <img src={mainImage} alt="Product" className="w-full h-auto rounded-lg shadow-lg" />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-bold mb-4">{product.name}</h1>
+            <p className="text-xl text-green-500 mb-4">{product.price}</p>
+            <p className="mb-4">{product.description}</p>
+            <label className="mb-2 font-bold">Select Size:</label>
+            <select
+              value={selectedSize}
+              onChange={(e) => setSelectedSize(e.target.value)}
+              className="mb-4 p-2 border rounded-lg"
+            >
+              <option value="" disabled>Select size</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>
+            </select>
+            <ul className="list-disc list-inside mb-4">
+              {product.features.map((feature, index) => (
+                <li key={index}>{feature}</li>
+              ))}
+            </ul>
+            <button className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-blue-600 transition-colors duration-200">
               Add to Cart
             </button>
           </div>
-          <div className="w-1/2 px-2">
-            <button className="w-full bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white py-2 px-4 rounded-full font-bold hover:bg-gray-300 dark:hover:bg-gray-600">
-              Add to Wishlist
-            </button>
-          </div>
+        </div>
+        <div className="mt-8">
+          <h2 className="text-xl font-bold mb-4">Product Details</h2>
+          <ul className="list-disc list-inside mb-4">
+            {Object.entries(product.details).map(([key, value], index) => (
+              <li key={index}><span className="font-bold">{key}:</span> {value}</li>
+            ))}
+          </ul>
+          <h2 className="text-xl font-bold mb-4">About this item</h2>
+          <ul className="list-disc list-inside mb-4">
+            {product.about.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+          <h2 className="text-xl font-bold mb-4">Additional Information</h2>
+          <ul className="list-disc list-inside">
+            {Object.entries(product.additional).map(([key, value], index) => (
+              <li key={index}><span className="font-bold">{key}:</span> {value}</li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div className="md:flex-1 px-4">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-          Product Name
-        </h2>
-        <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed ante
-          justo. Integer euismod libero id mauris malesuada tincidunt.
-        </p>
-        <div className="flex mb-4">
-          <div className="mr-4">
-            <span className="font-bold text-gray-700 dark:text-gray-300">
-              Price:
-            </span>
-            <span className="text-gray-600 dark:text-gray-300">$29.99</span>
-          </div>
-          <div>
-            <span className="font-bold text-gray-700 dark:text-gray-300">
-              Availability:
-            </span>
-            <span className="text-gray-600 dark:text-gray-300">In Stock</span>
-          </div>
-        </div>
-        <div className="mb-4">
-          <span className="font-bold text-gray-700 dark:text-gray-300">
-            Select Color:
-          </span>
-          <div className="flex items-center mt-2">
-            <button className="w-6 h-6 rounded-full bg-gray-800 dark:bg-gray-200 mr-2" />
-            <button className="w-6 h-6 rounded-full bg-red-500 dark:bg-red-700 mr-2" />
-            <button className="w-6 h-6 rounded-full bg-blue-500 dark:bg-blue-700 mr-2" />
-            <button className="w-6 h-6 rounded-full bg-yellow-500 dark:bg-yellow-700 mr-2" />
-          </div>
-        </div>
-        <div className="mb-4">
-          <span className="font-bold text-gray-700 dark:text-gray-300">
-            Select Size:
-          </span>
-          <div className="flex items-center mt-2">
-            <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-              S
-            </button>
-            <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-              M
-            </button>
-            <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-              L
-            </button>
-            <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-              XL
-            </button>
-            <button className="bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white py-2 px-4 rounded-full font-bold mr-2 hover:bg-gray-400 dark:hover:bg-gray-600">
-              XXL
-            </button>
-          </div>
-        </div>
-        <div>
-          <span className="font-bold text-gray-700 dark:text-gray-300">
-            Product Description:
-          </span>
-          <p className="text-gray-600 dark:text-gray-300 text-sm mt-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed
-            ante justo. Integer euismod libero id mauris malesuada tincidunt.
-            Vivamus commodo nulla ut lorem rhoncus aliquet. Duis dapibus augue
-            vel ipsum pretium, et venenatis sem blandit. Quisque ut erat vitae
-            nisi ultrices placerat non eget velit. Integer ornare mi sed ipsum
-            lacinia, non sagittis mauris blandit. Morbi fermentum libero vel
-            nisl suscipit, nec tincidunt mi consectetur.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    </Layout>
+  );
+};
 
-  )
-}
-
-export default Details
+export default Details;

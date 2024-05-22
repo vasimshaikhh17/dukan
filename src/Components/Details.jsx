@@ -10,7 +10,7 @@ const Details = () => {
       'https://m.media-amazon.com/images/I/71GMyeIiaNL._SY741_.jpg',
       'https://m.media-amazon.com/images/I/71RYNK1iGPL._SY741_.jpg',
       'https://m.media-amazon.com/images/I/71sTv352CGL._SY741_.jpg',
-     'https://m.media-amazon.com/images/I/71SN6Ri2iLL._SY741_.jpg',
+     'https://m.media-amazon.com/images/I/71SN6Ri2iLL._SY741_.jpg ',
       'https://m.media-amazon.com/images/I/71oZba+s3BL._SY741_.jpg'
     ],
     features: [

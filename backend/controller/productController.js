@@ -20,7 +20,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 
 export const updateProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
-  console.log(id);
+  // console.log(id);
   validateMongoDbId(id);
   try {
     if (req.body.title) {
@@ -54,7 +54,7 @@ export const getProduct = asyncHandler(async (req, res) => {
 });
 
 export const getAllProduct = asyncHandler(async (req, res) => {
-  console.log(req.query);
+  // console.log(req.query);
   try {
     //Filtering
     const queryObj = { ...req.query };
@@ -117,7 +117,7 @@ export const addToWishList = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { prodId } = req.body;
   validateMongoDbId(_id);
-  console.log(prodId);
+  // console.log(prodId);
   try {
     const user = await User.findById(_id);
     const alreadyAdded = await user.wishList.find(
@@ -155,7 +155,7 @@ export const addToWishList = asyncHandler(async (req, res) => {
 export const totalRatings = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { stars, prodId, comment } = req.body;
-  console.log(stars, prodId, comment);
+  // console.log(stars, prodId, comment);
   try {
     const prodcut = await Product.findById(prodId);
     let alredyRating = prodcut.ratings.find(
@@ -203,7 +203,7 @@ export const totalRatings = asyncHandler(async (req, res) => {
 
 // Uoload File and Images Functionlity
 export const uploadImage = asyncHandler(async (req, res) => {
-  console.log(req.files);
+  // console.log(req.files);
   const { id } = req.params;
   validateMongoDbId(id);
 
@@ -211,7 +211,7 @@ export const uploadImage = asyncHandler(async (req, res) => {
 
   const urls = [];
   const files = req.files;
-  console.log(files, "files");
+  // console.log(files, "files");
   for (const file of files) {
     const { path } = file;
     const newPath = await uploader(path);

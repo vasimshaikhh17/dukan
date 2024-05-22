@@ -58,7 +58,7 @@ export const approvalList = async (req, res, next) => {
     const categories = await Category.find();
 
     // Log the fetched data
-    console.log(categories);
+    // console.log(categories);
 
     // Respond with the fetched data
     if (isAdmin) {

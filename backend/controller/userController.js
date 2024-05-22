@@ -122,7 +122,7 @@ export const handleRefreshToken = asyncHandler(async (req, res) => {
   const cookie = req.cookies;
   if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
   const refreshToken = cookie.refreshToken;
-  console.log(refreshToken);
+  // console.log(refreshToken);
   const user = await User.findOne({ refreshToken });
   if (!user) throw new Error(" No Refresh token present in db or not matched");
   jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
@@ -335,7 +335,7 @@ export const getUserCart = asyncHandler(async (req, res) => {
     const getCart = await Cart.findOne({ orderby: _id }).populate(
       "Product.product"
     );
-    console.log(getCart);
+    // console.log(getCart);
     res.json(getCart);
   } catch (error) {
     throw new Error(error);
@@ -363,7 +363,7 @@ export const applyCoupon = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   validateMongoDbId(_id);
   const validCoupon = await Coupon.findOne({ name: coupon });
-  console.log(validCoupon);
+  // console.log(validCoupon);
   if (validCoupon === null) {
     throw new Error("Invalid Coupon ");
   }
@@ -422,7 +422,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     const updated = await Product.bulkWrite(update, {});
     res.json({ message: "success" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 });
 

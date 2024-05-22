@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 });
 
 const multerFilter = (req, file, cb) => {
-  console.log(req.files, "files");
+  // console.log(req.files, "files");
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
   } else {

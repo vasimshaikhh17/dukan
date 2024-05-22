@@ -15,20 +15,23 @@ import morgan from "morgan";
 import cors from "cors";
 
 dotenv.config();
-const PORT = process.env.PORT || 4000;
+
 const app = express();
+const PORT = process.env.PORT || 4000;
+
 connectDB();
+app.use(express.json());
 // app.use(bodyParser.json())s
 app.use(cors());
 app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(express.json());
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/user", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
-app.use("/api/blogCat", blogCatRoutes)
+app.use("/api/blogCat", blogCatRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

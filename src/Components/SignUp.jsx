@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Spinner from "./admin/others/Spinner";
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -13,16 +14,7 @@ const SignUp = () => {
     mobile: "",
     password: "",
   });
-  const spinner = (
-    <div
-      class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black"
-      role="status"
-    >
-      <span class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-        Loading...
-      </span>
-    </div>
-  );
+
   const [msg, setMsg] = useState("");
   const navigate = useNavigate();
   const [disable, setDisable] = useState(false);
@@ -34,11 +26,11 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMsg(spinner);
+    setMsg(<Spinner/>);
     setDisable(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/user/register",
+        "https://dukaan-ds92.onrender.com/api/user/register",
         {
           firstname: formData.firstname,
           lastname: formData.lastname,

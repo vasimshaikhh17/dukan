@@ -4,27 +4,19 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Spinner from './admin/others/Spinner';
 
 const ForgotPassword = () => {
   const [email,setEmail] = useState("")
   const [disable,setDisable]=useState(false);
   const navigate = useNavigate()
-  const spinner = (
-    <div
-      class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-black"
-      role="status">
-      <span
-        class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
-        >Loading...</span>
-    </div>
-    );
     const [msg,setMsg] = useState("")
   const onSubmit = async(e)=>{
     e.preventDefault()
-    setMsg(spinner)
+    setMsg(<Spinner/>)
     setDisable(true)
     try{
-    const response = await axios.post("http://localhost:5000/api/user/forgot-password-token",{email:email})
+    const response = await axios.post("https://dukaan-ds92.onrender.com/api/user/forgot-password-token",{email:email})
       if(response.data.length > 10){
         toast.success("Please Check your Email")
         setMsg(response.data.msg)

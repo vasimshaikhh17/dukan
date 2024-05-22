@@ -1,12 +1,55 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Spinner from '../others/Spinner';
 
 const Admin = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(true);
+  const [msg,setMsg] = useState("")
+  const navigate = useNavigate()
+
+
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
+
+
+  useEffect(()=>{
+    getUserData()
+  },[])
+
+  const getUserData = async()=>{
+    setMsg(<Spinner/>)
+    const bearerToken = JSON.parse(localStorage.getItem('userData'))
+      console.log(bearerToken,'token')
+
+    try{
+      const response = await axios.get(`https://dukaan-ds92.onrender.com/api/user/${bearerToken._id}`,
+      { headers: {
+        'Content-Type': 'application/json',
+        Authorization:`Bearer ${bearerToken.token}`
+      },})
+      console.log(response,'for user')
+      if(response.data){
+       if(response?.data?.getUser?.role !== "admin"){
+         toast.error("Sorry You are not an Admin");
+          navigate('/')
+       }
+        setMsg("")
+      }
+    }catch(error){
+      // toast.error("Something went Wrong");
+      setMsg("Something went wrong")
+      toast.error("Sorry You are not an Admin");
+      navigate('/')
+    }
+  }
+  
+
+
 
   return (
 <>
@@ -280,6 +323,7 @@ const Admin = () => {
      cool
     </div>
   </div> */}
+  <ToastContainer/>
 </>
 
   )

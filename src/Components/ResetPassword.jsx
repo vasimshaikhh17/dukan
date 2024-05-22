@@ -13,7 +13,7 @@ const navigate = useNavigate()
   const onSubmit = async(e)=>{
     e.preventDefault()
     try{
-      const response = await axios.put(`http://localhost:5000/api/user/reset-password/${params?.token}`,{password:password})
+      const response = await axios.put(`https://dukaan-ds92.onrender.com/api/user/reset-password/${params?.token}`,{password:password})
       if(response){
         toast.success("Password Reset Successfully")
        setTimeout(() => {

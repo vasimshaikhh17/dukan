@@ -3,10 +3,14 @@ import { Link } from "react-router-dom";
 import Layout from "../layout/Layout";
 import AllCategories from "./Navbar/AllCategories";
 import axios from "axios";
+import { toast , ToastContainer} from "react-toastify";
+import Spinner from "./admin/others/Spinner";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [category,setCategory] = useState('')
   const bearerToken = JSON.parse(localStorage.getItem('userData'))
+  const [msg,setMsg] = useState()
 
   const slides = [
     "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-1-.jpg&w=1200&q=75",
@@ -25,14 +29,27 @@ const Home = () => {
 useEffect(()=>{
   getAllCategory()
 },[])
+
   const getAllCategory = async()=>{
+    setMsg(<Spinner/>)
+    try{
     const response = await axios.get('https://dukaan-ds92.onrender.com/api/category/getAll',
       { headers: {
         'Content-Type': 'application/json',
-        // Authorization:`Bearer ${bearerToken.token}`
+        Authorization:`Bearer ${bearerToken.token}`
       },})
-
+      if(response.data){
+        setCategory(response?.data)
+        setMsg("")
+      }else{
+        toast("Something went Wrong")
+      setMsg("Something went Wrong")
+      }
       console.log(response)
+    }catch (error){
+      toast("Something went Wrong")
+      setMsg("Something went Wrong")
+    }
   }
 
 
@@ -247,19 +264,21 @@ useEffect(()=>{
         </h2>
         <div className="bg-slate-50 lg:h-32 flex items-center lg:mx-4">
           <div className="container mx-auto">
-            <div className="grid grid-cols-4 lg:grid-cols-8 md:grid-cols-4 sm:grid-cols- gap-4">
-              {circles.map((circle, index) => (
+            <div className=" grid grid-cols-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 gap-4 overflow-x-auto lg:overflow-x-hidden whitespace-nowrap">
+              {category ? category?.map((el, index) => (
                 <div key={index} className="flex flex-col items-center">
                   <div className={`w-16 h-16 rounded-full cursor-pointer `}>
+                   <Link to={`/categories/${el._id}`}>
                     <img
-                      src={circle.image}
-                      alt={circle.name}
+                      src={el.imageUrl}
+                      alt={el.title}
                       className="w-full h-full object-cover rounded-full"
                     />
+                    </Link>
                   </div>
-                  <div className="mt-2 text-center">{circle.name}</div>
+                  <div className="mt-2 text-center sm:text-[10px] md:text-[10px] lg:text-[15px]  ">{el.title}</div>
                 </div>
-              ))}
+              )) : <div className="">{msg}</div>   }
             </div>
           </div>
         </div>
@@ -400,6 +419,7 @@ useEffect(()=>{
             ))}
           </div>
         </div>
+        <ToastContainer />
       </div>
 
       {/* ...................................product----------------------------- */}

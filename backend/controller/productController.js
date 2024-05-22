@@ -230,3 +230,39 @@ export const uploadImage = asyncHandler(async (req, res) => {
   });
   res.json(findProduct);
 });
+export const topProducts = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { prodId } = req.body;
+  validateMongoDbId(_id);
+  try {
+    const user = await User.findById(_id);
+    const alreadyAdded = await user.topProducts.find(
+      (_id) => _id.toString() === prodId
+    );
+    if (alreadyAdded) {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $pull: { topProducts: prodId },
+        },
+        {
+          new: true,
+        }
+      );
+      res.json(user);
+    } else {
+      let user = await User.findByIdAndUpdate(
+        _id,
+        {
+          $push: { topProducts: prodId },
+        },
+        {
+          new: true,
+        }
+      );
+      res.json(user);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+});

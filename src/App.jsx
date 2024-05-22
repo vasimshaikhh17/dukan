@@ -13,6 +13,7 @@ import ResetPassword from "./Components/ResetPassword";
 import Admin from "./Components/admin/dashboard/Admin"
 import Users from "./Components/admin/users/Users";
 import UserDetails from "./Components/admin/users/UserDetails";
+import Categories from "./Components/product/Categories";
 
 const App = () => {
   return (
@@ -26,7 +27,7 @@ const App = () => {
         <Route path="/details" element={<Details />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-
+        <Route path="/categories/:id" element={<Categories />} />
 
         {/* -----------------------admin routes----------------------- */}
 

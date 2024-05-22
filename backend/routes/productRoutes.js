@@ -5,6 +5,7 @@ import {
   deleteProduct,
   getAllProduct,
   getProduct,
+  topProducts,
   totalRatings,
   updateProduct,
 } from "../controller/productController.js";
@@ -21,6 +22,7 @@ router
   .post("/create-product", authMiddleware, isAdmin, createProduct)
   .post("/get/:id", getProduct)
   .put("/wishlist", authMiddleware, addToWishList) 
+  .put("/top-products", authMiddleware, topProducts)
   .put("/ratings", authMiddleware, totalRatings)
   .get("/getAll", getAllProduct)
   .put("/updateProduct/:id", authMiddleware, isAdmin, updateProduct)

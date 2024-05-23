@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import { Product } from "../model/productModel.js";
 import { User } from "../model/userModel.js";
+import { TopProducts } from "../model/topProducts.js";
 import slugify from "slugify";
 import { validateMongoDbId } from "../utils/validateMongodbId.js";
 import { cloudinaryuploadImg } from "../utils/cloudinary.js";
@@ -266,6 +267,19 @@ export const addTopProducts = asyncHandler(async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
+export const getTopProducts = asyncHandler(async(req,res)=>{
+  let topProducts = await TopProducts.find();
+  try{
+    if(topProducts[0].topProducts){
+      res.json({productId:topProducts[0].topProducts})
+    }
+  }catch(error){
+    throw new Error(error)
+  }
+  // console.log(topProducts)
+
+})
 
 export const updateTopProductPosition = asyncHandler(async (req, res) => {
   const { userId, prodId, newPosition } = req.body;

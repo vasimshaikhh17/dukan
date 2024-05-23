@@ -6,6 +6,7 @@ import {
   deleteProduct,
   getAllProduct,
   getProduct,
+  getTopProducts,
   totalRatings,
   updateProduct,
   updateTopProductPosition,
@@ -30,6 +31,7 @@ router
     isAdmin,
     updateTopProductPosition
   )
+  .get("/top-product-list",getTopProducts)
   .put("/ratings", authMiddleware, totalRatings)
   .get("/getAll", getAllProduct)
   .put("/updateProduct/:id", authMiddleware, isAdmin, updateProduct)

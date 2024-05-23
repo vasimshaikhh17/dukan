@@ -29,6 +29,7 @@ const Home = () => {
 
   useEffect(() => {
     getAllCategory();
+    topProduct()
   }, []);
 
   const getAllCategory = async () => {
@@ -56,9 +57,10 @@ const Home = () => {
       setMsg("Something went Wrong");
     }
   };
-  // const topProduct = async()=>{
-  //   const Response = await axios.post(`https://dukaan-ds92.onrender.com/api/product/get/${}`)
-  // }
+  const topProduct = async()=>{
+    const Response = await axios.get(`https://dukaan-ds92.onrender.com/api/product/top-product-list`)
+    console.log(Response,'topProduct')
+  }
   // const OurLatestCollection = async()=>{
   //   const Response = await axios.post(`https://dukaan-ds92.onrender.com/api/product/get/${}`)
   // }

@@ -230,39 +230,72 @@ export const uploadImage = asyncHandler(async (req, res) => {
   });
   res.json(findProduct);
 });
-export const topProducts = asyncHandler(async (req, res) => {
+
+// Add or remove top products for a user
+export const addTopProducts = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { prodId } = req.body;
   validateMongoDbId(_id);
+
   try {
-    const user = await User.findById(_id);
-    const alreadyAdded = await user.topProducts.find(
-      (_id) => _id.toString() === prodId
-    );
-    if (alreadyAdded) {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { topProducts: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    } else {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $push: { topProducts: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
+    // Find the user's top products list
+    let topProducts = await TopProducts.findOne({ user: _id });
+
+    if (!topProducts) {
+      // If the top products list doesn't exist, create a new one
+      topProducts = new TopProducts({ user: _id, topProducts: [] });
     }
+
+    const alreadyAdded = topProducts.topProducts.find(
+      (id) => id.toString() === prodId
+    );
+
+    if (alreadyAdded) {
+      // Remove the product from the top products list
+      topProducts.topProducts = topProducts.topProducts.filter(
+        (id) => id.toString() !== prodId
+      );
+    } else {
+      // Add the product to the top products list
+      topProducts.topProducts.push(prodId);
+    }
+
+    await topProducts.save();
+    res.json(topProducts);
   } catch (error) {
-    throw new Error(error);
+    res.status(500).send(error.message);
+  }
+});
+
+export const updateTopProductPosition = asyncHandler(async (req, res) => {
+  const { userId, prodId, newPosition } = req.body;
+  validateMongoDbId(userId);
+
+  try {
+    let topProducts = await TopProducts.findOne({ user: userId });
+    if (!topProducts) {
+      return res.status(404).send("Top products list not found");
+    }
+
+    const productIdObj = new mongoose.Types.ObjectId(prodId);
+    const currentIndex = topProducts.topProducts.findIndex((id) =>
+      id.equals(productIdObj)
+    );
+
+    if (currentIndex === -1) {
+      return res.status(404).send("Product not found in top products");
+    }
+
+    if (newPosition < 0 || newPosition >= topProducts.topProducts.length) {
+      return res.status(400).send("Invalid new position");
+    }
+
+    const [movedProduct] = topProducts.topProducts.splice(currentIndex, 1);
+    topProducts.topProducts.splice(newPosition, 0, movedProduct);
+
+    await topProducts.save();
+    res.status(200).send(topProducts);
+  } catch (error) {
+    res.status(500).send("Server error");
   }
 });

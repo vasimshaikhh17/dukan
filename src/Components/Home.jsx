@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../layout/Layout";
-import AllCategories from "./Navbar/AllCategories";
+
 import axios from "axios";
-import { toast , ToastContainer} from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Spinner from "./admin/others/Spinner";
+import AllCategories from "./AllCategories";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [category,setCategory] = useState('')
-  const bearerToken = JSON.parse(localStorage.getItem('userData'))
-  const [msg,setMsg] = useState()
+  const [category, setCategory] = useState("");
+  const bearerToken = JSON.parse(localStorage.getItem("userData"));
+  const [msg, setMsg] = useState();
 
   const slides = [
     "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-1-.jpg&w=1200&q=75",
@@ -26,31 +27,43 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [slides.length]);
 
-useEffect(()=>{
-  getAllCategory()
-},[])
+  useEffect(() => {
+    getAllCategory();
+  }, []);
 
-  const getAllCategory = async()=>{
-    setMsg(<Spinner/>)
-    try{
-    const response = await axios.get('https://dukaan-ds92.onrender.com/api/category/getAll',
-      { headers: {
-        'Content-Type': 'application/json',
-        Authorization:`Bearer ${bearerToken.token}`
-      },})
-      if(response.data){
-        setCategory(response?.data)
-        setMsg("")
-      }else{
-        toast("Something went Wrong")
-      setMsg("Something went Wrong")
+  const getAllCategory = async () => {
+    setMsg(<Spinner />);
+    try {
+      const response = await axios.get(
+        "https://dukaan-ds92.onrender.com/api/category/getAll",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
+      if (response.data) {
+        setCategory(response?.data);
+        setMsg("");
+      } else {
+        toast("Something went Wrong");
+        setMsg("Something went Wrong");
       }
-      console.log(response)
-    }catch (error){
-      toast("Something went Wrong")
-      setMsg("Something went Wrong")
+      console.log(response);
+    } catch (error) {
+      toast("Something went Wrong");
+      setMsg("Something went Wrong");
     }
-  }
+  };
+  // const topProduct = async()=>{
+  //   const Response = await axios.post(`https://dukaan-ds92.onrender.com/api/product/get/${}`)
+  // }
+  // const OurLatestCollection = async()=>{
+  //   const Response = await axios.post(`https://dukaan-ds92.onrender.com/api/product/get/${}`)
+  // }
+
+
 
 
   const goToSlide = (index) => {
@@ -68,57 +81,6 @@ useEffect(()=>{
       prevSlide === slides.length - 1 ? 0 : prevSlide + 1
     );
   };
-
-  const circles = [
-    {
-      color: "bg-red-500",
-      name: "Red",
-      image:
-        "https://rukminim1.flixcart.com/flap/80/80/image/22fddf3c7da4c4f4.png?q=100",
-    },
-    {
-      color: "bg-blue-500",
-      name: "Blue",
-      image:
-        "https://rukminim1.flixcart.com/flap/80/80/image/29327f40e9c4d26b.png?q=100",
-    },
-    {
-      color: "bg-green-500",
-      name: "Green",
-      image:
-        "https://rukminim1.flixcart.com/fk-p-flap/80/80/image/0139228b2f7eb413.jpg?q=100",
-    },
-    {
-      color: "bg-yellow-500",
-      name: "Yellow",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdX-8yO4BqWlggZbYmhnUdtfNKM9sCKP9XQQ&s",
-    },
-    {
-      color: "bg-yellow-500",
-      name: "Yellow",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdX-8yO4BqWlggZbYmhnUdtfNKM9sCKP9XQQ&s",
-    },
-    {
-      color: "bg-yellow-500",
-      name: "Yellow",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdX-8yO4BqWlggZbYmhnUdtfNKM9sCKP9XQQ&s",
-    },
-    {
-      color: "bg-yellow-500",
-      name: "Yellow",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdX-8yO4BqWlggZbYmhnUdtfNKM9sCKP9XQQ&s",
-    },
-    {
-      color: "bg-yellow-500",
-      name: "Yellow",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdX-8yO4BqWlggZbYmhnUdtfNKM9sCKP9XQQ&s",
-    },
-  ];
 
   const products = [
     {
@@ -204,6 +166,96 @@ useEffect(()=>{
     },
   ];
 
+  const productData = [
+
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+ 
+    // Add more products as needed
+  ];
+
   return (
     <Layout>
       {/* // --------------------image Slider ----------------------------- */}
@@ -228,6 +280,8 @@ useEffect(()=>{
         </div>
 
         {/* Controllers */}
+      
+
         <button
           className="absolute top-1/2 transform -translate-y-1/2 left-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
           onClick={goToPrevSlide}
@@ -240,6 +294,7 @@ useEffect(()=>{
         >
           <i className="ri-arrow-right-s-line text-lg font-bold"></i>
         </button>
+
 
         {/* Dots */}
         <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
@@ -258,7 +313,7 @@ useEffect(()=>{
 
       {/* //---------------------categories-------------------------------- */}
 
-      <div className="pt-12">
+      {/* <div className="pt-12">
         <h2 className="text-center text-xl lg:text-2xl font-bold mb-4">
           Shop By Category
         </h2>
@@ -282,14 +337,11 @@ useEffect(()=>{
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
+      <AllCategories />
       {/* //---------------------categories-------------------------------- */}
-{/* <div className="pt-12">
 
-
-      <AllCategories/>
-</div> */}
 
       {/* --------------------------------our new launches----------------------------- */}
 
@@ -303,7 +355,7 @@ useEffect(()=>{
               <div className="mx-auto max-w-md text-center lg:text-left">
                 <header>
                   <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                  Latest Sale
+                    Latest Sale
                   </h2>
 
                   <p className="mt-4 text-gray-500">
@@ -367,7 +419,7 @@ useEffect(()=>{
 
       {/* ...................................product----------------------------- */}
 
-      <div className="bg-white">
+      {/* <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
             Our Latest Collection
@@ -420,8 +472,40 @@ useEffect(()=>{
           </div>
         </div>
         <ToastContainer />
+      </div> */}
+      <h2 className="text-center text-xl lg:text-2xl font-bold mb-10 pt-24">
+       Our Latest Collection
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-auto container mb-5">
+        {productData.map((product, index) => (
+          <div
+            key={index}
+            className="rounded-lg shadow-md overflow-hidden "
+          >
+            <a href="#" className="block">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-contain transition-transform hover:scale-105 "
+              />
+            </a>
+            <div className="p-4">
+              <div className="flex justify-between mb-2">
+                <div className="text-gray-800 font-semibold">
+                  {product.name}
+                </div>
+                <div className="text-gray-600">{product.price}</div>
+              </div>
+              <div className="flex justify-between mb-2">
+                <div className="text-gray-600">Ratings: {product.ratings}</div>
+                <button className="text-2xl transition-transform hover:scale-125">
+                  <i className="ri-heart-line"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-
       {/* ...................................product----------------------------- */}
 
       {/* .........................................latest collection--------------------- */}
@@ -504,8 +588,9 @@ useEffect(()=>{
       </section>
       {/* .........................................latest collection--------------------- */}
 
+  
 
-      
+
     </Layout>
   );
 };

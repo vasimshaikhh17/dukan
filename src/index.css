@@ -13,11 +13,33 @@
 
   .image-slider-container {
     margin: 0 auto;
-    width: 80vw;
+    width: 60vw;
   }
   
   .image-slider-container .slick-prev:before,
   .image-slider-container .slick-next:before {
     color: black;
    
+  }
+
+  .image-slider-container {
+    padding: 20px;
+  }
+  
+  .slider .slide {
+    padding: 10px;
+  }
+  
+  .category-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .slide-name {
+    margin-top: 10px;
+    font-size: 14px;
   }

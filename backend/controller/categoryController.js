@@ -2,43 +2,55 @@ import { errorHandler } from "../middlewares/errorHandler.js";
 import { Category } from "../model/categoryModels.js";
 import { User } from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
+
+
+// export const createCategory = async (req, res, next) => {
+//   const { name, icon, color, createdBy } = req.body;
+
+//   if (!name || !color || !icon || !createdBy) {
+//     return next(new errorHandler("Please fill in all fields", 400));
+//   }
+
+//   try {
+//     const alreadyExist = await Category.findOne({ name });
+//     if (alreadyExist) {
+//       return next(new errorHandler("Category already exists", 400));
+//     }
+
+//     const existingUser = await User.findOne({ _id: createdBy });
+//     if (!existingUser) {
+//       return next(new errorHandler("User doesn't exist", 400));
+//     }
+
+//     const admin = await User.findOne({ role: "admin" });
+//     const createdByAdmin = admin._id === createdBy;
+
+//     const createdCategory = await Category.create({
+//       name,
+//       icon,
+//       color,
+//       createdBy,
+//       createdByAdmin: createdByAdmin ? true : false,
+//     });
+
+//     if (createdCategory) {
+//       return res.status(200).json({
+//         success: true,
+//         msg: "Your category has been submitted successfully. It is awaiting approval.",
+//       });
+//     }
+//   } catch (error) {
+//     return next(new errorHandler(error.message, 500));
+//   }
+// };
+
 export const createCategory = async (req, res, next) => {
-  const { name, icon, color, createdBy } = req.body;
-
-  if (!name || !color || !icon || !createdBy) {
-    return next(new errorHandler("Please fill in all fields", 400));
-  }
-
+  const {title,imageUrl} = req.body;
   try {
-    const alreadyExist = await Category.findOne({ name });
-    if (alreadyExist) {
-      return next(new ErrorHandler("Category already exists", 400));
-    }
-
-    const existingUser = await User.findOne({ _id: createdBy });
-    if (!existingUser) {
-      return next(new ErrorHandler("User doesn't exist", 400));
-    }
-
-    const admin = await User.findOne({ role: "admin" });
-    const createdByAdmin = admin._id === createdBy;
-
-    const createdCategory = await Category.create({
-      name,
-      icon,
-      color,
-      createdBy,
-      createdByAdmin: createdByAdmin ? true : false,
-    });
-
-    if (createdCategory) {
-      return res.status(200).json({
-        success: true,
-        msg: "Your category has been submitted successfully. It is awaiting approval.",
-      });
-    }
+    const categoryCreate = await Category.create({title:title,imageUrl});
+    res.json(categoryCreate);
   } catch (error) {
-    return next(new ErrorHandler(error.message, 500));
+    throw new Error("Error in Create Category API!");
   }
 };
 

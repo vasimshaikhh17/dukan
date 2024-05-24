@@ -27,6 +27,11 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    subCategory:{
+      type:String,
+      enum:["Top", "Bottom"],
+      required:true
+    },
     brand: {
       // type:String,
       // enum:["Apple",'Samsung','Lenovo'],

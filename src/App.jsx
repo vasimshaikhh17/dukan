@@ -15,6 +15,8 @@ import Users from "./Components/admin/users/Users";
 import UserDetails from "./Components/admin/users/UserDetails";
 import Categories from "./Components/product/Categories";
 import AdminCategories from "./Components/admin/categories/AdminCategories";
+import AdminCategoriesDetails from "./Components/admin/categories/AdminCategoriesDetails";
+import AddNewCategory from "./Components/admin/categories/AddNewCategory";
 
 const App = () => {
   return (
@@ -38,6 +40,9 @@ const App = () => {
 
         
         <Route path="/admin/categories" element ={<AdminCategories/>} />
+        <Route path="/admin/add-category" element = {<AddNewCategory/>}/>
+        <Route path="/admin/category/:id" element ={<AdminCategoriesDetails/>} />
+
 
 
         {/* -----------------------admin routes----------------------- */}

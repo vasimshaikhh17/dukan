@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Spinner from './admin/others/Spinner';
 
+
 const ForgotPassword = () => {
   const [email,setEmail] = useState("")
   const [disable,setDisable]=useState(false);

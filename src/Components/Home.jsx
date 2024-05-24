@@ -6,12 +6,12 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import Spinner from "./admin/others/Spinner";
 import AllCategories from "./AllCategories";
+import OurLatestCollection from "../OurLatestCollection";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [category, setCategory] = useState("");
-  const bearerToken = JSON.parse(localStorage.getItem("userData"));
-  const [msg, setMsg] = useState();
+
+
 
   const slides = [
     "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-1-.jpg&w=1200&q=75",
@@ -26,46 +26,6 @@ const Home = () => {
     }, 5000); // Change 5000 to adjust the interval (5 seconds)
     return () => clearInterval(interval);
   }, [slides.length]);
-
-  useEffect(() => {
-    getAllCategory();
-    topProduct()
-  }, []);
-
-  const getAllCategory = async () => {
-    setMsg(<Spinner />);
-    try {
-      const response = await axios.get(
-        "https://dukaan-ds92.onrender.com/api/category/getAll",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken.token}`,
-          },
-        }
-      );
-      if (response.data) {
-        setCategory(response?.data);
-        setMsg("");
-      } else {
-        toast("Something went Wrong");
-        setMsg("Something went Wrong");
-      }
-      console.log(response);
-    } catch (error) {
-      toast("Something went Wrong");
-      setMsg("Something went Wrong");
-    }
-  };
-  const topProduct = async()=>{
-    const Response = await axios.get(`https://dukaan-ds92.onrender.com/api/product/top-product-list`)
-    console.log(Response,'topProduct')
-  }
-  // const OurLatestCollection = async()=>{
-  //   const Response = await axios.post(`https://dukaan-ds92.onrender.com/api/product/get/${}`)
-  // }
-
-
 
 
   const goToSlide = (index) => {
@@ -84,177 +44,92 @@ const Home = () => {
     );
   };
 
-  const products = [
-    {
-      id: 1,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/61jiY0UYqyL._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: false,
-    },
-
-    {
-      id: 2,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/81hf8+fckuL._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: true,
-    },
-    {
-      id: 3,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/61fLAAKKV8L._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: true,
-    },
-    {
-      id: 4,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/61WIfiQFknL._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: true,
-    },
-    {
-      id: 5,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/61MxGnqBzdL._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: false,
-    },
-    {
-      id: 6,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/71mRYklHcjL._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: false,
-    },
-    {
-      id: 7,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: true,
-    },
-    {
-      id: 8,
-      name: "Basic Tee",
-      color: "Black",
-      price: "$35",
-      imageSrc:
-        "https://m.media-amazon.com/images/I/61T6P+UfTkL._AC_UL480_FMwebp_QL65_.jpg",
-      link: "#",
-      inWishlist: true,
-    },
-  ];
-
   const productData = [
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
+    {
+      image:
+        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
+      name: "Casual Shirts",
+      price: "$35",
+      ratings: "4.2",
+    },
 
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
- 
     // Add more products as needed
   ];
 
@@ -282,7 +157,6 @@ const Home = () => {
         </div>
 
         {/* Controllers */}
-      
 
         <button
           className="absolute top-1/2 transform -translate-y-1/2 left-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
@@ -296,7 +170,6 @@ const Home = () => {
         >
           <i className="ri-arrow-right-s-line text-lg font-bold"></i>
         </button>
-
 
         {/* Dots */}
         <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
@@ -313,177 +186,22 @@ const Home = () => {
       </div>
       {/* // --------------------image Slider ----------------------------- */}
 
-      {/* //---------------------categories-------------------------------- */}
-
-      {/* <div className="pt-12">
-        <h2 className="text-center text-xl lg:text-2xl font-bold mb-4">
-          Shop By Category
-        </h2>
-        <div className="bg-slate-50 lg:h-32 flex items-center lg:mx-4">
-          <div className="container mx-auto">
-            <div className=" grid grid-cols-4 lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-3 gap-4 overflow-x-auto lg:overflow-x-hidden whitespace-nowrap">
-              {category ? category?.map((el, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <div className={`w-16 h-16 rounded-full cursor-pointer `}>
-                   <Link to={`/categories/${el._id}`}>
-                    <img
-                      src={el.imageUrl}
-                      alt={el.title}
-                      className="w-full h-full object-cover rounded-full"
-                    />
-                    </Link>
-                  </div>
-                  <div className="mt-2 text-center sm:text-[10px] md:text-[10px] lg:text-[15px]  ">{el.title}</div>
-                </div>
-              )) : <div className="">{msg}</div>   }
-            </div>
-          </div>
-        </div>
-      </div> */}
-
       <AllCategories />
-      {/* //---------------------categories-------------------------------- */}
-
 
       {/* --------------------------------our new launches----------------------------- */}
+      <OurLatestCollection/>
 
-      <section className="pt-16">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
-          Our New Launches
-        </h2>
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-stretch">
-            <div className="grid place-content-center rounded bg-gray-100 p-6 sm:p-8">
-              <div className="mx-auto max-w-md text-center lg:text-left">
-                <header>
-                  <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                    Latest Sale
-                  </h2>
-
-                  <p className="mt-4 text-gray-500">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                    Quas rerum quam amet provident nulla error!
-                  </p>
-                </header>
-
-                <a
-                  href="#"
-                  className="mt-8 inline-block rounded border border-gray-900 bg-gray-900 px-12 py-3 text-sm font-medium text-white transition hover:shadow focus:outline-none focus:ring"
-                >
-                  Shop All
-                </a>
-              </div>
-            </div>
-
-            <div className="lg:col-span-2 lg:py-8">
-              <ul className="grid grid-cols-2 gap-4">
-                <li>
-                  <a href="#" className="group block">
-                    <img
-                      src="https://m.media-amazon.com/images/I/717Szt9URYL._AC_UL480_FMwebp_QL65_.jpg"
-                      alt=""
-                      className="aspect-square w-full rounded object-contain"
-                    />
-
-                    <div className="mt-3">
-                      <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">
-                        Simple Watch
-                      </h3>
-
-                      <p className="mt-1 text-sm text-gray-700">$150</p>
-                    </div>
-                  </a>
-                </li>
-
-                <li>
-                  <a href="#" className="group block">
-                    <img
-                      src="https://m.media-amazon.com/images/I/6150O1H56aL._AC_UL480_FMwebp_QL65_.jpg"
-                      alt=""
-                      className="aspect-square w-full rounded object-contain"
-                    />
-
-                    <div className="mt-3">
-                      <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">
-                        Simple Watch
-                      </h3>
-
-                      <p className="mt-1 text-sm text-gray-700">$150</p>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      
       {/* --------------------------------our new launches----------------------------- */}
 
       {/* ...................................product----------------------------- */}
 
-      {/* <div className="bg-white">
-        <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
-            Our Latest Collection
-          </h2>
-          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-            {products.map((product) => (
-              <div className="group relative" key={product.id}>
-                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80 transform transition-transform duration-300 ease-in-out group-hover:scale-105">
-                  <img
-                    src={product.imageSrc}
-                    alt={`Front of men's ${product.name} in ${product.color}.`}
-                    className="h-full w-full object-cover object-top lg:h-full lg:w-full"
-                  />
-                </div>
-                <div className="mt-4 flex justify-between">
-                  <div>
-                    <h3 className="text-sm text-gray-700">
-                      <Link to={`/product/${product.id}`}>
-                        <span
-                          aria-hidden="true"
-                          className="absolute inset-0"
-                        ></span>
-                        {product.name}
-                      </Link>
-                    </h3>
-                    <p className="mt-1 text-sm text-gray-500">
-                      {product.color}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <p className="text-sm font-medium text-gray-900">
-                      {product.price}
-                    </p>
-                    <button
-                      onClick={() => toggleWishlist(product.id)}
-                      className={`ml-4 flex items-center justify-center w-8 h-8 rounded-full border border-gray-300 focus:outline-none ${
-                        product.inWishlist ? "text-red-500" : "text-gray-500"
-                      }`}
-                    >
-                      <i
-                        className={`${
-                          product.inWishlist ? "ri-heart-fill" : "ri-heart-line"
-                        }`}
-                      ></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <ToastContainer />
-      </div> */}
       <h2 className="text-center text-xl lg:text-2xl font-bold mb-10 pt-24">
-       Our Latest Collection
+        Our Latest Collection
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-auto container mb-5">
         {productData.map((product, index) => (
-          <div
-            key={index}
-            className="rounded-lg shadow-md overflow-hidden "
-          >
+          <div key={index} className="rounded-lg shadow-md overflow-hidden ">
             <a href="#" className="block">
               <img
                 src={product.image}
@@ -590,9 +308,7 @@ const Home = () => {
       </section>
       {/* .........................................latest collection--------------------- */}
 
-  
-
-
+      
     </Layout>
   );
 };

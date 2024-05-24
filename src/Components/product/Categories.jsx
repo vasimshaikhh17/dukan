@@ -45,7 +45,7 @@ const Categories = () => {
       {categoryData.map((category, index) => (
         <div key={index} className=" rounded-lg shadow-md overflow-hidden">
           <a href="#" className="block">
-            <img src={category.image} alt="Category" className="w-full h-48 object-contain" />
+            <img src={category.image} alt="Category" className="w-full h-48 object-contain transition-transform duration-300 hover:scale-125" />
           </a>
           <div className="p-4 ">
             <div className="text-gray-800 font-semibold mb-2 flex justify-center">{category.discount}</div>

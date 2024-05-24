@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Slider from 'react-slick';
 import axios from 'axios';
+import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { toast , ToastContainer} from "react-toastify";
@@ -59,10 +59,10 @@ export default function AllCategories() {
   const getAllCategories = async () => {
     setMsg(<Spinner />);
     try {
-      const response = await axios.get('https://dukaan-ds92.onrender.com/api/category/getAll', {
+      const response = await axios.get('http://dukaan-ds92.onrender.com/api/category/getAll', {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${bearerToken.token}`,
+          // Authorization: `Bearer ${bearerToken.token}`,
         },
       });
       if (response.data) {
@@ -74,7 +74,7 @@ export default function AllCategories() {
       }
     } catch (error) {
       toast.error("Something went wrong");
-      setMsg("Something went wrong");
+      setMsg("Something went wrong");  
     }
   };
 

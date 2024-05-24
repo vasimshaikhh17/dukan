@@ -1,7 +1,7 @@
 export const links = [
   {
     name: "Men",
-    submenu: false,
+    submenu: true,
     sublinks: [
       {
         Head: "Topwear",

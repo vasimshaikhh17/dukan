@@ -325,7 +325,7 @@ const Home = () => {
     <div className="flex justify-between mx-4">
 
     <p className="text-white mx-4">Latest Summer Sale</p>
-    <i class="ri-arrow-right-line"></i>
+    <i className="ri-arrow-right-line"></i>
     </div>
     
     <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-2 gap-4 px-4 py-4">

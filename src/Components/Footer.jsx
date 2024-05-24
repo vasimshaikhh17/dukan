@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   return (
     <footer className="bg-white">
-      <hr class="border-t-2 border-black"/>
+      <hr className="border-t-2 border-black"/>
       <div className="mx-auto max-w-screen-xl  sm:px-6 ">
 
 

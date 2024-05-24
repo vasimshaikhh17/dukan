@@ -19,6 +19,6 @@ router
     fetchSingleCategory
   )
   .delete("/deleteCategory/:id", authMiddleware, isAdmin, deleteCategory)
-  .get("/getAll",authMiddleware, fetchAllCategory);
+  .get("/getAll", fetchAllCategory);
 
   export default router;

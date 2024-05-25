@@ -13,10 +13,11 @@ import ResetPassword from "./Components/ResetPassword";
 import Admin from "./Components/admin/dashboard/Admin"
 import Users from "./Components/admin/users/Users";
 import UserDetails from "./Components/admin/users/UserDetails";
-import Categories from "./Components/product/Categories";
-import AdminCategories from "./Components/admin/categories/AdminCategories";
-import AdminCategoriesDetails from "./Components/admin/categories/AdminCategoriesDetails";
+import SubCategories from "./Components/product/SubCategories";
+
 import AddNewCategory from "./Components/admin/categories/AddNewCategory";
+import Category from "./Components/admin/categories/Category";
+import CategoryDetail from "./Components/admin/categories/CategoryDetail";
 
 const App = () => {
   return (
@@ -30,7 +31,7 @@ const App = () => {
         <Route path="/details" element={<Details />} />
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/categories/:id" element={<Categories />} />
+        <Route path="/categories/:id" element={<SubCategories />} />
 
         {/* -----------------------admin routes----------------------- */}
 
@@ -38,10 +39,9 @@ const App = () => {
         <Route path="/admin/users" element ={<Users/>} />
         <Route path="/admin/user/:id" element={<UserDetails/>}/>
 
-        
-        <Route path="/admin/categories" element ={<AdminCategories/>} />
+        <Route path="/admin/categories" element ={<Category/>} />
         <Route path="/admin/add-category" element = {<AddNewCategory/>}/>
-        <Route path="/admin/category/:id" element ={<AdminCategoriesDetails/>} />
+        <Route path="/admin/category/:id" element ={<CategoryDetail/>} />
 
 
 

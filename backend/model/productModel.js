@@ -22,14 +22,15 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      // type:mongoose.Schema.Types.ObjectId,
-      // ref:"Category",
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Category",
       type: String,
       required: true,
     },
     subCategory:{
-      type:String,
-      enum:["Top", "Bottom"],
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Category",
+      type: String,
       required:true
     },
     brand: {

@@ -59,11 +59,11 @@ export default function AllCategories() {
   const getAllCategories = async () => {
     setMsg(<Spinner />);
     try {
-      const response = await axios.get('https://dukaan-ds92.onrender.com/api/category/getAll', {
+      const response = await axios.get('http://localhost:5000/api/category/getAll', {
         headers: {
           'Content-Type': 'application/json',
           // Authorization: `Bearer ${bearerToken.token}`,
-        },
+        },    
       });
       if (response.data) {
         setCategories(response.data);

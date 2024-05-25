@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../../layout/Layout";
 
-const Categories = () => {
+const SubCategories = () => {
   const categoryData = [
     {
       image:
@@ -71,4 +71,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default SubCategories;

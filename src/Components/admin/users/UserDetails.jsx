@@ -1,6 +1,6 @@
 import React,{useEffect, useState} from 'react'
 import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
+import {useNavigate, useParams } from 'react-router-dom'
 import AdminLayout from '../layout/AdminLayout'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -14,7 +14,7 @@ const user = {
   role: "admin",
   isBlocked: false,
   cart: [
-    { id: 1, name: "Product 1", description: "Description of product 1", image: "https://via.placeholder.com/150" },
+    { id: 1, name: "Product 1", description: "Description of product 1111", image: "https://via.placeholder.com/150" },
     { id: 2, name: "Product 2", description: "Description of product 2", image: "https://via.placeholder.com/150" },
     { id: 3, name: "Product 3", description: "Description of product 3", image: "https://via.placeholder.com/150" },
     { id: 4, name: "Product 4", description: "Description of product 4", image: "https://via.placeholder.com/150" },
@@ -34,6 +34,7 @@ const UserDetails = ()=>{
   const bearerToken = JSON.parse(localStorage.getItem('userData'))
   const params = useParams()
   const [msg,setMsg] = useState("")
+  
   const navigate = useNavigate()
   // console.log(params)
 
@@ -47,7 +48,7 @@ const UserDetails = ()=>{
   const getUserData = async()=>{
     setMsg(<Spinner/>)
     try{
-      const response = await axios.get(`https://dukaan-ds92.onrender.com/api/user/${params.id}`,
+      const response = await axios.get(`http://localhost:5000/api/user/${params.id}`,
       { headers: {
         'Content-Type': 'application/json',
         Authorization:`Bearer ${bearerToken.token}`
@@ -68,7 +69,7 @@ const UserDetails = ()=>{
     setMsg(<Spinner/>)
 
     try{
-      const response = await axios.put(`https://dukaan-ds92.onrender.com/api/user/block-user/${params.id}`,
+      const response = await axios.put(`http:/localhost:5000/api/user/block-user/${params.id}`,
       {},
       { 
         headers: {
@@ -91,7 +92,7 @@ const UserDetails = ()=>{
   const unBlockUser = async()=>{
     setMsg(<Spinner/>)
     try{
-      const response = await axios.put(`https://dukaan-ds92.onrender.com/api/user/unblock-user/${params.id}`,
+      const response = await axios.put(`http://localhost:5000/api/user/unblock-user/${params.id}`,
       {},
       { 
         headers: {
@@ -114,7 +115,7 @@ const UserDetails = ()=>{
   const deleteUser= async()=>{
     setMsg(<Spinner/>)
     try{
-      const response = await axios.delete(`https://dukaan-ds92.onrender.com/api/user/${params.id}`,
+      const response = await axios.delete(`http://localhost:5000/api/user/${params.id}`,
       {},
       { 
         headers: {

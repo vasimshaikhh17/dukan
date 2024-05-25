@@ -13,7 +13,7 @@ const OurLatestCollection = () => {
     const TopProducts = async () => {
       try {
         const response = await axios.get(
-          "https://dukaan-ds92.onrender.com/api/product/top-product-list"
+          "http://localhost:5000/api/product/top-product-list"
         );
         if (response && response.data) {
           setproductListId(response.data.productId);
@@ -38,7 +38,7 @@ const OurLatestCollection = () => {
       const arr = [];
       for (let i = 0; i < productListId.length; i++) {
         const response = await axios.post(
-          `https://dukaan-ds92.onrender.com/api/product/get/${productListId[i]}`
+          `http://localhost:5000/api/product/get/${productListId[i]}`
         );
         arr.push(response.data);
         // console.log(response)

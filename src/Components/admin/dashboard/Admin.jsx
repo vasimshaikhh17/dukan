@@ -27,12 +27,12 @@ const Admin = () => {
       console.log(bearerToken,'token')
 
     try{
-      const response = await axios.get(`https://dukaan-ds92.onrender.com/api/user/${bearerToken._id}`,
+      const response = await axios.get(`http://localhost:5000/api/user/${bearerToken._id}`,
       { headers: {
         'Content-Type': 'application/json',
         Authorization:`Bearer ${bearerToken.token}`
       },})
-      console.log(response,'for user')
+      // console.log(response,'className=')
       if(response.data){
        if(response?.data?.getUser?.role !== "admin"){
          toast.error("Sorry You are not an Admin");

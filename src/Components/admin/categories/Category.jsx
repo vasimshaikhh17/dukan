@@ -86,7 +86,7 @@ const Category = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-auto container">
                 {currentCategories.map((category, index) => (
                   <div key={index} className="rounded-lg shadow-md overflow-hidden">
-                    <Link to={`/admin/category/${category._id}`} state={category._id} className="block">
+                    <Link to={`/admin/category/${category._id}`} state={{category:category._id,title:category.title}} className="block">
                       <img
                         src={category.imageUrl}
                         alt={category.title}

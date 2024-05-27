@@ -7,7 +7,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
-  const user = JSON.parse( localStorage.getItem("userData"));
+  const user = JSON.parse(localStorage.getItem("userData"));
   const handleLinkClick = () => {
     setOpen(false);
   };
@@ -53,18 +53,13 @@ const Navbar = () => {
               </Link>
             ) : (
               <>
-
-<div className="relative tooltip ">
-  <i className="ri-user-line text-2xl cursor-pointer"></i>
-  <div className="absolute newtooltip hidden bg-gray-800 text-white text-xs py-1 px-2 rounded shadow-lg  -translate-x-1/2 transform transition-opacity duration-300 ">
-  {user.firstname}&nbsp;{user.lastname}
-  </div>
-</div>
-
-
+                <div className="relative tooltip ">
+                  <i className="ri-user-line text-2xl cursor-pointer"></i>
+                  <div className="absolute newtooltip hidden bg-gray-800 text-white text-xs py-1 px-2 rounded shadow-lg  -translate-x-1/2 transform transition-opacity duration-300 ">
+                    {user.firstname}&nbsp;{user.lastname}
+                  </div>
+                </div>
               </>
-
-
             )}
             <div
               className="text-3xl md:hidden z-50"

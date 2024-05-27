@@ -18,6 +18,11 @@ import SubCategories from "./Components/product/SubCategories";
 import AddNewCategory from "./Components/admin/categories/AddNewCategory";
 import Category from "./Components/admin/categories/Category";
 import CategoryDetail from "./Components/admin/categories/CategoryDetail";
+import AllProducts from "./Components/admin/product/AllProducts";
+import DeleteSubCat from "./Components/admin/subCategory/DeleteSubCat";
+import UpdateSubCat from "./Components/admin/subCategory/UpdateSubCat";
+import CreateSubCat from "./Components/admin/subCategory/CreateSubCat";
+import CreateProduct from "./Components/admin/product/CreateProduct";
 
 const App = () => {
   return (
@@ -42,6 +47,23 @@ const App = () => {
         <Route path="/admin/categories" element ={<Category/>} />
         <Route path="/admin/add-category" element = {<AddNewCategory/>}/>
         <Route path="/admin/category/:id" element ={<CategoryDetail/>} />
+
+
+        
+        
+        <Route path="/admin/allproducts" element ={<AllProducts/>} />
+        <Route path="/admin/create-product" element = {<CreateProduct/>}/>
+        
+        
+        
+        
+        <Route path="/admin/delete-subCategory" element ={<DeleteSubCat/>} />
+        <Route path="/admin/update-subCategory" element ={<UpdateSubCat/>} />
+        <Route path="/admin/create-subCategory" element ={<CreateSubCat/>} />
+
+
+
+
 
 
 

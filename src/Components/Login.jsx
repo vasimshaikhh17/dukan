@@ -52,13 +52,13 @@ const Login = () => {
         toast.error("Invalid Credentials");
       }
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error);
       toast.error("Invalid Credentials");
       setMsg("Invalid Credentials");
       setDisable(false);
     }
 
-    console.log(value.email, value.password);
+    // console.log(value.email, value.password);
   };
 
   return (

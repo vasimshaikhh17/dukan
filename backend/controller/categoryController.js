@@ -1,5 +1,6 @@
 import { errorHandler } from "../middlewares/errorHandler.js";
 import { Category } from "../model/categoryModels.js";
+import { SubCategory } from "../model/subCategoryModel.js";
 import { User } from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
 
@@ -53,6 +54,57 @@ export const createCategory = async (req, res, next) => {
     throw new Error("Error in Create Category API!");
   }
 };
+
+
+export const createSubCategory = async (req, res, next) => {
+  const { category } = req.body;
+  try {
+    const subCategory = await SubCategory.create({ category });
+    res.json(subCategory);
+  } catch (error) {
+    next(new Error('Error in Create SubCategory API!'));
+  }
+};
+
+export const getSubCategories = async (req, res, next) => {
+  try {
+    const subCategories = await SubCategory.find();
+    res.json(subCategories);
+  } catch (error) {
+    next(new Error('Error in Get SubCategories API!'));
+  }
+};
+
+export const updateSubCategory = async (req, res, next) => {
+  const { id } = req.params;
+  const { category } = req.body;
+  try {
+    const subCategory = await SubCategory.findByIdAndUpdate(id, { category }, { new: true });
+    if (!subCategory) {
+      res.status(404).json({ message: 'SubCategory not found!' });
+    } else {
+      res.json(subCategory);
+    }
+  } catch (error) {
+    next(new Error('Error in Update SubCategory API!'));
+  }
+};
+
+export const deleteSubCategory = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const subCategory = await SubCategory.findByIdAndDelete(id);
+    if (!subCategory) {
+      res.status(404).json({ message: 'SubCategory not found!' });
+    } else {
+      res.json({ message: 'SubCategory deleted successfully!' });
+    }
+  } catch (error) {
+    next(new Error('Error in Delete SubCategory API!'));
+  }
+};
+
+
 
 export const approvalList = async (req, res, next) => {
   try {

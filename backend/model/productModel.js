@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema(
     },
     subCategory:{
       type:mongoose.Schema.Types.ObjectId,
-      ref:"Category",
+      ref:"SubCategory",
       type: String,
       required:true
     },

@@ -4,12 +4,7 @@ import mongoose from "mongoose";
 const categorySchema = new mongoose.Schema(
   {
     category:{
-      type: String,
-      required: [true, "category title is required"],
-    },
-    subCategory:{
-      type: String,
-      enum:["Top", "Bottom"],
+       type: String,
       required: [true, "category title is required"],
     },
     title: {

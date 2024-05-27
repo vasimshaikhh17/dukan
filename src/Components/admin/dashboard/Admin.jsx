@@ -24,7 +24,7 @@ const Admin = () => {
   const getUserData = async()=>{
     setMsg(<Spinner/>)
     const bearerToken = JSON.parse(localStorage.getItem('userData'))
-      console.log(bearerToken,'token')
+      // console.log(bearerToken,'token')
 
     try{
       const response = await axios.get(`http://localhost:5000/api/user/${bearerToken._id}`,
@@ -272,9 +272,10 @@ const Admin = () => {
             <span className="flex-1 ms-3 whitespace-nowrap">Categories</span>
           </Link>
         </li>
+        
         <li>
-          <a
-            href="#"
+          <Link to="/admin/allproducts"
+         
             className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
           >
             <svg
@@ -292,8 +293,8 @@ const Admin = () => {
                 d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
               />
             </svg>
-            <span className="flex-1 ms-3 whitespace-nowrap">Sign In</span>
-          </a>
+            <span className="flex-1 ms-3 whitespace-nowrap">All Products</span>
+          </Link>
         </li>
         <li>
           <a

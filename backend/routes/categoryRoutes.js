@@ -5,6 +5,10 @@ import {
   deleteCategory,
   fetchSingleCategory,
   fetchAllCategory,
+  createSubCategory,
+  getSubCategories,
+  updateSubCategory,
+  deleteSubCategory,
 } from "../controller/categoryController.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -19,6 +23,11 @@ router
     fetchSingleCategory
   )
   .delete("/deleteCategory/:id", authMiddleware, isAdmin, deleteCategory)
-  .get("/getAll", fetchAllCategory);
+  .get("/getAll", fetchAllCategory)
+
+  .post('/subcategory', createSubCategory)
+  .get('/subcategories', getSubCategories)
+  .put('/subcategory/:id', updateSubCategory)
+  .delete('/subcategory/:id', deleteSubCategory)
 
   export default router;

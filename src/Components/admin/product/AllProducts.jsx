@@ -21,6 +21,7 @@ const AllProducts = () => {
       );
       setProducts(response.data);
       setMsg("");
+      // console.log(response);
     } catch (error) {
       setMsg("Something went wrong");
     }
@@ -29,34 +30,34 @@ const AllProducts = () => {
     bringProducts();
   }, []);
 
-
-
   const deleteProduct = async (id) => {
-    console.log(id)
+    // console.log(id)
     setMsg(<Spinner />);
     try {
-      const response = await axios.delete(`http://localhost:5000/api/product/deleteProduct/${id}`,
-      { headers: {
-        'Content-Type': 'application/json',
-        Authorization:`Bearer ${bearerToken.token}`
-      },})
-      if(response.data){
+      const response = await axios.delete(
+        `http://localhost:5000/api/product/deleteProduct/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
+      if (response.data) {
         toast.success("Product Deleted Successfully");
-        setMsg("")
+        setMsg("");
         bringProducts();
-        setProductDelete(null)
+        setProductDelete(null);
       }
       // setProducts(products.filter((product) => product._id !== _id));
       // setProductDelete(null);
       // setMsg("Product deleted successfully");
       // setTimeout(() => setMsg(""), 1000);
     } catch (error) {
-      setMsg("")
+      setMsg("");
       toast.error("Something went Wrong");
     }
   };
-
-
 
   return (
     <AdminLayout>
@@ -106,7 +107,7 @@ const AllProducts = () => {
                           Edit
                         </button>
                         <button
-                          onClick={()=> setProductDelete(product._id)}
+                          onClick={() => setProductDelete(product._id)}
                           className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                         >
                           Delete
@@ -162,11 +163,13 @@ const AllProducts = () => {
             <div className="flex justify-end">
               <button
                 className="bg-red-500 text-white px-4 py-2 rounded mr-2"
-                onClick={() => {deleteProduct(prodDelete)}}
+                onClick={() => {
+                  deleteProduct(prodDelete);
+                }}
               >
                 Yes, Delete
               </button>
-              <button 
+              <button
                 className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
                 onClick={() => setProductDelete(null)}
               >
@@ -176,7 +179,6 @@ const AllProducts = () => {
           </div>
         </div>
       )}
-
     </AdminLayout>
   );
 };

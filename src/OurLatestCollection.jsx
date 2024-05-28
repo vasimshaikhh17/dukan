@@ -11,16 +11,18 @@ const OurLatestCollection = () => {
 
   useEffect(() => {
     const TopProducts = async () => {
+      setMsg(<Spinner/>)
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/product/top-product-list"
+          "http://localhost:5000/api/product/top-product-list"  
         );
         if (response && response.data) {
           setproductListId(response.data.productId);
         }
+        setMsg("")
       } catch (error) {
-        console.error(error);
-      }
+        // console.error(error);
+        setMsg("Something Went Wrong")      }
     };
 
     TopProducts();
@@ -37,12 +39,13 @@ const OurLatestCollection = () => {
     try {
       const arr = [];
       for (let i = 0; i < productListId.length; i++) {
-        const response = await axios.post(
+        const response = await axios.get(
           `http://localhost:5000/api/product/get/${productListId[i]}`
         );
         arr.push(response.data);
         // console.log(response)
       }
+      setMsg("")
       setProductList(arr);
     } catch (error) {
       setMsg("Something Went Wrong");
@@ -123,7 +126,7 @@ const OurLatestCollection = () => {
                     <div className="group block product-item">
                       <img
                         src={
-                          product.images[0] || "https://via.placeholder.com/150"
+                          product.images[0] || "https://placehold.co/600x400"
                         }
                         alt={product.title}
                         className="aspect-square w-full rounded object-contain"

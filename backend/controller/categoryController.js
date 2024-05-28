@@ -3,6 +3,7 @@ import { Category } from "../model/categoryModels.js";
 import { SubCategory } from "../model/subCategoryModel.js";
 import { User } from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
+import { validateMongoDbId } from "../utils/validateMongodbId.js";
 
 
 // export const createCategory = async (req, res, next) => {
@@ -46,12 +47,13 @@ import asyncHandler from "express-async-handler";
 // };
 
 export const createCategory = async (req, res, next) => {
-  const {title,imageUrl} = req.body;
+  const {category,title,imageUrl} = req.body;
   try {
-    const categoryCreate = await Category.create({title:title,imageUrl});
+    const categoryCreate = await Category.create({category,title,imageUrl});
     res.json(categoryCreate);
   } catch (error) {
-    throw new Error("Error in Create Category API!");
+    // throw new Error(error);
+    console.log(error)
   }
 };
 
@@ -78,6 +80,7 @@ export const getSubCategories = async (req, res, next) => {
 export const updateSubCategory = async (req, res, next) => {
   const { id } = req.params;
   const { category } = req.body;
+  validateMongoDbId(id)
   try {
     const subCategory = await SubCategory.findByIdAndUpdate(id, { category }, { new: true });
     if (!subCategory) {
@@ -92,6 +95,7 @@ export const updateSubCategory = async (req, res, next) => {
 
 export const deleteSubCategory = async (req, res, next) => {
   const { id } = req.params;
+  validateMongoDbId(id)
   try {
     const subCategory = await SubCategory.findByIdAndDelete(id);
     if (!subCategory) {
@@ -147,9 +151,10 @@ export const approvalList = async (req, res, next) => {
 };
 export const updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validateMongoId(id);
+  validateMongoDbId(id)
+  //validateMongoId(id);
   try {
-    const updateProductCategory = await categoryModels.findByIdAndUpdate(
+    const updateProductCategory = await Category.findByIdAndUpdate(
       id,
       req.body,
       {
@@ -164,7 +169,8 @@ export const updateCategory = asyncHandler(async (req, res) => {
 //Delete the ProductsCategory
 export const deleteCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validateMongoId(id);
+  validateMongoDbId(id)
+ // validateMongoId(id);
   try {
     const deleteProductCategory = await Category.findByIdAndDelete(id);
     res.json(deleteProductCategory);
@@ -176,7 +182,8 @@ export const deleteCategory = asyncHandler(async (req, res) => {
 //Fetch Single Product Category
 export const fetchSingleCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validateMongoId(id);
+  validateMongoDbId(id)
+ // validateMongoId(id);
   try {
     const getCategory = await Category.findById(id);
     res.json(getCategory);

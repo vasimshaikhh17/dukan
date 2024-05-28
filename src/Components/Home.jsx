@@ -10,8 +10,8 @@ import OurLatestCollection from "../OurLatestCollection";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-
-
+  const [product, setProducts] = useState([]);
+  const [msg, setMsg] = useState();
 
   const slides = [
     "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-1-.jpg&w=1200&q=75",
@@ -26,7 +26,6 @@ const Home = () => {
     }, 5000); // Change 5000 to adjust the interval (5 seconds)
     return () => clearInterval(interval);
   }, [slides.length]);
-
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
@@ -44,94 +43,28 @@ const Home = () => {
     );
   };
 
-  const productData = [
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
-    {
-      image:
-        "https://m.media-amazon.com/images/I/61IytOl+V7L._AC_UL480_FMwebp_QL65_.jpg",
-      name: "Casual Shirts",
-      price: "$35",
-      ratings: "4.2",
-    },
+  const getProducts = async () => {
+    setMsg(<Spinner />);
+    try {
+      const result = await axios.get(
+        `http://localhost:5000/api/product/getAll`
+      );
+      setMsg("");
+      // const data = result.data;
+      // console.log(data);
 
-    // Add more products as needed
-  ];
+
+      const slicedProducts = result.data.slice(0, 3);
+
+      setProducts(slicedProducts);
+    } catch (error) {
+      setMsg("Something Went Wrong");
+    }
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <Layout>
@@ -189,44 +122,61 @@ const Home = () => {
       <AllCategories />
 
       {/* --------------------------------our new launches----------------------------- */}
-      <OurLatestCollection/>
+      <OurLatestCollection />
 
-      
       {/* --------------------------------our new launches----------------------------- */}
 
-      {/* ...................................product----------------------------- */}
+      {/* ...................................our product----------------------------- */}
 
       <h2 className="text-center text-xl lg:text-2xl font-bold mb-10 pt-24">
-        Our Latest Collection
+        Our Products
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-auto container mb-5">
-        {productData.map((product, index) => (
-          <div key={index} className="rounded-lg shadow-md overflow-hidden ">
-            <a href="#" className="block">
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-48 object-contain transition-transform hover:scale-105 "
-              />
-            </a>
-            <div className="p-4">
-              <div className="flex justify-between mb-2">
-                <div className="text-gray-800 font-semibold">
-                  {product.name}
+      {!msg ? (
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-auto container mb-5">
+          {product.map((products) => (
+            <div
+              key={products._id}
+              className="rounded-lg shadow-md overflow-hidden "
+            >
+              <a href="#" className="block">
+                <img
+                  src={products.images[0] || " https://placehold.co/600x400"}
+                  alt={products.title}
+                  className="w-full h-48 object-contain transition-transform hover:scale-105 "
+                />
+              </a>
+              <div className="p-4">
+                <div className="flex justify-between mb-2">
+                  <div className="text-gray-800 font-semibold">
+                    {products.name}
+                  </div>
+                  <div className="text-gray-600">₹{products.price}</div>
                 </div>
-                <div className="text-gray-600">{product.price}</div>
-              </div>
-              <div className="flex justify-between mb-2">
-                <div className="text-gray-600">Ratings: {product.ratings}</div>
-                <button className="text-2xl transition-transform hover:scale-125">
-                  <i className="ri-heart-line"></i>
-                </button>
+                <div className="flex justify-between mb-2">
+                  <div className="text-gray-600"> {products.title}</div>
+                  <button className="text-2xl transition-transform hover:scale-125">
+                    <i className="ri-heart-line"></i>
+                  </button>
+                </div>
+                <div className="text-gray-600"> {products.description}</div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+      ) : (
+        <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">
+          {msg}
+        </div>
+      )}
+
+      <div class="text-center mt-8">
+        <button class="group bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center">
+          View All Products{" "}
+          <i class="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+        </button>
       </div>
-      {/* ...................................product----------------------------- */}
+
+      {/* ...................................our products----------------------------- */}
 
       {/* .........................................latest collection--------------------- */}
       <section>
@@ -307,8 +257,6 @@ const Home = () => {
         </div>
       </section>
       {/* .........................................latest collection--------------------- */}
-
-      
     </Layout>
   );
 };

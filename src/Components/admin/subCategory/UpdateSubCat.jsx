@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import axios from "axios";
 import Spinner from "../others/Spinner";
+
+
 // import { FaEdit } from "react-icons/fa";
 
 const UpdateSubCat = () => {

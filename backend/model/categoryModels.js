@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 //schema
 const categorySchema = new mongoose.Schema(
   {
-    category:{
-       type: String,
+    category: {
+      type: String,
       required: [true, "category title is required"],
     },
     title: {
@@ -13,8 +13,7 @@ const categorySchema = new mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      default:
-        "https://image.similarpng.com/very-thumbnail/2021/09/Good-food-logo-design-on-transparent-background-PNG.png",
+      required: [true, "Image is required"],
     },
   },
   { timestamps: true }
@@ -22,3 +21,35 @@ const categorySchema = new mongoose.Schema(
 
 //export
 export const Category = mongoose.model("Category", categorySchema);
+
+// Static data (for initial population)
+const initialCategories = [
+  {
+    category: "Top",
+    title: "Jeans",
+    imageUrl: "http://example.com/electronics.jpg",
+  },
+  {
+    category: "Bottom",
+    title: "Books",
+    imageUrl: "http://example.com/books.jpg",
+  },
+  {
+    category: "Watches",
+    title: "FastTracks",
+    imageUrl: "http://example.com/clothing.jpg",
+  },
+];
+
+// Function to initialize database with static data
+export const initializeCategories = async () => {
+  try {
+      const count = await Category.countDocuments();
+      if (count === 0) {
+          await Category.insertMany(initialCategories);
+          console.log('Initial categories have been populated');
+      }
+  } catch (error) {
+      console.error('Error initializing categories:', error);
+  }
+};

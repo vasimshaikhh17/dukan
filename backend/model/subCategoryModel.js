@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 //schema
 const subCategorySchema = new mongoose.Schema(
   {
-    category:{
+    sub_category:{
        type: String,
       required: [true, "category title is required"],
     },

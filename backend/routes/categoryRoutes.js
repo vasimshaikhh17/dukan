@@ -10,24 +10,27 @@ import {
   updateSubCategory,
   deleteSubCategory,
 } from "../controller/categoryController.js";
+import { upload } from "../middlewares/testingMiddleware.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 router
-  .post("/create-category", authMiddleware, isAdmin, createCategory)
-  .put("/update-category/:id", authMiddleware, isAdmin, updateCategory)
-  .get(
-    "/fetchSingleCategory/:id",
+  .post(
+    "/create-category",
     authMiddleware,
     isAdmin,
-    fetchSingleCategory
+    upload.single("images"),
+    createCategory
   )
+  .put("/update-category/:id", authMiddleware, isAdmin, updateCategory)
+  .get("/fetchSingleCategory/:identifier", fetchSingleCategory)
+  // .get("/fetchSingleCategory/:name", fetchSingleCategory)
   .delete("/deleteCategory/:id", authMiddleware, isAdmin, deleteCategory)
   .get("/getAll", fetchAllCategory)
 
-  .post('/subcategory', createSubCategory)
-  .get('/subcategories', getSubCategories)
-  .put('/subcategory/:id', updateSubCategory)
-  .delete('/subcategory/:id', deleteSubCategory)
+  .post("/subcategory", createSubCategory)
+  .get("/subcategories", getSubCategories)
+  .put("/subcategory/:id", updateSubCategory)
+  .delete("/subcategory/:id", deleteSubCategory);
 
-  export default router;
+export default router;

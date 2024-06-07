@@ -4,18 +4,91 @@ import { User } from "../model/userModel.js";
 import { TopProducts } from "../model/topProducts.js";
 import slugify from "slugify";
 import { validateMongoDbId } from "../utils/validateMongodbId.js";
-import { cloudinaryuploadImg } from "../utils/cloudinary.js";
+//import { cloudinaryuploadImg } from "../utils/cloudinary.js";
 import fs from "fs";
+import { cloudinaryuploadImg } from "../utils/cloudinary.js";
+import cloudinary from "cloudinary";
+import { Wishlist } from "../model/wishList.js";
+import mongoose from "mongoose";
 
 export const createProduct = asyncHandler(async (req, res) => {
+  const {
+    title,
+    description,
+    price,
+    category,
+    brand,
+    quantity,
+    sub_category,
+    sold,
+    color,
+    tags,
+  } = req.body;
+
+  // let slug = "";
+  //   if (title) {
+  //     slug = slugify(title);
+  //   }
+
   try {
     if (req.body.title) {
       req.body.slug = slugify(req.body.title);
     }
-    const newProduct = await Product.create(req.body);
-    res.json(newProduct);
+    let slug = "";
+    if (title) {
+      slug = slugify(title);
+    }
+
+    //Starts
+    const uploadResults = await Promise.all(
+      req.files.map((file) => cloudinary.uploader.upload(file.path))
+    );
+
+    const imageUrls = uploadResults.map(
+      (uploadResult) => uploadResult.secure_url
+    );
+
+    const newImage = new Product({
+      title: title,
+      images: imageUrls,
+      description: description || "",
+      price: price,
+      slug: slug,
+      brand: brand,
+      quantity: quantity,
+      sub_category: sub_category,
+      color: color,
+      tags: tags,
+      category: category,
+      sold: sold,
+    });
+
+    await newImage.save();
+
+    req.files.forEach((file) => {
+      fs.unlink(file.path, function (err) {
+        if (err) console.log(err);
+        else console.log("\nFile Successfully Deleted");
+      });
+    });
+    //ends
+
+    res.json({
+      title: title,
+      images: imageUrls,
+      description: description || "",
+      price: price,
+      brand: brand,
+      quantity: quantity,
+      sub_category: sub_category,
+      color: color,
+      tags: tags,
+      category: category,
+      sold: sold,
+      message: "Successfully uploaded",
+    });
   } catch (error) {
-    throw new Error(error);
+    console.error(error);
   }
 });
 
@@ -39,7 +112,13 @@ export const updateProduct = asyncHandler(async (req, res) => {
     }
     res.json(updatedProduct);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A product with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -50,7 +129,13 @@ export const getProduct = asyncHandler(async (req, res) => {
     const findProduct = await Product.findById(id);
     res.json(findProduct);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A product with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -114,43 +199,98 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 // Add to WishList Functionality
-export const addToWishList = asyncHandler(async (req, res) => {
-  const { _id } = req.user;
-  const { prodId } = req.body;
-  validateMongoDbId(_id);
-  // console.log(prodId);
-  try {
-    const user = await User.findById(_id);
-    const alreadyAdded = await user.wishList.find(
-      (_id) => _id.toString() === prodId
-    );
-    if (alreadyAdded) {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { wishList: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    } else {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $push: { wishList: prodId },
-        },
-        {
-          new: true,
-        }
-      );
-      res.json(user);
-    }
-  } catch (error) {
-    throw new Error("Error in WishList API!");
-  }
-});
+// export const addToWishList = asyncHandler(async (req, res) => {
+//   const { _id } = req.user;
+//   const { prodId } = req.body;
+//   validateMongoDbId(_id);
+//   // console.log(prodId);
+//   try {
+//     const user = await User.findById(_id);
+//     const alreadyAdded = await user.wishList.find(
+//       (id) => id.toString() === prodId
+//     );
+//     if (alreadyAdded) {
+//       let user = await User.findByIdAndUpdate(
+//         _id,
+//         {
+//           $pull: { wishList: prodId },
+//         },
+//         {
+//           new: true,
+//         }
+//       );
+//       res.json(user);
+//     } else {
+//       let user = await User.findByIdAndUpdate(
+//         _id,
+//         {
+//           $push: { wishList: prodId },
+//         },
+//         {
+//           new: true,
+//         }
+//       );
+//       res.json(user);
+//     }
+//   } catch (error) {
+//     if (error.code === 11000) {
+//       res.status(400).json({
+//         error: "Duplicate key error: A product with this slug already exists.",
+//       });
+//     } else {
+//       res.status(400).json({ error: error.message });
+//     }
+//   }
+// });
+
+
+
+// export const addToWishList = asyncHandler(async (req, res) => {
+//   const { _id } = req.user;
+//   const { prodId } = req.body;
+//   validateMongoDbId(_id);
+//   validateMongoDbId(prodId);
+//   console.log(prodId);
+//   try {
+//     const user = await User.findById(_id);
+//     const alreadyAdded = user.wishList.find((_id) => _id.toString() === prodId);
+//     if (alreadyAdded) {
+//       let user = await User.findByIdAndUpdate(
+//         _id,
+//         {
+//           $pull: { wishList: prodId },
+//         },
+//         {
+//           new: true,
+//         }
+//       );
+//       res.json({
+//         msg: "Product removed Successfully from wishlist",
+//       });
+//     } else {
+//       let user = await User.findByIdAndUpdate(
+//         _id,
+//         {
+//           $push: { wishList: prodId },
+//         },
+//         {
+//           new: true,
+//         }
+//       );
+//       res.json({
+//         msg: "Product added Successfully to wishlist",
+//       });
+//     }
+//   } catch (error) {
+//     if (error.code === 11000) {
+//       res.status(400).json({
+//         error: "Duplicate key error: A product with this slug already exists.",
+//       });
+//     } else {
+//       res.status(400).json({ error: error.message });
+//     }
+//   }
+// });
 
 //Ratings Functionality
 export const totalRatings = asyncHandler(async (req, res) => {
@@ -208,28 +348,29 @@ export const uploadImage = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
 
-  const uploader = (path) => cloudinaryuploadImg(path, "images");
+  try {
+    const file = req.file;
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
 
-  const urls = [];
-  const files = req.files;
-  // console.log(files, "files");
-  for (const file of files) {
-    const { path } = file;
-    const newPath = await uploader(path);
-    urls.push(newPath);
-    fs.unlinkSync(path);
+    const uploadResult = await cloudinary.uploader.upload(req.file.path);
+    const newImage = new Product({ images: uploadResult.secure_url });
+    await newImage.save();
+    console.log(newImage);
+    fs.unlink(req.file.path, function (err) {
+      if (err) console.log(err);
+      else console.log("File Successfully Deleted");
+    });
+    const findProduct = await Product.findByIdAndUpdate(
+      id,
+      { images: uploadResult.secure_url },
+      { new: true }
+    );
+    res.json(findProduct, newImage);
+  } catch (error) {
+    console.log(error);
   }
-  const findProduct = await Product.findByIdAndUpdate(id, {
-    images: urls.map(
-      (file) => {
-        return file;
-      },
-      {
-        new: true,
-      }
-    ),
-  });
-  res.json(findProduct);
 });
 
 // Add or remove top products for a user
@@ -268,19 +409,20 @@ export const addTopProducts = asyncHandler(async (req, res) => {
   }
 });
 
-export const getTopProducts = asyncHandler(async(req,res)=>{
+//Get Top Producsts!
+export const getTopProducts = asyncHandler(async (req, res) => {
   let topProducts = await TopProducts.find();
-  try{
-    if(topProducts[0].topProducts){
-      res.json({productId:topProducts[0].topProducts})
+  try {
+    if (topProducts[0].topProducts) {
+      res.json({ productId: topProducts[0].topProducts });
     }
-  }catch(error){
-    throw new Error(error)
+  } catch (error) {
+    throw new Error(error);
   }
   // console.log(topProducts)
+});
 
-})
-
+//Update Top Products
 export const updateTopProductPosition = asyncHandler(async (req, res) => {
   const { userId, prodId, newPosition } = req.body;
   validateMongoDbId(userId);
@@ -310,6 +452,13 @@ export const updateTopProductPosition = asyncHandler(async (req, res) => {
     await topProducts.save();
     res.status(200).send(topProducts);
   } catch (error) {
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A product with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
     res.status(500).send("Server error");
   }
 });

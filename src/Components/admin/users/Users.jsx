@@ -49,9 +49,9 @@ const Users = () => {
                     </tr>
                   </thead>
                   <tbody className="text-gray-700 text-sm font-light">
-                    {users.map((user, index) => (
+                    {users.map((user) => (
                       <tr
-                        key={index}
+                        key={user._id}
                         className="border-b border-gray-200 hover:bg-gray-100 "
                       >
                         <td className="py-3 px-6 text-left whitespace-nowrap">

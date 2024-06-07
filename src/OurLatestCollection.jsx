@@ -4,25 +4,27 @@ import Spinner from "./Components/admin/others/Spinner";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Link } from "react-router-dom";
 const OurLatestCollection = () => {
   const [productListId, setproductListId] = useState("");
   const [productList, setProductList] = useState("");
   const [msg, setMsg] = useState("");
 
-  useEffect(() => {
+  useEffect(() => {   
     const TopProducts = async () => {
-      setMsg(<Spinner/>)
+      setMsg(<Spinner />);
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/product/top-product-list"  
+          "http://localhost:5000/api/product/top-product-list"
         );
         if (response && response.data) {
           setproductListId(response.data.productId);
         }
-        setMsg("")
+        setMsg("");
       } catch (error) {
         // console.error(error);
-        setMsg("Something Went Wrong")      }
+        setMsg("Something Went Wrong");
+      }
     };
 
     TopProducts();
@@ -45,7 +47,7 @@ const OurLatestCollection = () => {
         arr.push(response.data);
         // console.log(response)
       }
-      setMsg("")
+      setMsg("");
       setProductList(arr);
     } catch (error) {
       setMsg("Something Went Wrong");
@@ -109,12 +111,12 @@ const OurLatestCollection = () => {
                   rerum quam amet provident nulla error!
                 </p>
               </header>
-              <a
-                href="#"
+              <Link
+                to="/view-products"
                 className="mt-8 inline-block rounded border border-gray-900 bg-gray-900 px-12 py-3 text-sm font-medium text-white transition hover:shadow focus:outline-none focus:ring"
               >
                 Shop All
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -126,20 +128,20 @@ const OurLatestCollection = () => {
                     <div className="group block product-item">
                       <img
                         src={
-                          product.images[0] || "https://placehold.co/600x400"
+                          product?.images[0] || "https://placehold.co/600x400"
                         }
-                        alt={product.title}
+                        alt={product?.title}
                         className="aspect-square w-full rounded object-contain"
                       />
                       <div className="mt-3">
                         <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">
-                          {product.title}
+                          {product?.title}
                         </h3>
                         <p className="mt-1 text-sm text-gray-700">
-                          ${product.price}
+                          ${product?.price}
                         </p>
                         <p className="mt-1 text-sm text-gray-500">
-                          {product.description}
+                          {product?.description}
                         </p>
                       </div>
                     </div>

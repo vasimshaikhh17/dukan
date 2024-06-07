@@ -67,9 +67,10 @@ const UserDetails = () => {
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
   const params = useParams();
   const [msg, setMsg] = useState("");
+  const [deleteId, setDeleteId] = useState(null);
 
   const navigate = useNavigate();
-  // console.log(params)
+  // console.log(params);
 
   useEffect(() => {
     getUserData();
@@ -79,7 +80,7 @@ const UserDetails = () => {
     setMsg(<Spinner />);
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/user/${params.id}`,
+        `http://localhost:5000/api/user/${params?.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -87,7 +88,6 @@ const UserDetails = () => {
           },
         }
       );
-      // console.log(response)
       if (response.data) {
         setData(response?.data?.getUser);
         setMsg("");
@@ -100,10 +100,9 @@ const UserDetails = () => {
 
   const blockUser = async () => {
     setMsg(<Spinner />);
-
     try {
       const response = await axios.put(
-        `http:/localhost:5000/api/user/block-user/${params.id}`,
+        `http://localhost:5000/api/user/block-user/${params?.id}`,
         {},
         {
           headers: {
@@ -113,8 +112,8 @@ const UserDetails = () => {
         }
       );
       if (response.data) {
-        toast.success("User Blocked Successfully");
-        getUserData();
+        await getUserData();
+        // toast.success("User Blocked Successfully");
         setMsg("");
       }
     } catch (error) {
@@ -122,11 +121,12 @@ const UserDetails = () => {
       setMsg("Something went wrong!");
     }
   };
+
   const unBlockUser = async () => {
     setMsg(<Spinner />);
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/user/unblock-user/${params.id}`,
+        `http://localhost:5000/api/user/unblock-user/${params?.id}`,
         {},
         {
           headers: {
@@ -136,13 +136,13 @@ const UserDetails = () => {
         }
       );
       if (response.data) {
-        toast.success("User UnBlocked Successfully");
-        getUserData();
+        await getUserData();
+        // toast.success("User UnBlocked Successfully");
         setMsg("");
       }
     } catch (error) {
       toast.error("Something went Wrong");
-      setMsg("Spmething went wrong");
+      setMsg("Something went wrong");
     }
   };
 
@@ -150,8 +150,7 @@ const UserDetails = () => {
     setMsg(<Spinner />);
     try {
       const response = await axios.delete(
-        `http://localhost:5000/api/user/${params.id}`,
-        {},
+        `http://localhost:5000/api/user/${deleteId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -159,25 +158,31 @@ const UserDetails = () => {
           },
         }
       );
-      // console.log(response)
       if (response.data) {
-        toast.success("User Deleted Successfully");
+        toast.success("User Deleted Successfully, You are being redirected to dashboard!");
         setMsg("");
-        navigate("/admin/users");
+        setTimeout(() => {
+          navigate("/admin/users");
+        }, 4000);
       }
     } catch (error) {
       toast.error("Something went Wrong");
-      setMsg("Spmething went wrong");
+      setMsg("Something went wrong");
+      console.log(error, 'err');
     }
+  };
+
+  const confirmDeleteUser = () => {
+    setDeleteId(params?.id);
   };
 
   return (
     <>
       <AdminLayout>
+            {!msg ? (
         <div className="p-4 sm:ml-64">
           <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* User Details Box */}
-            {!msg ? (
               <div className="bg-white shadow-lg rounded-lg p-4">
                 <h2 className="text-2xl font-semibold text-gray-800">
                   {data?.firstname} {data?.lastname}
@@ -199,23 +204,19 @@ const UserDetails = () => {
                   {data?.isBlocked ? "Unblock" : "Block"}
                 </button>
                 <button
-                  onClick={deleteUser}
+                  onClick={confirmDeleteUser}
                   className="mt-4 mx-4 px-4 py-2 bg-red-500 text-white rounded"
                 >
                   Delete User
                 </button>
               </div>
-            ) : (
-              <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">
-                {msg}
-              </div>
-            )}
+       
 
             {/* Address Box */}
             <div className="bg-white shadow-lg rounded-lg p-4">
               <h3 className="text-xl font-semibold text-gray-800">Address</h3>
-              {user.address.length > 0 ? (
-                user.address.map((addr, index) => (
+              {data?.address.length > 0 ? (
+                data?.address.map((addr, index) => (
                   <p key={index} className="text-gray-600 mt-2">
                     {addr}
                   </p>
@@ -270,7 +271,38 @@ const UserDetails = () => {
             </div>
           </div>
         </div>
+
+      ) : (
+        <div className="flex flex-col items-center justify-center h-screen">
+        {msg}
+      </div>
+      )}
       </AdminLayout>
+
+      {deleteId && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-auto">
+            <h2 className="text-xl font-semibold mb-4 text-center">
+              Are you sure you want to delete this user?
+            </h2>
+            <div className="flex justify-end">
+              <button
+                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+                onClick={deleteUser}
+              >
+                Yes, Delete
+              </button>
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                onClick={() => setDeleteId(null)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <ToastContainer />
     </>
   );

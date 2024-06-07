@@ -1,11 +1,13 @@
 import { errorHandler } from "../middlewares/errorHandler.js";
 import { Category } from "../model/categoryModels.js";
+import { Product } from "../model/productModel.js";
 import { SubCategory } from "../model/subCategoryModel.js";
 import { User } from "../model/userModel.js";
 import asyncHandler from "express-async-handler";
 import { validateMongoDbId } from "../utils/validateMongodbId.js";
-
-
+import cloudinary from "cloudinary";
+import fs from "fs";
+import mongoose from "mongoose";
 // export const createCategory = async (req, res, next) => {
 //   const { name, icon, color, createdBy } = req.body;
 
@@ -47,16 +49,44 @@ import { validateMongoDbId } from "../utils/validateMongodbId.js";
 // };
 
 export const createCategory = async (req, res, next) => {
-  const {category,title,imageUrl} = req.body;
+  const { category, title } = req.body;
   try {
-    const categoryCreate = await Category.create({category,title,imageUrl});
-    res.json(categoryCreate);
+    //Starts
+    // const uploadResults = await Promise.all(
+    //   req.files.map((file) => cloudinary.uploader.upload(file.path))
+    // );
+
+    const uploadResults = await cloudinary.uploader.upload(req.file.path);
+
+    // const imageUrls = uploadResults.map(
+    //   (uploadResult) => uploadResult.secure_url
+    // );
+    console.log(uploadResults, "uploadResults");
+    const categoryCreates = await Category.create({
+      category: category,
+      title: title,
+      imageUrl: uploadResults?.secure_url,
+    });
+    await categoryCreates.save();
+    fs.unlink(req.file.path, function (err) {
+      if (err) console.log(err);
+      else console.log("File or Images Successfully Deleted!");
+    });
+    console.log(categoryCreates);
+    res.json(categoryCreates);
   } catch (error) {
     // throw new Error(error);
-    console.log(error)
+    console.log(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error:
+          "Duplicate key error: A product with this Create category already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 };
-
 
 export const createSubCategory = async (req, res, next) => {
   const { category } = req.body;
@@ -64,7 +94,14 @@ export const createSubCategory = async (req, res, next) => {
     const subCategory = await SubCategory.create({ category });
     res.json(subCategory);
   } catch (error) {
-    next(new Error('Error in Create SubCategory API!'));
+    if (error.code === 11000) {
+      res.status(400).json({
+        error:
+          "Duplicate key error: A product with this sub-category already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 };
 
@@ -73,42 +110,50 @@ export const getSubCategories = async (req, res, next) => {
     const subCategories = await SubCategory.find();
     res.json(subCategories);
   } catch (error) {
-    next(new Error('Error in Get SubCategories API!'));
+    next(new Error("Error in Get SubCategories API!"));
   }
 };
 
 export const updateSubCategory = async (req, res, next) => {
   const { id } = req.params;
   const { category } = req.body;
-  validateMongoDbId(id)
+  validateMongoDbId(id);
   try {
-    const subCategory = await SubCategory.findByIdAndUpdate(id, { category }, { new: true });
+    const subCategory = await SubCategory.findByIdAndUpdate(
+      id,
+      { category },
+      { new: true }
+    );
     if (!subCategory) {
-      res.status(404).json({ message: 'SubCategory not found!' });
+      res.status(404).json({ message: "SubCategory not found!" });
     } else {
       res.json(subCategory);
     }
   } catch (error) {
-    next(new Error('Error in Update SubCategory API!'));
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A product with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 };
 
 export const deleteSubCategory = async (req, res, next) => {
   const { id } = req.params;
-  validateMongoDbId(id)
+  validateMongoDbId(id);
   try {
     const subCategory = await SubCategory.findByIdAndDelete(id);
     if (!subCategory) {
-      res.status(404).json({ message: 'SubCategory not found!' });
+      res.status(404).json({ message: "SubCategory not found!" });
     } else {
-      res.json({ message: 'SubCategory deleted successfully!' });
+      res.json({ message: "SubCategory deleted successfully!" });
     }
   } catch (error) {
-    next(new Error('Error in Delete SubCategory API!'));
+    next(new Error("Error in Delete SubCategory API!"));
   }
 };
-
-
 
 export const approvalList = async (req, res, next) => {
   try {
@@ -151,7 +196,7 @@ export const approvalList = async (req, res, next) => {
 };
 export const updateCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validateMongoDbId(id)
+  validateMongoDbId(id);
   //validateMongoId(id);
   try {
     const updateProductCategory = await Category.findByIdAndUpdate(
@@ -163,14 +208,20 @@ export const updateCategory = asyncHandler(async (req, res) => {
     );
     res.json(updateProductCategory);
   } catch (error) {
-    throw new Error("Error In Update Catgory API!");
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A product with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 //Delete the ProductsCategory
 export const deleteCategory = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  validateMongoDbId(id)
- // validateMongoId(id);
+  validateMongoDbId(id);
+  // validateMongoId(id);
   try {
     const deleteProductCategory = await Category.findByIdAndDelete(id);
     res.json(deleteProductCategory);
@@ -181,14 +232,36 @@ export const deleteCategory = asyncHandler(async (req, res) => {
 
 //Fetch Single Product Category
 export const fetchSingleCategory = asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  validateMongoDbId(id)
- // validateMongoId(id);
+  const { identifier } = req.params;
+
   try {
-    const getCategory = await Category.findById(id);
-    res.json(getCategory);
+    // Validate the categoryId
+    let categoryname = await Category.find({ title: identifier });
+
+    let categoryby;
+    if (mongoose.Types.ObjectId.isValid(identifier)) {
+      categoryby = identifier;
+    } else if (categoryname) {
+      let categoryName = await Category.find({ title: identifier });
+      categoryby = await categoryName[0]?._id;
+      // console.log(categoryby, "categoryname");
+      // console.log(categoryName, "categoryname");
+    } else {
+      return res.status(400).json({ message: "Invalid category ID" });
+    }
+    // Fetch products based on the categoryId
+
+    const products = await Product.find({ category: categoryby });
+    // const products = await Product.find({ categoryId }).populate("category");
+    if (products.length > 0) {
+      res.json({ msg: "success", data: products });
+    } else {
+      res
+        .status(404)
+        .json({ message: "No products found for the given category ID" });
+    }
   } catch (error) {
-    throw new Error("Single Category API!");
+    res.status(500).json({ message: error.message });
   }
 });
 

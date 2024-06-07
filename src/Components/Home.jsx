@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 
 import axios from "axios";
@@ -7,15 +7,20 @@ import { toast, ToastContainer } from "react-toastify";
 import Spinner from "./admin/others/Spinner";
 import AllCategories from "./AllCategories";
 import OurLatestCollection from "../OurLatestCollection";
+import Loaders from "../common/loaders/Loaders";
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [product, setProducts] = useState([]);
   const [msg, setMsg] = useState();
+  const [wishListIds, setWishListIds] = useState([]);
+  const navigate = useNavigate();
+  
+  // console.log(wishListIds,'wishListIds')
 
   const slides = [
-    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-1-.jpg&w=1200&q=75",
-    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-2_1_.jpg&w=1200&q=75", // Add more image URLs as needed
+    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2FSummer-Shirts-2024.jpg&w=1200&q=75",
+    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2FSummer-Tshirts-2024.jpg&w=1200&q=75", // Add more image URLs as needed
   ];
 
   useEffect(() => {
@@ -44,7 +49,7 @@ const Home = () => {
   };
 
   const getProducts = async () => {
-    setMsg(<Spinner />);
+    setMsg(<Loaders />);
     try {
       const result = await axios.get(
         `http://localhost:5000/api/product/getAll`
@@ -53,8 +58,7 @@ const Home = () => {
       // const data = result.data;
       // console.log(data);
 
-
-      const slicedProducts = result.data.slice(0, 3);
+      const slicedProducts = result.data.slice(0, 4);
 
       setProducts(slicedProducts);
     } catch (error) {
@@ -63,16 +67,81 @@ const Home = () => {
   };
 
   useEffect(() => {
+    getUserData();
+  }, []);
+
+  const getUserData = async () => {
+    setMsg(<Spinner />);
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    // console.log(bearerToken,'token')
+    try {
+      if (bearerToken) {
+        const response = await axios.get(
+          `http://localhost:5000/api/user/${bearerToken._id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken.token}`,
+            },
+          }
+        );
+        // console.log(response,'className=')
+        if (response.data) {
+          setWishListIds(response?.data?.getUser?.wishList);
+          setMsg("")
+        }
+      }
+    } catch (error) {
+      setMsg("Something went wrong");
+      toast.error("Something went wrong");
+    }
+  };
+
+  useEffect(() => {
     getProducts();
   }, []);
 
+  const setToWishList = async (id) => {
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    try {
+
+      if(!bearerToken){
+        toast.error("Login Required")
+        setTimeout(()=>{
+          navigate('/login')
+        },3000)
+      }else{
+        const Response = await axios.put(
+          `http://localhost:5000/api/product/wishlist`,
+          { prodId: id },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken.token}`,
+            },
+          }
+        );
+        if(Response.data){
+          await getUserData()
+          toast.success(Response.data.msg);
+          // console.log(Response, "Wishlist");
+        }
+      }
+     
+    } catch (error) {
+      // console.log(error);
+      toast.error("Something went wrong");
+    }
+  };
+
   return (
     <Layout>
+     
       {/* // --------------------image Slider ----------------------------- */}
 
       <div className="relative w-full pt-16">
         {/* Carousel wrapper */}
-        <div className="relative h-56 overflow-hidden md:h-96">
+        <div className="relative h-56 overflow-hidden md:h-[500px]">
           {slides.map((slide, index) => (
             <div
               key={index}
@@ -80,18 +149,20 @@ const Home = () => {
                 index === currentSlide ? "opacity-100" : "opacity-0"
               }`}
             >
-              <img
-                src={slide}
-                className="w-full h-full object-cover object-top"
-                alt={`Slide ${index + 1}`}
-              />
+              <Link to={"/view-products"}>
+                <img
+                  src={slide}
+                  className="w-full h-full object-cover "
+                  alt={`Slide ${index + 1}`}
+                />
+              </Link>
             </div>
           ))}
         </div>
 
         {/* Controllers */}
 
-        <button
+        {/* <button
           className="absolute top-1/2 transform -translate-y-1/2 left-3 z-10 bg-white bg-opacity-50 p-2 rounded-full"
           onClick={goToPrevSlide}
         >
@@ -102,16 +173,14 @@ const Home = () => {
           onClick={goToNextSlide}
         >
           <i className="ri-arrow-right-s-line text-lg font-bold"></i>
-        </button>
+        </button> */}
 
         {/* Dots */}
         <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-10 flex space-x-2">
           {slides.map((_, index) => (
             <button
               key={index}
-              className={`w-3 h-3 rounded-full bg-gray-400 ${
-                index === currentSlide ? "bg-gray-800" : ""
-              }`}
+              className={`w-3 h-3 rounded-full  ${index === currentSlide ? "bg-red-600" : "bg-gray-600" }`}
               onClick={() => goToSlide(index)}
             />
           ))}
@@ -128,58 +197,72 @@ const Home = () => {
 
       {/* ...................................our product----------------------------- */}
 
-      <h2 className="text-center text-xl lg:text-2xl font-bold mb-10 pt-24">
-        Our Products
-      </h2>
-      {!msg ? (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mx-auto container mb-5">
-          {product.map((products) => (
-            <div
-              key={products._id}
-              className="rounded-lg shadow-md overflow-hidden "
-            >
-              <a href="#" className="block">
-                <img
-                  src={products.images[0] || " https://placehold.co/600x400"}
-                  alt={products.title}
-                  className="w-full h-48 object-contain transition-transform hover:scale-105 "
-                />
-              </a>
-              <div className="p-4">
-                <div className="flex justify-between mb-2">
-                  <div className="text-gray-800 font-semibold">
-                    {products.name}
+      <div className="mt-14 mb-12 ">
+        <div className="container mx-auto">
+          {/* Header section */}
+          <div className="text-center mb-10 max-w-[600px] mx-auto">
+            <h1 className="text-3xl mb-5 font-bold">Our Products</h1>
+            <p className="text-sm text-gray-600">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit
+              asperiores modi Sit asperiores modi
+            </p>
+          </div>
+          {!msg ? (
+            <div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 place-items-center gap-6">
+                {/* card section */}
+                {product.map((data) => (
+                  <div
+                    key={data?._id}
+                    className="space-y-3 rounded-xl bg-white relative shadow-xl duration-300 group max-w-[250px] mx-auto"
+                  >
+                    <div className="relative w-full h-[350px]">
+                      <Link to={`/details/${data?._id}`}>
+                        <img
+                          src={data?.images[0] || "https://placehold.co/600x400"}
+                          alt=""
+                          className="w-full h-full object-cover rounded-md hover:scale-105 duration-300"
+                        />
+                      </Link>
+                      <div className="absolute top-2 right-3 flex w-8 h-8 bg-white items-center justify-center rounded-full">
+                        <i
+                          onClick={() => setToWishList(data?._id)}
+                          className={`ri-heart-fill text-xl cursor-pointer ${wishListIds.includes(data?._id)? "text-red-500": ""}`}
+                        ></i>
+                      </div>
+                    </div>
+                    <div className="px-2 pb-3">
+                      <h3 className="font-semibold">{data?.title}</h3>
+                      <p className="text-sm text-gray-600">₹{data?.price}</p>
+                    </div>
                   </div>
-                  <div className="text-gray-600">₹{products.price}</div>
-                </div>
-                <div className="flex justify-between mb-2">
-                  <div className="text-gray-600"> {products.title}</div>
-                  <button className="text-2xl transition-transform hover:scale-125">
-                    <i className="ri-heart-line"></i>
-                  </button>
-                </div>
-                <div className="text-gray-600"> {products.description}</div>
+                ))}
               </div>
+              {/* view all button */}
             </div>
-          ))}
+          ) : (
+            <div className="flex flex-col items-center justify-center h-96">
+              {msg}
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">
-          {msg}
-        </div>
-      )}
+      </div>
 
-      <div class="text-center mt-8">
-        <button class="group bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center">
-          View All Products{" "}
-          <i class="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+      <div className="text-center mt-8 mb-8">
+        <button
+          onClick={() => navigate("/view-products")}
+          className="group bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center"
+        >
+          View All Products
+          <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
         </button>
+        <ToastContainer />
       </div>
 
       {/* ...................................our products----------------------------- */}
 
       {/* .........................................latest collection--------------------- */}
-      <section>
+      {/* <section>
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
           <header className="text-center">
             <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">
@@ -255,7 +338,7 @@ const Home = () => {
             </li>
           </ul>
         </div>
-      </section>
+      </section> */}
       {/* .........................................latest collection--------------------- */}
     </Layout>
   );

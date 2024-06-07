@@ -9,7 +9,13 @@ export const createCategory = asyncHandler(async (req, res) => {
     const categoryCreate = await Blogcategory.create(req.body);
     res.json(categoryCreate);
   } catch (error) {
-    throw new Error("Error in Create Category API!");
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A Blog with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -27,7 +33,14 @@ export const updateCategory = asyncHandler(async (req, res) => {
     );
     res.json(updateProductCategory);
   } catch (error) {
-    throw new Error("Error In Update Catgory API!");
+    if (error.code === 11000) {
+      res.status(400).json({
+        error:
+          "Duplicate key error: A Update Product with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 

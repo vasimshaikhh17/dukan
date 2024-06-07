@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Wishlist } from "./wishList.js";
 
 const productSchema = new mongoose.Schema(
   {
@@ -9,9 +10,8 @@ const productSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      required: true,
       unique: true,
-      isLowercase: true,
+      required: [true, "Slug is required"],
     },
     description: {
       type: String,
@@ -22,20 +22,20 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"Category",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       type: String,
       required: true,
     },
-    subCategory:{
-      type:mongoose.Schema.Types.ObjectId,
-      ref:"SubCategory",
+    sub_category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SubCategory",
       type: String,
-      required:true
+      required: true,
     },
     brand: {
-      // type:String,
-      // enum:["Apple",'Samsung','Lenovo'],
+      type: String,
+      enum: ["Apple", "Samsung", "Lenovo"],
       type: String,
       required: true,
     },
@@ -49,9 +49,12 @@ const productSchema = new mongoose.Schema(
       default: 0,
       select: false,
     },
-    images: {
-      type: Array,
-    },
+    images: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     color: {
       type: String,
       required: true,
@@ -65,5 +68,15 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+productSchema.pre("remove", async function (next) {
+  try {
+    await Wishlist.updateMany({}, { $pull: { products: this._id } });
+    next();
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+});
 
 export const Product = mongoose.model("Product", productSchema);

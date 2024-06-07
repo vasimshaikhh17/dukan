@@ -25,8 +25,14 @@ export const createUser = asyncHandler(async (req, res) => {
     const newUser = await User.create(req.body);
     res.json({ success: true, newUser, msg: "User Registered Successfully" });
   } else {
-    throw new Error("User Already Exisits");
-    res.json({ success: false, msg: "User Already Exisits" });
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: User alredy Exits.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
+    //res.json({ success: false, msg: "User Already Exisits" });
   }
 });
 
@@ -59,7 +65,13 @@ export const loginUserctrl = asyncHandler(async (req, res) => {
       token: generateToken(findUser?._id),
     });
   } else {
-    throw new Error("Invalid Credientials");
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A User with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
   // console.log(email, password);
 });
@@ -154,7 +166,7 @@ export const logout = asyncHandler(async (req, res) => {
     httpOnly: true,
     secure: true,
   });
-  return res.status(204); //Forbiden
+  return res.sendStatus(204); // No Content
 });
 
 // Update Users
@@ -176,7 +188,13 @@ export const updateAUser = asyncHandler(async (req, res) => {
     );
     res.json(updateUser);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A User with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -326,6 +344,56 @@ export const userCart = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+//Add To Cart
+
+export const addToCart = asyncHandler(async (req, res) => {
+  const { _id } = req.user;
+  const { prodId, size } = req.body;
+  validateMongoDbId(_id);
+  validateMongoDbId(prodId);
+
+  if (!['S', 'M', 'L', 'XL', 'XXL'].includes(size)) {
+    return res.status(400).json({ error: "Invalid size selected" });
+  }
+
+  try {
+    let user = await User.findById(_id).populate('cart');
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    let cart = user.cart;
+
+    if (!cart) {
+      cart = new Cart({ user: _id, items: [] });
+    }
+
+    const existingCartItemIndex = cart.items.findIndex(
+      item => item.product.toString() === prodId && item.size === size
+    );
+
+    if (existingCartItemIndex !== -1) {
+      // Update the quantity if item already exists in the cart
+      cart.items[existingCartItemIndex].quantity += 1;
+    } else {
+      // Add the new item to the cart
+      cart.items.push({ product: mongoose.Types.ObjectId(prodId), size });
+    }
+
+    await cart.save();
+
+    if (!user.cart) {
+      user.cart = cart._id;
+      await user.save();
+    }
+
+    res.json(cart);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+});
+
 
 //Get User Cart
 export const getUserCart = asyncHandler(async (req, res) => {

@@ -14,7 +14,6 @@ const CategoryDetail = () => {
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     fetchCategories();
     fetchSubCategories();
@@ -29,10 +28,11 @@ const CategoryDetail = () => {
     try {
       let url = `http://localhost:5000/api/product/getAll/?category=${category}`;
       if (selectedSubCategory) {
-        url += `&subCategory=${selectedSubCategory}`;
+        url += `&sub_category=${selectedSubCategory}`;
       }
       const response = await axios.get(url);
       setProducts(response.data);
+      console.log(response,"mihirchomu");
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -44,6 +44,7 @@ const CategoryDetail = () => {
         `http://localhost:5000/api/category/getAll`
       );
       setCategories(response.data);
+      // console.log(response,"cool");
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -70,8 +71,6 @@ const CategoryDetail = () => {
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Category
-   
-                
               </label>
               <select
                 value={category}
@@ -85,22 +84,21 @@ const CategoryDetail = () => {
                   </option>
                 ))}
               </select>
-              <div className="flex gap-5 mt-3 mb-3 ">
-                  <button onClick={() => navigate(`/admin/add-category`)} className="bg-green-700 text-white p-2 rounded-lg ">
-                    Create
-                  </button>
-                  <button onClick={() => navigate(`/admin/update-category`)} className="bg-blue-700 text-white p-2 rounded-lg ">
-                    Update
-                  </button>
-                  <button onClick={()=> navigate(`/admin/delete-category`)} className="bg-red-700 text-white p-2 rounded-lg ">
-                    Delete
-                  </button>
-                </div>
+              <div className="flex gap-5 mt-3 mb-3">
+                <button onClick={() => navigate(`/admin/add-category`)} className="bg-green-700 text-white p-2 rounded-lg">
+                  Create
+                </button>
+                <button onClick={() => navigate(`/admin/update-category`)} className="bg-blue-700 text-white p-2 rounded-lg">
+                  Update
+                </button>
+                <button onClick={() => navigate(`/admin/delete-category`)} className="bg-red-700 text-white p-2 rounded-lg">
+                  Delete
+                </button>
+              </div>
             </div>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 SubCategory
-              
               </label>
               <select
                 value={selectedSubCategory}
@@ -108,23 +106,23 @@ const CategoryDetail = () => {
                 className="mt-1 p-2 w-fit border rounded-lg"
               >
                 <option value="">All Sub Category</option>
-                {subCategories.map((subCategory, index) => (
-                  <option key={index} value={subCategory.category}>
-                    {subCategory.category}
+                {subCategories.map((sub_category, index) => (
+                  <option key={index} value={sub_category.category}>
+                    {sub_category.category}
                   </option>
                 ))}
               </select>
-              <div className="flex gap-5 mt-3 mb-3 ">
-                  <button onClick={() => navigate(`/admin/create-subCategory`)} className="bg-green-700 text-white p-2 rounded-lg ">
-                    Create
-                  </button>
-                  <button onClick={() => navigate(`/admin/update-subCategory`)} className="bg-blue-700 text-white p-2 rounded-lg ">
-                    Update
-                  </button>
-                  <button onClick={() => navigate(`/admin/delete-subCategory`)} className="bg-red-700 text-white p-2 rounded-lg ">
-                    Delete
-                  </button>
-                </div>
+              <div className="flex gap-5 mt-3 mb-3">
+                <button onClick={() => navigate(`/admin/create-sub_category`)} className="bg-green-700 text-white p-2 rounded-lg">
+                  Create
+                </button>
+                <button onClick={() => navigate(`/admin/update-sub_category`)} className="bg-blue-700 text-white p-2 rounded-lg">
+                  Update
+                </button>
+                <button onClick={() => navigate(`/admin/delete-sub_category`)} className="bg-red-700 text-white p-2 rounded-lg">
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
 
@@ -138,8 +136,6 @@ const CategoryDetail = () => {
                   <th className="text-start py-2 px-4 border-b">SubCategory</th>
                   <th className="text-start py-2 px-4 border-b">Brand</th>
                   <th className="text-start py-2 px-4 border-b">Color</th>
-                  <th className="text-start py-2 px-4 border-b"></th>
-                  <th className="text-start py-2 px-4 border-b"></th>
                 </tr>
               </thead>
               <tbody>
@@ -154,9 +150,7 @@ const CategoryDetail = () => {
                     </td>
                     <td className="py-2 px-4 border-b">{product.title}</td>
                     <td className="py-2 px-4 border-b">{product.price}</td>
-                    <td className="py-2 px-4 border-b">
-                      {product.subCategory}
-                    </td>
+                    <td className="py-2 px-4 border-b">{product.sub_category}</td>
                     <td className="py-2 px-4 border-b">{product.brand}</td>
                     <td className="py-2 px-4 border-b">{product.color}</td>
                   </tr>
@@ -186,7 +180,7 @@ const CategoryDetail = () => {
                   <strong>Category:</strong> {product.category}
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mt-2">
-                  <strong>SubCategory:</strong> {product.subCategory}
+                  <strong>SubCategory:</strong> {product.sub_category}
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mt-2">
                   <strong>Brand:</strong> {product.brand}

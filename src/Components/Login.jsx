@@ -31,7 +31,7 @@ const Login = () => {
     setDisable(true);
     try {
       const response = await axios.post(
-        `https://dukaan-ds92.onrender.com/api/user/login`,
+        `http://localhost:5000/api/user/login`,
         {
           email: value.email,
           password: value.password,

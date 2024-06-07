@@ -1,106 +1,92 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { links } from "./Mylinks";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { links } from './Mylinks';
+  
+const NavLinks = ({ isMobile }) => {
+  const [heading, setHeading] = useState('');
 
-const NavLinks = () => {
-  const [heading, setHeading] = useState("");
-  const [subHeading, setSubHeading] = useState("");
   return (
     <>
       {links.map((link, index) => (
         <div key={index}>
           <div className="text-left md:cursor-pointer group">
-            <h1
-              className="py-2 flex justify-between items-center md:pr-0 pr-5 group"
-              onClick={() => {
-                heading !== link.name ? setHeading(link.name) : setHeading("");
-                setSubHeading("");
-              }}
-            >
-              {link.name}
-              <span className="text-xl md:hidden inline">
-                <ion-icon
-                  name={`${
-                    heading === link.name ? "chevron-up" : "chevron-down"
-                  }`}
-                ></ion-icon>
-              </span>
-
-              {link.submenu === false ? (
-                " "
-              ) : (
-                <span className="text-xl md:mt-1 md:ml-2 md:block hidden group-hover:rotate-180 group-hover:-mt-2">
-                  <ion-icon name="chevron-down"></ion-icon>{" "}
+            {!isMobile ? (
+              <Link
+                to={link.linktopath}
+                className="py-2 flex justify-between items-center md:pr-0 pr-5 group hover:text-red-600 text-[12px]"
+                onClick={() => {
+                  heading !== link.name ? setHeading(link.name) : setHeading('');
+                }}
+              >
+                {link.name}
+                <span className="text-xl md:hidden inline">
+                  <ion-icon
+                    name={`${heading === link.name ? 'chevron-up' : 'chevron-down'}`}
+                  ></ion-icon>
                 </span>
-              )}
-            </h1>
+              </Link>
+            ) : (
+              <div
+                className="py-2 flex justify-between items-center md:pr-0 pr-5 group hover:text-red-600 text-[12px]"
+                onClick={() => {
+                  heading !== link.name ? setHeading(link.name) : setHeading('');
+                }}
+              >
+                {link.name}
+                <span className="text-xl md:hidden inline">
+                  <ion-icon
+                    name={`${heading === link.name ? 'chevron-up' : 'chevron-down'}`}
+                  ></ion-icon>
+                </span>
+              </div>
+            )}
             {link.submenu && (
               <div>
-                <div className="absolute top-12 hidden group-hover:md:block hover:md:block w-full left-0 bg-white">
-                  <div className="bg-white mx-auto p-8 grid grid-cols-5 w-full container my-5">
-                    {link.sublinks.map((mysublinks, subIndex) => (
-                      <div key={subIndex}>
-                        <h1 className="text-lg font-semibold">
-                          {mysublinks.Head}
-                        </h1>
-                        {mysublinks.sublink.map((slink, subLinkIndex) => (
-                          <li key={subLinkIndex} className="text-sm text-gray-600 my-2.5">
-                            <Link
-                              to={slink.link}
-                              className="hover:text-primary"
-                            >
-                              {slink.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </div>
-                    ))}
+                <div className="relative">
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+                    <div className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container border-2 ">
+                      {link.sublinks.map((mysublinks, subIndex) => (
+                        <div key={subIndex}>
+                          {mysublinks.sublink.map((slink, subLinkIndex) => (
+                            <li key={subLinkIndex} className="text-sm text-gray-600 my-2.5">
+                              <div className="flex items-center justify-tart">
+                                <img
+                                  src={slink.imageUrl}
+                                  alt=""
+                                  className="w-10 h-10 "
+                                />
+                                <Link
+                                  to={`${link.linktopath}${slink.link}`}
+                                  className="hover:text-red-600 duration-100 pl-3 text-[12px]"
+                                >
+                                  {slink.name}
+                                </Link>
+                              </div>
+                            </li>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
             )}
           </div>
-          {/* Mobile menus */}
-          <div
-            className={`
-            ${heading === link.name ? "md:hidden" : "hidden"}
-          `}
-          >
-            {/* sublinks */}
+          <div className={`${heading === link.name ? 'md:hidden' : 'hidden'}`}>
             {link.sublinks.map((slinks, slinkIndex) => (
               <div key={slinkIndex}>
-                <div>
-                  <h1
-                    onClick={() =>
-                      subHeading !== slinks.Head
-                        ? setSubHeading(slinks.Head)
-                        : setSubHeading("")
-                    }
-                    className="pl-7 font-semibold md:pr-0 pr-5 flex justify-between items-center"
-                  >
-                    {slinks.Head}
-
-                    <span className="text-xl md:mt-1 md:ml-2 inline">
-                      <ion-icon
-                        name={`${
-                          subHeading === slinks.Head
-                            ? "chevron-up"
-                            : "chevron-down"
-                        }`}
-                      ></ion-icon>
-                    </span>
-                  </h1>
-                  <div
-                    className={`${
-                      subHeading === slinks.Head ? "md:hidden" : "hidden"
-                    }`}
-                  >
-                    {slinks.sublink.map((slink, innerSlinkIndex) => (
-                      <li key={innerSlinkIndex} className="pl-14">
-                        <Link to={slink.link}>{slink.name}</Link>
-                      </li>
-                    ))}
-                  </div>
+                <div className="pl-7 font-semibold md:pr-0 pr-5 flex justify-between items-center">
+                  {/* Removed slinks.Head */}
+                  <span className="text-xl md:mt-1 md:ml-2 inline">
+                    {/* Removed ion-icon since slinks.Head is removed */}
+                  </span>
+                </div>
+                <div className="md:hidden">
+                  {slinks.sublink.map((slink, innerSlinkIndex) => (
+                    <li key={innerSlinkIndex} className="pl-14">
+                      <Link to={`${link.linktopath}${slink.link}`}>{slink.name}</Link>
+                    </li>
+                  ))}
                 </div>
               </div>
             ))}

@@ -75,7 +75,7 @@ const Category = () => {
           )}
           {error && (
             <div className="text-center mb-20">
-              Error: {error.message}
+              Error: {error?.message}
             </div>
           )}
           {!loading && !error && (
@@ -86,16 +86,16 @@ const Category = () => {
               <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-auto container">
                 {currentCategories.map((category, index) => (
                   <div key={index} className="rounded-lg shadow-md overflow-hidden">
-                    <Link to={`/admin/category/${category._id}`} state={{category:category._id,title:category.title}} className="block">
+                    <Link to={`/admin/category/${category?._id}`} state={{category:category?._id,title:category?.title}} className="block">
                       <img
-                        src={category.imageUrl}
-                        alt={category.title}
+                        src={category?.imageUrl}
+                        alt={category?.title}
                         className="w-full h-48 object-contain transition-transform duration-300 hover:scale-125"
                       />
                     </Link>
                     <div className="p-4">
                       <div className="text-gray-800 font-semibold mb-2 flex justify-center">
-                        {category.title}
+                        {category?.title}
                       </div>
                     </div>
                   </div>

@@ -8,7 +8,13 @@ export const createBrand = asyncHandler(async (req, res) => {
     const categoryCreate = await Brand.create(req.body);
     res.json(categoryCreate);
   } catch (error) {
-    throw new Error("Error in Create Category API!");
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -24,7 +30,14 @@ export const updateBrand = asyncHandler(async (req, res) => {
     });
     res.json(updateBrand);
   } catch (error) {
-    throw new Error("Error In Update Catgory API!");
+    if (error.code === 11000) {
+      res.status(400).json({
+        error:
+          "Duplicate key error: A Brand Update with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 

@@ -22,6 +22,7 @@ import {
   getOrders,
   updateOrderStatus,
   saveUserAddress,
+  addToCart,
 } from "../controller/userController.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -33,6 +34,7 @@ router
   .post("/wishList", authMiddleware, getWishList)
   .post("/cash-order", authMiddleware, createOrder)
   .post("/cart/apply-coupon", authMiddleware, applyCoupon)
+  .post("/addToSize", authMiddleware, addToCart)
   .put("/reset-password/:token", resetPassword)
   .put("/password", authMiddleware, updatePassword)
   .post("/login", loginUserctrl)
@@ -41,7 +43,7 @@ router
   .get("/getUserCart", authMiddleware, getUserCart)
   .get("/:id", authMiddleware, isAdmin, getAUser)
   .get("/refresh", handleRefreshToken)
-  .get("/logout", logout)
+  .get("/log-out", logout)
   .delete("/:id",authMiddleware, isAdmin, deleteAUser)
   .delete("/empty-cart", authMiddleware, emtyCart)
   .put(

@@ -26,11 +26,11 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMsg(<Spinner/>);
+    setMsg(<Spinner />);
     setDisable(true);
     try {
       const response = await axios.post(
-        "https://dukaan-ds92.onrender.com/api/user/register",
+        "http://localhost:5000/api/user/register",
         {
           firstname: formData.firstname,
           lastname: formData.lastname,
@@ -143,9 +143,13 @@ const SignUp = () => {
             </div>
             <div className="mb-6">
               <button
-              disabled={disable}
+                disabled={disable}
                 type="submit"
-                className={`  w-full  text-white py-2 px-4 rounded-lg  focus:outline-none  ${ disable ? 'bg-gray-600' : 'bg-indigo-600 focus:bg-indigo-700 hover:bg-indigo-700'}`}
+                className={`  w-full  text-white py-2 px-4 rounded-lg  focus:outline-none  ${
+                  disable
+                    ? "bg-gray-600"
+                    : "bg-indigo-600 focus:bg-indigo-700 hover:bg-indigo-700"
+                }`}
               >
                 Sign Up
               </button>

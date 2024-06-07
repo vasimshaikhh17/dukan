@@ -9,7 +9,13 @@ export const createCoupon = asyncHandler(async (req, res) => {
     const coupon = await Coupon.create(req.body);
     res.json(coupon);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A Coupon with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -33,7 +39,13 @@ export const updateCoupon = asyncHandler(async (req, res) => {
     });
     res.json(coupon);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A Coupon with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 

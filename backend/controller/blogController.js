@@ -11,7 +11,13 @@ export const createBlog = asyncHandler(async (req, res) => {
       newBlog,
     });
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A Blog with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 
@@ -24,7 +30,13 @@ export const updateBlog = asyncHandler(async (req, res) => {
     });
     res.json(updateBlog);
   } catch (error) {
-    throw new Error(error);
+    if (error.code === 11000) {
+      res.status(400).json({
+        error: "Duplicate key error: A Blog with this slug already exists.",
+      });
+    } else {
+      res.status(400).json({ error: error.message });
+    }
   }
 });
 

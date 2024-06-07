@@ -6,6 +6,7 @@ const topProductsSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  // products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
   topProducts: [
     {
       type: mongoose.Schema.Types.ObjectId,

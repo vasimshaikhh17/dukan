@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
+import { type } from "os";
 
 const userSchema = new mongoose.Schema(
   {
@@ -36,11 +37,11 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     cart: {
-      type: String,
-      //default: [],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Cart",
     },
     address: [String],
-    wishList: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    wishList: { type: mongoose.Schema.Types.ObjectId, ref: "Wishlist" },
     topProducts: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -61,7 +62,7 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
-  const salt = await bcrypt.genSaltSync(10);
+  const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 userSchema.methods.isPasswordMatched = async function (enteredPassword) {

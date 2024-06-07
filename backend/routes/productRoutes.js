@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  addToWishList,
   addTopProducts,
   createProduct,
   deleteProduct,
@@ -10,8 +9,11 @@ import {
   totalRatings,
   updateProduct,
   updateTopProductPosition,
+  uploadImage,
 } from "../controller/productController.js";
 import { isAdmin, authMiddleware } from "../middlewares/authMiddleware.js";
+//import { uploadPhoto } from "../middlewares/uploadImages.js";
+import { upload } from "../middlewares/testingMiddleware.js";
 
 const router = express.Router();
 router
@@ -21,9 +23,10 @@ router
   // .get("/", getAllProduct)
   // .put("/:id", authMiddleware, isAdmin, updateProduct)
   // .delete("/:id", authMiddleware, isAdmin, deleteProduct);
-  .post("/create-product", authMiddleware, isAdmin, createProduct)
-  .post("/get/:id", getProduct)
-  .put("/wishlist", authMiddleware, addToWishList) 
+  // .post("/create-product", authMiddleware, isAdmin, createProduct)
+
+  .post("/create-product", upload.array("images", 10), createProduct)
+  .get("/get/:id", getProduct)
   .put("/top-products", authMiddleware, addTopProducts)
   .put(
     "/change-product-positon",
@@ -31,7 +34,8 @@ router
     isAdmin,
     updateTopProductPosition
   )
-  .get("/top-product-list",getTopProducts)
+  .put("/upload-singleImage/:id", upload.single("images"), uploadImage)
+  .get("/top-product-list", getTopProducts)
   .put("/ratings", authMiddleware, totalRatings)
   .get("/getAll", getAllProduct)
   .put("/updateProduct/:id", authMiddleware, isAdmin, updateProduct)

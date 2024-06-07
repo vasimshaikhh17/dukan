@@ -13,7 +13,7 @@ export const getAllWishlistsByUserId = asyncHandler(async (req, res) => {
     const wishlists = await Wishlist.find({ user: userId }).populate(
       "products"
     );
-    res.json(wishlists);
+    res.json({products:wishlists[0]?.products});
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

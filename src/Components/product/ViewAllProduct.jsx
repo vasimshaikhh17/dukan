@@ -50,7 +50,7 @@ const ViewAllProduct = () => {
     try {
       if (bearerToken) {
         const response = await axios.get(
-          `http://localhost:5000/api/user/${bearerToken._id}`,
+          `http://localhost:5000/api/wishlist/${bearerToken._id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -58,29 +58,32 @@ const ViewAllProduct = () => {
             },
           }
         );
-        // console.log(response,'className=')
+        console.log(response,'className=')
         if (response.data) {
-          setWishListIds(response?.data?.getUser?.wishList);
-          setMsg("");
+          const products = response.data.products;
+          const ids = products.map(product => product._id);
+          setWishListIds(ids);
+          setMsg("")
         }
       }
     } catch (error) {
       setMsg("Something went wrong");
-      toast.error("Something went wrong");
+      toast.error("Something went wrong ");
     }
   };
 
   const setToWishList = async (id) => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
     try {
-      if (!bearerToken) {
-        toast.error("Login Required");
-        setTimeout(() => {
-          navigate("/login");
-        }, 3000);
-      } else {
+
+      if(!bearerToken){
+        toast.error("Login Required")
+        setTimeout(()=>{
+          navigate('/login')
+        },3000)
+      }else{
         const Response = await axios.put(
-          `http://localhost:5000/api/product/wishlist`,
+          `http://localhost:5000/api/wishlist/getWishlist`,
           { prodId: id },
           {
             headers: {
@@ -89,15 +92,16 @@ const ViewAllProduct = () => {
             },
           }
         );
-        if (Response.data) {
-          await getUserData();
+        if(Response.data){
+          await getUserData()
           toast.success(Response.data.msg);
-          // console.log(Response, "Wishlist");
+          // console.log(Response.data, "Wishlist");
         }
       }
+     
     } catch (error) {
       // console.log(error);
-      toast.error("Something went wrong");
+      toast.error("Something went wronghhhhhhhhh");
     }
   };
   return (
@@ -132,13 +136,9 @@ const ViewAllProduct = () => {
                         />
                       </Link>
                       <div className="absolute top-2 right-3 flex w-8 h-8 bg-white items-center justify-center rounded-full">
-                        <i
+                      <i
                           onClick={() => setToWishList(data?._id)}
-                          className={`ri-heart-fill text-xl cursor-pointer ${
-                            wishListIds.includes(data?._id)
-                              ? "text-red-500"
-                              : ""
-                          }`}
+                          className={`ri-heart-fill text-xl cursor-pointer ${wishListIds?.includes(data?._id)? "text-red-500": ""}`}
                         ></i>
                       </div>
                     </div>

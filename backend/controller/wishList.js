@@ -13,7 +13,7 @@ export const getAllWishlistsByUserId = asyncHandler(async (req, res) => {
     const wishlists = await Wishlist.find({ user: userId }).populate(
       "products"
     );
-    res.json({products:wishlists[0]?.products});
+    res.json({ products: wishlists[0]?.products });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -60,7 +60,7 @@ export const addToWishList = asyncHandler(async (req, res) => {
       await user.save();
     }
 
-    res.json(wishlist);
+    res.json({ msg: "Products has been Added to the Wishlist" });
   } catch (error) {
     console.log(error);
     res.status(400).json({ error: error.message });

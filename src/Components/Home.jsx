@@ -19,8 +19,8 @@ const Home = () => {
   // console.log(wishListIds,'wishListIds')
 
   const slides = [
-    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2FSummer-Shirts-2024.jpg&w=1200&q=75",
-    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2FSummer-Tshirts-2024.jpg&w=1200&q=75", // Add more image URLs as needed
+    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner-2_2__2.jpg&w=1200&q=75",
+    "https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fmycustomfolder%2Fbanner_7__5.jpg&w=1200&q=75", // Add more image URLs as needed
   ];
 
   useEffect(() => {

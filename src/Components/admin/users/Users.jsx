@@ -1,7 +1,7 @@
 // src/components/Users.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import SomethingWentWrong from "../others/SomethingWentWrong";
+// import SomethingWentWrong from "../others/SomethingWentWrong";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
 import Spinner from "../others/Spinner";

@@ -15,10 +15,10 @@ const OurLatestCollection = () => {
       setMsg(<Spinner />);
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/product/top-product-list"
+          "http://localhost:5000/api/topProduct/top-product-list"
         );
         if (response && response.data) {
-          setproductListId(response.data.productId);
+          setProductList(response?.data?.products);
         }
         setMsg("");
       } catch (error) {
@@ -30,29 +30,9 @@ const OurLatestCollection = () => {
     TopProducts();
   }, []);
 
-  useEffect(() => {
-    if (productListId.length > 0) {
-      OurLatestCollection();
-    }
-  }, [productListId]);
 
-  const OurLatestCollection = async () => {
-    setMsg(<Spinner />);
-    try {
-      const arr = [];
-      for (let i = 0; i < productListId.length; i++) {
-        const response = await axios.get(
-          `http://localhost:5000/api/product/get/${productListId[i]}`
-        );
-        arr.push(response.data);
-        // console.log(response)
-      }
-      setMsg("");
-      setProductList(arr);
-    } catch (error) {
-      setMsg("Something Went Wrong");
-    }
-  };
+
+
 
   const settings = {
     autoplay: true,
@@ -122,17 +102,20 @@ const OurLatestCollection = () => {
 
           <div className="lg:col-span-2 lg:py-8  container mx-auto">
             <Slider {...settings} className="slider">
-              {productList && productList.length > 0 ? (
-                productList.map((product, index) => (
+              {productList && productList?.length > 0 ? (
+                productList?.map((product, index) => (
                   <div key={index} className="px-4">
                     <div className="group block product-item">
+                      <Link to={`/details/${product?._id}`}>
+                      
                       <img
                         src={
                           product?.images[0] || "https://placehold.co/600x400"
                         }
                         alt={product?.title}
-                        className="aspect-square w-full rounded object-contain"
+                        className="aspect-square w-full rounded object-cover"
                       />
+                      </Link>
                       <div className="mt-3">
                         <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">
                           {product?.title}

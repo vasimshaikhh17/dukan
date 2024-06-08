@@ -137,7 +137,7 @@ const Navbar = () => {
               <i className="ri-heart-line text-2xl"></i>
             </Link>
             <Link to="/cart" className="hover:text-red-600 duration-300">
-              <i className="ri-shopping-cart-2-line text-2xl"></i>
+              <i className="ri-shopping-bag-3-line text-2xl"></i>
             </Link>
             <i
               className="ri-search-line lg:hidden text-2xl"

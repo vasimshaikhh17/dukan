@@ -111,10 +111,10 @@ const Wishlist = () => {
                       </p>
                       <hr />
                       <div className="flex justify-between mx-2 py-2  items-center">
-                        <button className="text-slate-500  hover:text-black duration-300">
+                        <button className="text-slate-500  hover:text-black duration-300 text-sm">
                           Remove
                         </button>
-                        <button className="text-red-600 hover:text-red-700 duration-300">
+                        <button className="text-red-600 hover:text-red-700 duration-300 text-sm">
                           Move to bag
                         </button>
                       </div>

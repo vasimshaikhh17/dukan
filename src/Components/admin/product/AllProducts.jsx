@@ -67,7 +67,7 @@ const AllProducts = () => {
   
     try {
       const Response = await axios.put(
-        `http://localhost:5000/api/product/top-products`,
+        `http://localhost:5000/api/topProduct/top-products` ,
         { prodId: id },
         {
           headers: {

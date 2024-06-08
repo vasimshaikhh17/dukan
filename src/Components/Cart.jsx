@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Layout from "../layout/Layout";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
   const products = [
     {
       id: 1,
@@ -30,6 +32,11 @@ const Cart = () => {
     
     // Add more products as needed
   ];
+
+
+  const goToAllProduct = ()=>{
+    navigate("/view-products")
+  }
 
   return (
     <Layout>
@@ -176,9 +183,9 @@ const Cart = () => {
               </div>
               <div className="flex gap-2">
                 <button className="transition-colors text-sm bg-blue-600 hover:bg-blue-700 p-2 rounded-sm w-full text-white text-hover shadow-md">
-                  FINISH
+                Checkout
                 </button>
-                <button className="transition-colors text-sm bg-white border border-gray-600 p-2 rounded-sm w-full text-gray-700 text-hover shadow-md">
+                <button onClick={goToAllProduct} className=" transition-colors text-sm bg-white border border-gray-600 p-2 rounded-sm w-full text-gray-700 text-hover shadow-md">
                   ADD MORE PRODUCTS
                 </button>
               </div>

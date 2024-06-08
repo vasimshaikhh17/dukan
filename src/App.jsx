@@ -10,7 +10,7 @@ import Details from "./Components/Details";
 import Wishlist from "./Components/Wishlist";
 
 import ResetPassword from "./Components/ResetPassword";
-import Admin from "./Components/admin/dashboard/Admin";
+// import Admin from "./Components/admin/dashboard/Admin";
 import Users from "./Components/admin/users/Users";
 import UserDetails from "./Components/admin/users/UserDetails";
 import SubCategories from "./Components/product/SubCategories";
@@ -33,6 +33,7 @@ import PrivacyPolicy from "./common/footer/PrivacyPolicy ";
 import HowToOrder from "./common/footer/HowToOrder ";
 import TopProducts from "./Components/admin/product/TopProducts";
 import DynamicPage from "./Components/product/DynamicPage";
+import Checkout from "./Components/checkout/Checkout";
 
 const App = () => {
   return (
@@ -84,6 +85,11 @@ const App = () => {
         <Route path="/admin/delete-subCategory" element={<DeleteSubCat />} />
         <Route path="/admin/update-subCategory" element={<UpdateSubCat />} />
         <Route path="/admin/create-subCategory" element={<CreateSubCat />} />
+
+
+        <Route path="/checkout" element={<Checkout/>} />
+
+
 
         {/* -----------------------admin routes----------------------- */}
       </Routes>

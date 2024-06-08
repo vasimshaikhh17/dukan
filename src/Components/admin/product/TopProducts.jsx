@@ -6,7 +6,6 @@ import Spinner from "../others/Spinner";
 const TopProducts = () => {
   const [msg, setMsg] = useState("");
   const [productList, setProductList] = useState([]);
-  const [productListId, setproductListId] = useState([]);
 
   useEffect(() => {
     getTopProducts();
@@ -16,10 +15,10 @@ const TopProducts = () => {
     setMsg(<Spinner />);
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/product/top-product-list"
+        "http://localhost:5000/api/topProduct/top-product-list"
       );
       if (response && response.data) {
-        setproductListId(response.data.productId);
+        setProductList(response.data.products);
       }
       console.log(response);
 
@@ -29,30 +28,7 @@ const TopProducts = () => {
     }
   };
 
-  useEffect(() => {
-    if (productListId.length > 0) {
-      ourTopProduct();
-    }
-  }, [productListId]);
-
-  const ourTopProduct = async () => {
-    setMsg(<Spinner />);
-    try {
-      const arr = [];
-      for (let i = 0; i < productListId.length; i++) {
-        const response = await axios.get(
-          `http://localhost:5000/api/product/get/${productListId[i]}`
-        );
-
-        arr.push(response.data);
-      }
-      setMsg("");
-      setProductList(arr);
-    } catch (error) {
-      setMsg("Something Went Wrong");
-    }
-  };
-
+  
   return (
     <AdminLayout>
       <div className="p-4 sm:ml-64">
@@ -65,11 +41,12 @@ const TopProducts = () => {
                   <th className="px-4 py-2 text-start">Image</th>
                   <th className="px-4 py-2 text-start">Title</th>
                   <th className="px-4 py-2 text-start">Description</th>
+                  <th className="px-4 py-2 text-start">Current Position</th>
                 </tr>
               </thead>
               <tbody>
                 {productList && productList.length > 0 ? (
-                  productList.map((product) => (
+                  productList.map((product, index) => (
                     <tr key={product?._id} className="border-t">
                       <td className="px-4 py-2">
                         <img
@@ -82,6 +59,22 @@ const TopProducts = () => {
                       </td>
                       <td className="px-4 py-2">{product?.title}</td>
                       <td className="px-4 py-2">{product?.description}</td>
+                      <td className="px-4 py-2">
+                        
+                      <select
+                          className="border border-gray-300 rounded p-1"
+                        
+                          
+                        >
+                            <option key={index} value={index + 1}>
+                              {index +1}
+                            </option>
+                          {productList.map((_,index) => (
+                            <option key={index} value={index}>
+                              {index}
+                            </option>
+                          ))}
+                        </select> </td>
                     </tr>
                   ))
                 ) : (

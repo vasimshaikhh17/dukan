@@ -96,187 +96,238 @@ const CreateProduct = () => {
 
   return (
     <AdminLayout>
-<div className="p-4 sm:ml-64">
-  <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-    <h1 className="text-3xl font-bold text-center ">Create New Product</h1>
-    <form
-      onSubmit={handleSubmit}
-      encType="multipart/form-data"
-      className="space-y-4 w-full mx-auto bg-white p-6 rounded-lg shadow-lg"
-    >
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="title">Title</label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          value={productData?.title}
-          onChange={handleInputChange}
-          placeholder="Enter title of product"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          value={productData?.description}
-          onChange={handleInputChange} 
-          placeholder="Enter description of product"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          required
-        />
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="color">Color</label>
-        <input
-          type="text"
-          id="color"
-          name="color"
-          value={productData?.color}
-          onChange={handleInputChange}
-          placeholder="Enter color of product"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="price">Price</label>
-        <input
-          type="number"
-          id="price"
-          name="price"
-          value={productData?.price}
-          onChange={handleInputChange}
-          placeholder="Enter price of product"
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          required
-        />
-      </div>
-      </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="category">Category</label>
-          <select
-            id="category"
-            name="category"
-            value={productData?.category}
-            onChange={handleInputChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            required
+      <div className="p-4 sm:ml-64">
+        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+          <h1 className="text-3xl font-bold text-center ">
+            Create New Product
+          </h1>
+          <form
+            onSubmit={handleSubmit}
+            encType="multipart/form-data"
+            className="space-y-4 w-full mx-auto bg-white p-6 rounded-lg shadow-lg"
           >
-            <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option value={category._id} key={category._id}>
-                {category.title}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="sub_category">Sub Category</label>
-          <select
-            id="sub_category"
-            name="sub_category"
-            value={productData?.sub_category}
-            onChange={handleInputChange}
-            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-            required
-          >
-            <option value="">Select Sub Category</option>
-            {subcategories.map((subCat) => (
-              <option value={subCat._id} key={subCat._id}>
-                {subCat.category}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="brand">Brand</label>
-        <input
-          type="text"
-          id="brand"
-          name="brand"
-          value={productData?.brand}
-          onChange={handleInputChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          required
-        />
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="quantity">Quantity</label>
-        <input
-          type="number"
-          id="quantity"
-          name="quantity"
-          value={productData?.quantity}
-          onChange={handleInputChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-          required
-        />
-      </div>
-      </div>
-
-
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="tags">Tags</label>
-        <input
-          type="text"
-          id="tags"
-          name="tags"
-          value={productData?.tags}
-          onChange={handleInputChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="sold">Sold</label>
-        <input
-          type="number"
-          id="sold"
-          name="sold"
-          value={productData?.sold}
-          onChange={handleInputChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-        />
-      </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                htmlFor="title"
+              >
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={productData?.title}
+                onChange={handleInputChange}
+                placeholder="Enter title of product"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                required
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                htmlFor="description"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={productData?.description}
+                onChange={handleInputChange}
+                placeholder="Enter description of product"
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                required
+              />
             </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300" htmlFor="image">Image</label>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          multiple
-          onChange={handleFileChange}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-        />
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="color"
+                >
+                  Color
+                </label>
+                <input
+                  type="text"
+                  id="color"
+                  name="color"
+                  value={productData?.color}
+                  onChange={handleInputChange}
+                  placeholder="Enter color of product"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="price"
+                >
+                  Price
+                </label>
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={productData?.price}
+                  onChange={handleInputChange}
+                  placeholder="Enter price of product"
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="category"
+                >
+                  Category
+                </label>
+                <select
+                  id="category"
+                  name="category"
+                  value={productData?.category}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                >
+                  <option value="">Select Category</option>
+                  {categories.map((category) => (
+                    <option value={category._id} key={category._id}>
+                      {category.title}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="sub_category"
+                >
+                  Sub Category
+                </label>
+                <select
+                  id="sub_category"
+                  name="sub_category"
+                  value={productData?.sub_category}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                >
+                  <option value="">Select Sub Category</option>
+                  {subcategories.map((subCat) => (
+                    <option value={subCat._id} key={subCat._id}>
+                      {subCat.category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="brand"
+                >
+                  Brand
+                </label>
+                <input
+                  type="text"
+                  id="brand"
+                  name="brand"
+                  value={productData?.brand}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="quantity"
+                >
+                  Quantity
+                </label>
+                <input
+                  type="number"
+                  id="quantity"
+                  name="quantity"
+                  value={productData?.quantity}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="tags"
+                >
+                  Tags
+                </label>
+                <input
+                  type="text"
+                  id="tags"
+                  name="tags"
+                  value={productData?.tags}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="sold"
+                >
+                  Sold
+                </label>
+                <input
+                  type="number"
+                  id="sold"
+                  name="sold"
+                  value={productData?.sold}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                htmlFor="image"
+              >
+                Image
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                multiple
+                onChange={handleFileChange}
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-indigo-600 text-white p-2 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+        {msg && <div className="mt-4 text-center">{msg}</div>}
       </div>
-      <button
-        type="submit"
-        className="w-full bg-indigo-600 text-white p-2 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-      >
-        Submit
-      </button>
-    </form>
-  </div>
-  {msg && <div className="mt-4 text-center">{msg}</div>}
-</div>
-
-
     </AdminLayout>
   );
 };

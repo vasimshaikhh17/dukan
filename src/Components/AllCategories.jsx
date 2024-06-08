@@ -83,7 +83,7 @@ export default function AllCategories() {
 
   return (
     <div className="image-slider-container pt-12">
-      <h2 className="text-center text-xl lg:text-2xl font-bold mb-4">
+      <h2 className="text-center md:text-2xl  font-bold mb-4 sm:text-sm">
         Shop By Category
       </h2>
       {msg ? (
@@ -101,7 +101,7 @@ export default function AllCategories() {
                   className="category-image"
                 />
               </Link>
-              <div className="slide-name text-center">{category.title}</div>
+              <div className=" text-center  md:text-xl text-[10px]">{category.title}</div>
             </div>
           ))}
         </Slider>

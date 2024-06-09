@@ -10,6 +10,7 @@ import brandRoutes from "./routes/brandRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import wishListRoutes from "./routes/wishListRoutes.js";
+import orderRoutes from "./routes/orderRoutes.js";
 import topProductRoutes from "./routes/topProductsRoutes.js";
 import bodyParser from "body-parser";
 import { errorHandler, notFound } from "./middlewares/errorHandler.js";
@@ -46,6 +47,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/testing", testingRoutes);
 app.use("/api/wishlist", wishListRoutes);
 app.use("/api/topProduct", topProductRoutes);
+app.use("/api/order", orderRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

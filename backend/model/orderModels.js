@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
 
-// Declare the Schema of the Mongo model
-var orderSchema = new mongoose.Schema(
+const orderSchema = new mongoose.Schema(
   {
     products: [
       {
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
+          required: true
         },
-        count: Number,
+        count: {
+          type: Number,
+          required: true
+        },
         color: String,
       },
     ],
@@ -29,6 +32,7 @@ var orderSchema = new mongoose.Schema(
     orderby: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true
     },
   },
   {
@@ -36,6 +40,5 @@ var orderSchema = new mongoose.Schema(
   }
 );
 
-//Export the model
-
+// Export the model
 export const Order = mongoose.model("Order", orderSchema);

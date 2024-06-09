@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderby: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "user",
       required: true
     },
   },

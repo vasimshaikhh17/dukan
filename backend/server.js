@@ -1,5 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
+import { User } from "./model/userModel.js";
+import { Product } from "./model/productModel.js";
 import { connectDB } from "./config/config.js";
 import authRouter from "./routes/authRoutes.js";
 import blogRouter from "./routes/blogRoutes.js";
@@ -18,6 +20,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import cors from "cors";
 import cloudinary from "cloudinary";
+
 
 dotenv.config();
 

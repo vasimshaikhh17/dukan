@@ -10,6 +10,8 @@ import { cloudinaryuploadImg } from "../utils/cloudinary.js";
 import cloudinary from "cloudinary";
 import { Wishlist } from "../model/wishList.js";
 import mongoose from "mongoose";
+import { Category } from "../model/categoryModels.js";
+import { SubCategory } from "../model/subCategoryModel.js";
 
 export const createProduct = asyncHandler(async (req, res) => {
   const {
@@ -167,7 +169,6 @@ export const getAllProduct = asyncHandler(async (req, res) => {
     } else {
       query = query.select("-__v");
     }
-
     //pagination
 
     const page = req.query.page;
@@ -186,6 +187,74 @@ export const getAllProduct = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+export const searchProducts = asyncHandler(async (req, res) => {
+  try {
+    const { search, sort, page, limit, fields } = req.query;
+
+    if (!search) {
+      return res.status(400).json({ error: 'Search query is required' });
+    }
+
+    // Create a regex for case-insensitive partial match for string fields
+    const regex = new RegExp(search, 'i');
+
+    // Try to convert search term to a number for numeric fields
+    const searchNumber = parseFloat(search);
+
+    // Construct the query object
+    const queryObj = {
+      $or: [
+        { title: regex },
+        // { category: regex },
+        // { sub_category: regex },
+        { color: regex },
+        { brand: regex },
+        { description: regex },
+        ...(isNaN(searchNumber) ? [] : [{ price: searchNumber }, { 'ratings.star': searchNumber }]),
+      ]
+    };
+
+    let query = Product.find(queryObj);
+
+    // Sorting
+    if (sort) {
+      const sortBy = sort.split(',').join(' ');
+      query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+
+    // Limiting the fields
+    if (fields) {
+      const selectedFields = fields.split(',').join(' ');
+      query = query.select(selectedFields);
+    } else {
+      query = query.select('-__v');
+    }
+
+    // Pagination
+    const pageNo = parseInt(page, 10) || 1;
+    const limitNo = parseInt(limit, 10) || 10;
+    const skip = (pageNo - 1) * limitNo;
+
+    query = query.skip(skip).limit(limitNo);
+
+    const products = await query;
+
+    res.status(200).json({
+      status: 'success',
+      results: products.length,
+      data: {
+        products,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 export const deleteProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
@@ -417,6 +486,7 @@ export const getTopProducts = asyncHandler(async (req, res) => {
       res.json({ productId: topProducts[0].topProducts });
     }
   } catch (error) {
+    console.log(error)
     throw new Error(error);
   }
   // console.log(topProducts)

@@ -6,6 +6,7 @@ import {
   getAllProduct,
   getProduct,
   getTopProducts,
+  searchProducts,
   totalRatings,
   updateProduct,
   updateTopProductPosition,
@@ -36,6 +37,7 @@ router
   )
   .put("/upload-singleImage/:id", upload.single("images"), uploadImage)
   .get("/top-product-list", getTopProducts)
+  .get("/search", searchProducts)
   .put("/ratings", authMiddleware, totalRatings)
   .get("/getAll", getAllProduct)
   .put("/updateProduct/:id", authMiddleware, isAdmin, updateProduct)

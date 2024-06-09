@@ -34,6 +34,7 @@ import HowToOrder from "./common/footer/HowToOrder ";
 import TopProducts from "./Components/admin/product/TopProducts";
 import DynamicPage from "./Components/product/DynamicPage";
 import Checkout from "./Components/checkout/Checkout";
+import Test from "./Components/test/Test";
 
 const App = () => {
   return (
@@ -88,6 +89,10 @@ const App = () => {
 
 
         <Route path="/checkout" element={<Checkout/>} />
+
+        //Test  
+        <Route path="/test" element={<Test/>} />
+
 
 
 

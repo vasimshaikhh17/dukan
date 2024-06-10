@@ -26,7 +26,7 @@ const CategoryDetail = () => {
 
   const fetchProducts = async () => {
     try {
-      let url = `http://localhost:5000/api/product/getAll/?category=${category}`;
+      let url = `http://localhost:5000/api/product/getAll?title=${category}`;
       if (selectedSubCategory) {
         url += `&sub_category=${selectedSubCategory}`;
       }

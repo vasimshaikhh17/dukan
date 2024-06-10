@@ -5,7 +5,7 @@ const subCategorySchema = new mongoose.Schema(
   {
     sub_category:{
        type: String,
-      required: [true, "category title is required"],
+      required: [true, "Sub-Category title is required"],
     },
   },
   { timestamps: true }

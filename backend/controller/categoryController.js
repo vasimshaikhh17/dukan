@@ -89,11 +89,12 @@ export const createCategory = async (req, res, next) => {
 };
 
 export const createSubCategory = async (req, res, next) => {
-  const { category } = req.body;
+  const { sub_category } = req.body;
   try {
-    const subCategory = await SubCategory.create({ category });
+    const subCategory = await SubCategory.create({sub_category });
     res.json(subCategory);
   } catch (error) {
+    console.log(error)
     if (error.code === 11000) {
       res.status(400).json({
         error:

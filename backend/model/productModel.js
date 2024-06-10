@@ -40,11 +40,20 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    quantity: {
-      type: Number,
-      required: true,
-      select: true,
-    },
+    quantity: [
+      {
+        size: {
+          type: String,
+          enum: ["XS", "S", "M", "L", "XL", "XXL", "XXXL"],
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: false,
+          default:0
+        },
+      },
+    ],
     sold: {
       type: Number,
       default: 0,

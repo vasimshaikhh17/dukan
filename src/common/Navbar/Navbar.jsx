@@ -17,6 +17,10 @@ const Navbar = () => {
   const [cat, setCat] = useState([]);
   const [msg, setMsg] = useState();
   const [subCat, setSubCat] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  const searchRef = useRef(null);
 
   const user = JSON.parse(localStorage.getItem("userData"));
   const handleLinkClick = () => {
@@ -27,6 +31,9 @@ const Navbar = () => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setUserDropdownOpen(false);
+      }
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setSearchResults([]);
       }
     };
 
@@ -79,6 +86,7 @@ const Navbar = () => {
   useEffect(() => {
     getAllSubCat();
   }, []);
+
   const getAllSubCat = async () => {
     setMsg(<Spinner />);
     try {
@@ -87,11 +95,27 @@ const Navbar = () => {
       );
       setSubCat(res.data);
       setMsg("");
-      // console.log(res, "coooool");
     } catch (error) {
       setMsg("Something went wrong");
     }
   };
+
+  const handleSearch = async (query) => {
+    setMsg(<Spinner />);
+    try {
+      const res = await axios.get(`http://localhost:5000/api/product/search?search=${query}`);
+      setSearchResults(res.data.data.products);
+      setMsg("");
+    } catch (error) {
+      setMsg("Something went wrong");
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    handleSearch(e.target.value);
+  };
+
   return (
     <>
       <nav className="bg-white fixed top-0 w-full z-50 shadow-md h-16 py-2 md:px-10">
@@ -106,19 +130,18 @@ const Navbar = () => {
                   <Link
                     to="/tshirts"
                     className="py-2 flex justify-between items-center md:pr-0 pr-5 group hover:text-red-600 text-[12px]"
-                    >
+                  >
                     {cats?.title}
                   </Link>
-                    <div className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
-                      {subCat.map((subcat) => (
-                      <div  key={subcat._id} className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container ">
+                  <div className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+                    {subCat.map((subcat) => (
+                      <div key={subcat._id} className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container ">
                         <div className="flex items-center justify-start ">
                           <img
                             src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
                             alt=""
                             className="w-10 h-10 "
                           />
-
                           <Link
                             to="/tshirts/casual-shirts"
                             className="hover:text-red-600 duration-100 pl-3 text-[12px]"
@@ -127,17 +150,31 @@ const Navbar = () => {
                           </Link>
                         </div>
                       </div>
-                      ))}
-                    </div>
+                    ))}
+                  </div>
                 </div>
               ))}
-              <div className="hidden lg:flex w-72 relative">
+              <div className="hidden lg:flex w-72 relative" ref={searchRef}>
                 <input
                   type="text"
                   className="w-full px-2 py-1 border border-gray-800 rounded pl-10"
-                  placeholder="What are you looking for...  "
+                  placeholder="What are you looking for..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
                 />
                 <i className="ri-search-line absolute left-3 top-1 text-gray-400"></i>
+                {searchResults.length > 0 && (
+                  <div className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg z-50">
+                    {searchResults.map((product) => (
+                      <Link key={product._id} to={`/details/${product?._id}`}>
+                      <div  className="flex items-center p-2 hover:bg-gray-100">
+                        <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover" />
+                        <span className="ml-3">{product.title}</span>
+                      </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             </ul>
             <Link to="/wishlist" className="hover:text-red-600 duration-300">
@@ -167,8 +204,7 @@ const Navbar = () => {
                   {userDropdownOpen && (
                     <div className="absolute top-10 right-0 bg-slate-100 rounded-lg shadow-md mt-2 py-2 w-48 z-50">
                       <h4 className="block px-4 py-2 text-center">
-                        <i className="ri-user-line"></i> {user.firstname}{" "}
-                        {user.lastname}
+                        <i className="ri-user-line"></i> {user.firstname} {user.lastname}
                       </h4>
                       <button
                         onClick={logout}
@@ -189,7 +225,6 @@ const Navbar = () => {
               <ion-icon name={`${open ? "close" : "menu"}`}></ion-icon>
             </div>
           </div>
-
           <ul
             className={`
               md:hidden bg-white fixed w-full top-0 overflow-y-auto bottom-0 py-14 pl-4
@@ -214,33 +249,24 @@ const Navbar = () => {
                   </button>
                 </div>
                 {mobileDropdownOpen === index && (
-                  
-                   
-
-
                   <div className="pl-5">
-                    {
-                      subCat.map((subcat)=>(
-
-                    <div key={subcat._id} className="flex items-center justify-start mt-2">
-                      <img
-                        src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
-                        alt=""
-                        className="w-10 h-10"
-                      />
-                      <Link
-                        to="/tshirts/casual-shirts"
-                        className="hover:text-red-600 duration-100 pl-3 text-[12px]"
-                        onClick={handleLinkClick}
-                      >
-                        {subcat?.category}
-                      </Link>
-                    </div>
-                      ))
-                    }
+                    {subCat.map((subcat) => (
+                      <div key={subcat._id} className="flex items-center justify-start mt-2">
+                        <img
+                          src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
+                          alt=""
+                          className="w-10 h-10"
+                        />
+                        <Link
+                          to="/tshirts/casual-shirts"
+                          className="hover:text-red-600 duration-100 pl-3 text-[12px]"
+                          onClick={handleLinkClick}
+                        >
+                          {subcat?.category}
+                        </Link>
+                      </div>
+                    ))}
                   </div>
-                 
-                  
                 )}
               </li>
             ))}
@@ -249,14 +275,30 @@ const Navbar = () => {
       </nav>
 
       {searchOpen && (
-        <div className="lg:hidden w-full p-5 bg-white fixed top-16 z-40 flex justify-between">
+        <div className="lg:hidden w-full p-5 bg-white fixed top-16 z-40 flex justify-between" ref={searchRef}>
           <div className="relative w-11/12">
             <input
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded pl-10"
               placeholder="What are you looking for..."
+              value={searchQuery}
+              onChange={handleSearchChange}
             />
             <i className="ri-search-line absolute left-3 top-2 text-gray-400"></i>
+            {searchResults.length > 0 && (
+              <div className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg z-50">
+                {searchResults.map((product) => (
+                  <Link key={product._id} to={`/details/${product?._id}`}>
+                  
+                
+                  <div  className="flex items-center p-2 hover:bg-gray-100">
+                    <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover" />
+                    <span className="ml-3">{product.title}</span>
+                  </div>
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

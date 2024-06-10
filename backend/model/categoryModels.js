@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 //schema
 const categorySchema = new mongoose.Schema(
   {
-    category: {
-      type: String,
-      required: [true, "category title is required"],
-    },
+    // category: {
+    //   type: String,
+    //   required: [true, "category title is required"],
+    // },
     title: {
       type: String,
-      required: [true, "category title is required"],
+      required: [true, "Category Title is required"],
     },
     imageUrl: {
       type: String,

@@ -1,5 +1,3 @@
-// src/components/CreateProduct.js
-
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import axios from "axios";
@@ -17,9 +15,16 @@ const CreateProduct = () => {
     category: "",
     sub_category: "",
     brand: "",
-    quantity: "",
     tags: "",
-    sold: "",
+    sold: "0",
+    quantity: [
+      { size: "S", quantity: 0 },
+      { size: "M", quantity: 0 },
+      { size: "L", quantity: 0 },
+      { size: "XL", quantity: 0 },
+      { size: "XXL", quantity: 0 },
+      { size: "XXXL", quantity: 0 },
+    ],
   });
   const [imageFiles, setImageFiles] = useState([]);
 
@@ -53,7 +58,15 @@ const CreateProduct = () => {
   }, []);
 
   const handleInputChange = (e) => {
-    setProductData({ ...productData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setProductData({ ...productData, [name]: value });
+  };
+
+  const handleQuantityChange = (index, field, value) => {
+    const newQuantities = productData.quantity.map((q, i) =>
+      i === index ? { ...q, [field]: value } : q
+    );
+    setProductData({ ...productData, quantity: newQuantities });
   };
 
   const handleFileChange = (e) => {
@@ -61,17 +74,21 @@ const CreateProduct = () => {
     if (files.length <= 10) {
       setImageFiles(files);
     } else {
-      // Display an error message or take appropriate action
       console.log("You can upload a maximum of 10 images");
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMsg(<Spinner />);
 
     const formData = new FormData();
     Object.keys(productData).forEach((key) => {
-      formData.append(key, productData[key]);
+      if (key === "quantity") {
+        formData.append(key, JSON.stringify(productData[key]));
+      } else {
+        formData.append(key, productData[key]);
+      }
     });
 
     for (let i = 0; i < imageFiles.length; i++) {
@@ -250,26 +267,6 @@ const CreateProduct = () => {
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  htmlFor="quantity"
-                >
-                  Quantity
-                </label>
-                <input
-                  type="number"
-                  id="quantity"
-                  name="quantity"
-                  value={productData?.quantity}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
                   htmlFor="tags"
                 >
                   Tags
@@ -283,7 +280,9 @@ const CreateProduct = () => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                 />
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -300,6 +299,38 @@ const CreateProduct = () => {
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                 />
               </div>
+            </div>
+
+            <div>
+              <label
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                htmlFor="quantity"
+              >
+                Quantity
+              </label>
+              {productData.quantity.map((q, index) => (
+                <div key={index} className="grid grid-cols-2 gap-2 mb-2">
+                  <input
+                    type="text"
+                    name={`size-${index}`}
+                    value={q.size}
+                    onChange={(e) =>
+                      handleQuantityChange(index, "size", e.target.value)
+                    }
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    readOnly
+                  />
+                  <input
+                    type="number"
+                    name={`quantity-${index}`}
+                    value={q.quantity}
+                    onChange={(e) =>
+                      handleQuantityChange(index, "quantity", e.target.value)
+                    }
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  />
+                </div>
+              ))}
             </div>
 
             <div>

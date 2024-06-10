@@ -294,34 +294,27 @@ export const getAllProduct = asyncHandler(async (req, res) => {
       const category = await Category.findOne({ title: req.query.category });
       if (category) {
         queryObj.category = category._id;
+      } else {
+        return res.status(404).json({ message: "Category not found" });
       }
     }
 
     // Handle subcategory filtering if parameter exists
     if (req.query.sub_category) {
       const subCategory = await SubCategory.findOne({ sub_category: req.query.sub_category });
+      // console.log('SubCategory:', subCategory);
       if (subCategory) {
         queryObj.sub_category = subCategory._id;
+      } else {
+        return res.status(404).json({ message: "Subcategory not found" });
       }
     }
 
-    // If no category or subcategory parameters are provided, proceed with regular query
-    if (!req.query.category && !req.query.sub_category) {
-      const queryString = JSON.stringify(queryObj);
-      let query = Product.find(JSON.parse(queryString));
-
-      // Sorting, Field Selection, Pagination - Remaining code remains the same
-      // ...
-
-      const product = await query;
-      return res.json(product);
-    }
-
-    // If category or subcategory parameters are provided, update query and execute
+    // Construct the query
     const queryString = JSON.stringify(queryObj);
     let query = Product.find(JSON.parse(queryString));
 
-    // Sorting, Field Selection, Pagination - Remaining code remains the same
+    // Sorting, Field Selection, Pagination - Remaining code should be here
     // ...
 
     const product = await query;

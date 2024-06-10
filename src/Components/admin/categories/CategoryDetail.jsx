@@ -113,13 +113,13 @@ const CategoryDetail = () => {
                 ))}
               </select>
               <div className="flex gap-5 mt-3 mb-3">
-                <button onClick={() => navigate(`/admin/create-sub_category`)} className="bg-green-700 text-white p-2 rounded-lg">
+                <button onClick={() => navigate(`/admin/create-subCategory`)} className="bg-green-700 text-white p-2 rounded-lg">
                   Create
                 </button>
-                <button onClick={() => navigate(`/admin/update-sub_category`)} className="bg-blue-700 text-white p-2 rounded-lg">
+                <button onClick={() => navigate(`/admin/update-subCategory`)} className="bg-blue-700 text-white p-2 rounded-lg">
                   Update
                 </button>
-                <button onClick={() => navigate(`/admin/delete-sub_category`)} className="bg-red-700 text-white p-2 rounded-lg">
+                <button onClick={() => navigate(`/admin/delete-subCategory`)} className="bg-red-700 text-white p-2 rounded-lg">
                   Delete
                 </button>
               </div>

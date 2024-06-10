@@ -37,6 +37,11 @@ const Cart = () => {
   const goToAllProduct = ()=>{
     navigate("/view-products")
   }
+  const gotoCheckout = ()=>{
+    navigate("/checkout")
+  }
+
+
 
   return (
     <Layout>
@@ -182,7 +187,7 @@ const Cart = () => {
                 </div>
               </div>
               <div className="flex gap-2">
-                <button className="transition-colors text-sm bg-blue-600 hover:bg-blue-700 p-2 rounded-sm w-full text-white text-hover shadow-md">
+                <button onClick={gotoCheckout} className="transition-colors text-sm bg-blue-600 hover:bg-blue-700 p-2 rounded-sm w-full text-white text-hover shadow-md">
                 Checkout
                 </button>
                 <button onClick={goToAllProduct} className=" transition-colors text-sm bg-white border border-gray-600 p-2 rounded-sm w-full text-gray-700 text-hover shadow-md">

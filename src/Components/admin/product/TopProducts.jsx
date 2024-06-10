@@ -6,10 +6,19 @@ import Spinner from "../others/Spinner";
 const TopProducts = () => {
   const [msg, setMsg] = useState("");
   const [productList, setProductList] = useState([]);
+  const [positionId, setPositionId] = useState({
+    prodId: "",
+    newPosition: "",
+  });
+  const [refreshData, setRefreshData] = useState(false); // State to trigger re-render
+
+  // console.log(positionId)
 
   useEffect(() => {
-    getTopProducts();
-  }, []);
+    return () => {
+      getTopProducts();
+    };
+  }, [refreshData]);
 
   const getTopProducts = async () => {
     setMsg(<Spinner />);
@@ -20,7 +29,7 @@ const TopProducts = () => {
       if (response && response.data) {
         setProductList(response.data.products);
       }
-      console.log(response);
+      // console.log(response);
 
       setMsg("");
     } catch (error) {
@@ -28,7 +37,54 @@ const TopProducts = () => {
     }
   };
 
-  
+  const handlePosition = async (selectedValue) => {
+    const [position, productId] = selectedValue.split(":");
+
+    setPositionId({
+      prodId: productId,
+      newPosition: position,
+    });
+
+    // console.log(position)
+  };
+
+  const changePosition = async () => {
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    try {
+      if (!bearerToken) {
+        throw new Error("Login Required");
+      }
+
+      const response = await axios.put(
+        "http://localhost:5000/api/topProduct/change-product-positon",
+        {
+          prodId: positionId?.prodId,
+          newPosition: positionId?.newPosition,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
+
+      if (response.data.products) {
+        console.log(response, "Wishlist");
+        setRefreshData((prev) => !prev);
+
+        // toast.success(response.data.msg);
+      }
+    } catch (error) {
+      console.log(error); // Log the error message
+      if (error.response) {
+        console.log(error.response.data); // Log the error response data if available
+      }
+      // Handle the error here, e.g., display a toast or navigate to a specific page
+      // toast.error("Something went wrong");
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="p-4 sm:ml-64">
@@ -42,6 +98,7 @@ const TopProducts = () => {
                   <th className="px-4 py-2 text-start">Title</th>
                   <th className="px-4 py-2 text-start">Description</th>
                   <th className="px-4 py-2 text-start">Current Position</th>
+                  <th className="px-4 py-2 text-start">Change Position</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,21 +117,28 @@ const TopProducts = () => {
                       <td className="px-4 py-2">{product?.title}</td>
                       <td className="px-4 py-2">{product?.description}</td>
                       <td className="px-4 py-2">
-                        
-                      <select
+                        <select
                           className="border border-gray-300 rounded p-1"
-                        
-                          
+                          onChange={(event) =>
+                            handlePosition(event.target.value)
+                          }
                         >
-                            <option key={index} value={index + 1}>
-                              {index +1}
-                            </option>
-                          {productList.map((_,index) => (
-                            <option key={index} value={index}>
-                              {index}
+                          <option value="">{index + 1}</option>
+                          {productList.map((_, index) => (
+                            <option
+                              key={index}
+                              value={`${index}:${product?._id}`}
+                            >
+                              {index + 1}
                             </option>
                           ))}
-                        </select> </td>
+                        </select>{" "}
+                      </td>
+                      <td>
+                        <button onClick={changePosition}>
+                          Change Position
+                        </button>
+                      </td>
                     </tr>
                   ))
                 ) : (

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import Logo from "../../assets/logo.png";
 import Logo from "../../assets/Logo.png";
 import Spinner from "../../Components/admin/others/Spinner";
 import axios from "axios";
@@ -17,6 +16,7 @@ const Navbar = () => {
 
   const [cat, setCat] = useState([]);
   const [msg, setMsg] = useState();
+  const [subCat, setSubCat] = useState([]);
 
   const user = JSON.parse(localStorage.getItem("userData"));
   const handleLinkClick = () => {
@@ -76,6 +76,22 @@ const Navbar = () => {
     setMobileDropdownOpen((prev) => (prev === index ? null : index));
   };
 
+  useEffect(() => {
+    getAllSubCat();
+  }, []);
+  const getAllSubCat = async () => {
+    setMsg(<Spinner />);
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/category/subcategories"
+      );
+      setSubCat(res.data);
+      setMsg("");
+      // console.log(res, "coooool");
+    } catch (error) {
+      setMsg("Something went wrong");
+    }
+  };
   return (
     <>
       <nav className="bg-white fixed top-0 w-full z-50 shadow-md h-16 py-2 md:px-10">
@@ -90,39 +106,29 @@ const Navbar = () => {
                   <Link
                     to="/tshirts"
                     className="py-2 flex justify-between items-center md:pr-0 pr-5 group hover:text-red-600 text-[12px]"
-                  >
+                    >
                     {cats?.title}
                   </Link>
-                  <div className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
-                    <div className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container border-2">
-                      <div className="flex items-center justify-start">
-                        <img
-                          src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
-                          alt=""
-                          className="w-10 h-10"
-                        />
-                        <Link
-                          to="/tshirts/casual-shirts"
-                          className="hover:text-red-600 duration-100 pl-3 text-[12px]"
-                        >
-                          Casual shirts
-                        </Link>
+                    <div className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
+                      {subCat.map((subcat) => (
+                      <div  key={subcat._id} className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container ">
+                        <div className="flex items-center justify-start ">
+                          <img
+                            src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
+                            alt=""
+                            className="w-10 h-10 "
+                          />
+
+                          <Link
+                            to="/tshirts/casual-shirts"
+                            className="hover:text-red-600 duration-100 pl-3 text-[12px]"
+                          >
+                            {subcat?.category}
+                          </Link>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-start mt-2">
-                        <img
-                          src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp201-1029510-1.jpg&w=256&q=75"
-                          alt=""
-                          className="w-10 h-10"
-                        />
-                        <Link
-                          to="/tshirts/formal-shirts"
-                          className="hover:text-red-600 duration-100 pl-3 text-[12px]"
-                        >
-                          Formal shirts
-                        </Link>
-                      </div>
+                      ))}
                     </div>
-                  </div>
                 </div>
               ))}
               <div className="hidden lg:flex w-72 relative">
@@ -208,8 +214,15 @@ const Navbar = () => {
                   </button>
                 </div>
                 {mobileDropdownOpen === index && (
+                  
+                   
+
+
                   <div className="pl-5">
-                    <div className="flex items-center justify-start mt-2">
+                    {
+                      subCat.map((subcat)=>(
+
+                    <div key={subcat._id} className="flex items-center justify-start mt-2">
                       <img
                         src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
                         alt=""
@@ -220,24 +233,14 @@ const Navbar = () => {
                         className="hover:text-red-600 duration-100 pl-3 text-[12px]"
                         onClick={handleLinkClick}
                       >
-                        Casual shirts
+                        {subcat?.category}
                       </Link>
                     </div>
-                    <div className="flex items-center justify-start mt-2">
-                      <img
-                        src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp201-1029510-1.jpg&w=256&q=75"
-                        alt=""
-                        className="w-10 h-10"
-                      />
-                      <Link
-                        to="/tshirts/formal-shirts"
-                        className="hover:text-red-600 duration-100 pl-3 text-[12px]"
-                        onClick={handleLinkClick}
-                      >
-                        Formal shirts
-                      </Link>
-                    </div>
+                      ))
+                    }
                   </div>
+                 
+                  
                 )}
               </li>
             ))}

@@ -10,6 +10,7 @@ import blogCatRoutes from "./routes/blogCatRoutes.js";
 import testingRoutes from "./routes/testingRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js"
 import categoryRoutes from "./routes/categoryRoutes.js";
 import wishListRoutes from "./routes/wishListRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
@@ -51,6 +52,7 @@ app.use("/api/testing", testingRoutes);
 app.use("/api/wishlist", wishListRoutes);
 app.use("/api/topProduct", topProductRoutes);
 app.use("/api/order", orderRoutes);
+app.use("/api/cart", cartRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

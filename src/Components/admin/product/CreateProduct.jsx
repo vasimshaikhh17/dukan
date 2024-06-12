@@ -114,14 +114,14 @@ const CreateProduct = () => {
   return (
     <AdminLayout>
       <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-10">
           <h1 className="text-3xl font-bold text-center ">
             Create New Product
           </h1>
           <form
             onSubmit={handleSubmit}
             encType="multipart/form-data"
-            className="space-y-4 w-full mx-auto bg-white p-6 rounded-lg shadow-lg"
+            className="space-y-4 w-full mx-auto bg-gray-300 p-6 rounded-lg shadow-lg"
           >
             <div>
               <label
@@ -159,7 +159,7 @@ const CreateProduct = () => {
               />
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -196,7 +196,42 @@ const CreateProduct = () => {
                   required
                 />
               </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="brand"
+                >
+                  Brand
+                </label>
+                <input
+                  type="text"
+                  id="brand"
+                  name="brand"
+                  value={productData?.brand}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  required
+                />
+              </div>
+              <div>
+                <label
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                  htmlFor="tags"
+                >
+                  Tags
+                </label>
+                <input
+                  type="text"
+                  id="tags"
+                  name="tags"
+                  value={productData?.tags}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                />
+              </div>
             </div>
+
+        
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label
@@ -246,41 +281,7 @@ const CreateProduct = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  htmlFor="brand"
-                >
-                  Brand
-                </label>
-                <input
-                  type="text"
-                  id="brand"
-                  name="brand"
-                  value={productData?.brand}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                  required
-                />
-              </div>
-              <div>
-                <label
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                  htmlFor="tags"
-                >
-                  Tags
-                </label>
-                <input
-                  type="text"
-                  id="tags"
-                  name="tags"
-                  value={productData?.tags}
-                  onChange={handleInputChange}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                />
-              </div>
-            </div>
+     
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
@@ -300,7 +301,6 @@ const CreateProduct = () => {
                 />
               </div>
             </div>
-
             <div>
               <label
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -308,29 +308,31 @@ const CreateProduct = () => {
               >
                 Quantity
               </label>
-              {productData.quantity.map((q, index) => (
-                <div key={index} className="grid grid-cols-2 gap-2 mb-2">
-                  <input
-                    type="text"
-                    name={`size-${index}`}
-                    value={q.size}
-                    onChange={(e) =>
-                      handleQuantityChange(index, "size", e.target.value)
-                    }
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                    readOnly
-                  />
-                  <input
-                    type="number"
-                    name={`quantity-${index}`}
-                    value={q.quantity}
-                    onChange={(e) =>
-                      handleQuantityChange(index, "quantity", e.target.value)
-                    }
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                  />
-                </div>
-              ))}
+              <div className="flex flex-wrap gap-2 mb-2">
+                {productData.quantity.map((q, index) => (
+                  <div key={index} className="flex flex-col items-start">
+                    <input
+                      type="text"
+                      name={`size-${index}`}
+                      value={q.size}
+                      onChange={(e) =>
+                        handleQuantityChange(index, "size", e.target.value)
+                      }
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                      readOnly
+                    />
+                    <input
+                      type="number"
+                      name={`quantity-${index}`}
+                      value={q.quantity}
+                      onChange={(e) =>
+                        handleQuantityChange(index, "quantity", e.target.value)
+                      }
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div>

@@ -17,7 +17,7 @@ const Navbar = () => {
   const [cat, setCat] = useState([]);
   const [msg, setMsg] = useState();
   const [subCat, setSubCat] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
 
   const searchRef = useRef(null);
@@ -103,7 +103,9 @@ const Navbar = () => {
   const handleSearch = async (query) => {
     setMsg(<Spinner />);
     try {
-      const res = await axios.get(`http://localhost:5000/api/product/search?search=${query}`);
+      const res = await axios.get(
+        `http://localhost:5000/api/product/search?search=${query}`
+      );
       setSearchResults(res.data.data.products);
       setMsg("");
     } catch (error) {
@@ -121,7 +123,9 @@ const Navbar = () => {
       <nav className="bg-white fixed top-0 w-full z-50 shadow-md h-16 py-2 md:px-10">
         <div className="flex items-center font-medium justify-between mx-3 md:mx-0">
           <Link to="/">
-            <img src={Logo} alt="logo" className="md:cursor-pointer z-50" />
+            {/* <img src={Logo} alt="logo" className="md:cursor-pointer z-50" /> */}
+            <p className="md:cursor-pointer z-50 text-4xl" >    Dukan</p>
+       
           </Link>
           <div className="flex gap-5 items-center">
             <ul className="md:flex hidden uppercase items-center gap-8">
@@ -135,7 +139,10 @@ const Navbar = () => {
                   </Link>
                   <div className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
                     {subCat.map((subcat) => (
-                      <div key={subcat._id} className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container ">
+                      <div
+                        key={subcat._id}
+                        className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container "
+                      >
                         <div className="flex items-center justify-start ">
                           <img
                             src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
@@ -164,13 +171,17 @@ const Navbar = () => {
                 />
                 <i className="ri-search-line absolute left-3 top-1 text-gray-400"></i>
                 {searchResults.length > 0 && (
-                  <div className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg z-50">
+                  <div className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
                     {searchResults.map((product) => (
-                      <Link key={product._id} to={`/details/${product?._id}`}>
-                      <div  className="flex items-center p-2 hover:bg-gray-100">
-                        <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover" />
-                        <span className="ml-3">{product.title}</span>
-                      </div>
+                      <Link key={product._id} to={`/details/${product._id}`}>
+                        <div className="flex items-center p-2 hover:bg-gray-100">
+                          <img
+                            src={product.images[0]}
+                            alt={product.title}
+                            className="w-10 h-10 object-cover"
+                          />
+                          <span className="ml-3">{product.title}</span>
+                        </div>
                       </Link>
                     ))}
                   </div>
@@ -204,7 +215,8 @@ const Navbar = () => {
                   {userDropdownOpen && (
                     <div className="absolute top-10 right-0 bg-slate-100 rounded-lg shadow-md mt-2 py-2 w-48 z-50">
                       <h4 className="block px-4 py-2 text-center">
-                        <i className="ri-user-line"></i> {user.firstname} {user.lastname}
+                        <i className="ri-user-line"></i> {user.firstname}{" "}
+                        {user.lastname}
                       </h4>
                       <button
                         onClick={logout}
@@ -251,7 +263,10 @@ const Navbar = () => {
                 {mobileDropdownOpen === index && (
                   <div className="pl-5">
                     {subCat.map((subcat) => (
-                      <div key={subcat._id} className="flex items-center justify-start mt-2">
+                      <div
+                        key={subcat._id}
+                        className="flex items-center justify-start mt-2"
+                      >
                         <img
                           src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
                           alt=""
@@ -275,7 +290,10 @@ const Navbar = () => {
       </nav>
 
       {searchOpen && (
-        <div className="lg:hidden w-full p-5 bg-white fixed top-16 z-40 flex justify-between" ref={searchRef}>
+        <div
+          className="lg:hidden w-full p-5 bg-white fixed top-16 z-40 flex justify-between"
+          ref={searchRef}
+        >
           <div className="relative w-11/12">
             <input
               type="text"
@@ -286,15 +304,17 @@ const Navbar = () => {
             />
             <i className="ri-search-line absolute left-3 top-2 text-gray-400"></i>
             {searchResults.length > 0 && (
-              <div className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg z-50">
+              <div className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto">
                 {searchResults.map((product) => (
                   <Link key={product._id} to={`/details/${product?._id}`}>
-                  
-                
-                  <div  className="flex items-center p-2 hover:bg-gray-100">
-                    <img src={product.images[0]} alt={product.title} className="w-10 h-10 object-cover" />
-                    <span className="ml-3">{product.title}</span>
-                  </div>
+                    <div className="flex items-center p-2 hover:bg-gray-100">
+                      <img
+                        src={product.images[0]}
+                        alt={product.title}
+                        className="w-10 h-10 object-cover"
+                      />
+                      <span className="ml-3">{product.title}</span>
+                    </div>
                   </Link>
                 ))}
               </div>

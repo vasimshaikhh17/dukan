@@ -8,24 +8,41 @@ var cartSchema = new mongoose.Schema(
         product: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
+          required: true,
         },
-        count: Number,
-        color: String,
-        price: Number,
+        count: {
+          type: Number,
+          required: true,
+          default: 1,
+        },
+        color: {
+          type: String,
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+        size: {
+          type: String,
+          enum: ["S", "M", "L", "XL", "XXL" , "XXXL"],
+          required: true,
+        },
       },
     ],
-    cartTotal: Number,
-    totalAfterDiscount: Number,
+    cartTotal: {
+      type: Number,
+      default: 0,
+    },
+    totalAfterDiscount: {
+      type: Number,
+      default: 0,
+    },
     orderby: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-    },
-    size: {
-      type: String,
-      enum: ["S", "M", "L", "XL", "XXL"],
       required: true,
     },
-    quantity: { type: Number, default: 1 },
   },
   {
     timestamps: true,

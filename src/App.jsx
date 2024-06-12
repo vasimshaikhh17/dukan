@@ -35,6 +35,7 @@ import TopProducts from "./Components/admin/product/TopProducts";
 import DynamicPage from "./Components/product/DynamicPage";
 import Checkout from "./Components/checkout/Checkout";
 import Test from "./Components/test/Test";
+import UpdateProduct from "./Components/admin/product/UpdateProduct";
 
 const App = () => {
   return (
@@ -81,7 +82,9 @@ const App = () => {
         <Route path="/admin/top-products" element={<TopProducts />} />
 
         <Route path="/admin/allproducts" element={<AllProducts />} />
-        <Route path="/admin/create-product" element={<CreateProduct />} />  
+        <Route path="/admin/create-product" element={<CreateProduct />} /> 
+        <Route path="/admin/update-product/:id" element={<UpdateProduct />} /> 
+
 
         <Route path="/admin/delete-subCategory" element={<DeleteSubCat />} />
         <Route path="/admin/update-subCategory" element={<UpdateSubCat />} />

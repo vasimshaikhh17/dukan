@@ -58,7 +58,7 @@ const Home = () => {
       // const data = result.data;
       // console.log(data);
 
-      const slicedProducts = result.data.slice(0, 4);
+      const slicedProducts = result.data.slice(0, 8);
 
       setProducts(slicedProducts);
     } catch (error) {

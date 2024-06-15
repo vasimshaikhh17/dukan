@@ -23,6 +23,8 @@ import {
   updateOrderStatus,
   saveUserAddress,
   addToCart,
+  removeAddress,
+  addAddress,
 } from "../controller/userController.js";
 import { authMiddleware, isAdmin } from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -35,6 +37,8 @@ router
   .post("/cash-order", authMiddleware, createOrder)
   .post("/cart/apply-coupon", authMiddleware, applyCoupon)
   .post("/addToSize", authMiddleware, addToCart)
+  .post('/add-address',authMiddleware, addAddress)
+  .post('/remove-address',authMiddleware, removeAddress)
   .put("/reset-password/:token", resetPassword)
   .put("/password", authMiddleware, updatePassword)
   .post("/login", loginUserctrl)

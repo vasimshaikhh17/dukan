@@ -63,8 +63,8 @@ const CategoryDetail = () => {
 
   return (
     <AdminLayout>
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 mt-14">
+      <div className="p-2 ">
+        <div className="p-1">
           <h1 className="text-2xl font-bold mb-4">Product Details</h1>
 
           <div className="md:flex gap-40">

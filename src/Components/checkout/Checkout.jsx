@@ -1,247 +1,503 @@
-import React from "react";
-import Layout from "../../layout/Layout";
+import React, { useEffect, useState } from "react";
+import LayoutOrder from "../../layout/LayoutOrder";
+import Spinner from "../admin/others/Spinner";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const Checkout = () => {
-  // Define products object
-  const products = [
-    {
-      name: "Split Sneakers",
-      image: "https://readymadeui.com/images/product10.webp",
-      size: "37",
-      quantity: 2,
-      price: 40,
-    },
-    {
-      name: "Velvet Boots",
-      image: "https://readymadeui.com/images/product11.webp",
-      size: "37",
-      quantity: 2,
-      price: 40,
-    },
-    {
-      name: "Echo Elegance",
-      image: "https://readymadeui.com/images/product14.webp",
-      size: "37",
-      quantity: 2,
-      price: 40,
-    },
-    {
-      name: "Pumps",
-      image: "https://readymadeui.com/images/product13.webp",
-      size: "37",
-      quantity: 2,
-      price: 40,
-    },
-    
-  ];
+  const [showAddressForm, setShowAddressForm] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [cart, setCart] = useState([]);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedAddIndex, setSelectedIndex] = useState(null);
+  const [newAddress, setNewAddress] = useState({
+    postCode: "",
+    state: "",
+    city: "",
+    address1: "",
+    address2: "",
+    landmark: "",
+  });
+  const [addressOff, setAddressOff] = useState(false);
+  const [ordersOff, setOrdersOff] = useState(true);
+
+  const [orderData,setOrderData] = useState()
+  const bearerToken = JSON.parse(localStorage.getItem("userData"));
+
+
+  console.log(selectedAddIndex, "selectedAddress");
+
+  const toggleAddressForm = () => {
+    setShowAddressForm(!showAddressForm);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewAddress({
+      ...newAddress,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    setMsg(<Spinner />);
+    e.preventDefault();
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/user/add-address",
+        {
+          userId: bearerToken._id,
+          newAddress: `${newAddress.address1}, ${newAddress.address2}, ${newAddress.city}, ${newAddress.state}, ${newAddress.postCode}, ${newAddress.landmark}`,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
+
+      setMsg("");
+      setAddresses([...addresses, response.data.newAddress]);
+      toggleAddressForm();
+      toast.success("New addeess added");
+      getUserData();
+    } catch (error) {
+      console.error("Error adding new address:", error);
+      toast.error("Error adding new address");
+      setMsg("something went wrong");
+    }
+  };
+
+  const getCart = async () => {
+    setMsg(<Spinner />);
+
+    try {
+      const response = await axios.get("http://localhost:5000/api/cart", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken.token}`,
+        },
+      });
+      setMsg("");
+      setCart(response.data);
+    } catch (error) {
+      console.error("Error fetching cart:");
+      setMsg("Something went wrong");
+    }
+  };
+
+  const getUserData = async () => {
+    setMsg(<Spinner />);
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+
+    try {
+      if (bearerToken) {
+        const response = await axios.get(
+          `http://localhost:5000/api/user/${bearerToken._id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken.token}`,
+            },
+          }
+        );
+        if (response.data) {
+          setAddresses(response?.data?.getUser?.address);
+          setMsg("");
+        }
+      }
+    } catch (error) {
+      setMsg("Something went wrong");
+    }
+  };
+
+  const removeAdd = async (address) => {
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    const url = "http://localhost:5000/api/user/remove-address";
+    try {
+      const Response = await axios.post(
+        url,
+        { userId: bearerToken._id, addressToRemove: address },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
+      if (Response.data.addresses) {
+        toast.success(`Address Removed SuccessFull`);
+        getUserData();
+      }
+    } catch (error) {
+      toast.error("Something went Wrong");
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      getCart();
+      getUserData();
+    };
+  }, []);
+
+  const handleAddressChange = (event) => {
+    setSelectedAddress(event.target.value);
+  };
+
+
+  useEffect(()=>{
+    if (cart.products && cart.products.length > 0) {
+    const transformedProducts = cart?.products?.map(item => ({
+      product: item.product._id,
+      count: item.count,
+      color: item.color,
+      size: item.size
+    }))
+    setOrderData({ products: transformedProducts,paymentIntent: {
+    "id": "pi_1GqIC8Ez4e5GAbFDS7hJI9K5",
+    "amount": 1000,
+    "currency": "usd",
+    "status": "succeeded"
+  },orderby: cart?.orderby, addressIndex:selectedAddIndex });
+  // return()=>{transformedProducts}
+}
+  },[cart , selectedAddIndex])
+
+  const Order = async()=>{
+    const url = `http://localhost:5000/api/order/create-order`
+    try {
+      const Response = await axios.post(url,orderData,{
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${bearerToken.token}`,
+        },
+      })
+      console.log(Response,'payment Check')
+      // alert()
+    } catch (error) {
+        console.log(error,'rerer')
+        if (error.response.data.error){
+          toast.warn  (error.response.data.error)
+        }
+    }
+   
+  } 
 
   return (
-    <Layout>
-      <div className="font-sans bg-gray-100 container mx-auto mt-16">
-        <div className="flex max-sm:flex-col gap-4 h-full">
-          <div className=" sm:h-screen sm:sticky sm:top-0 lg:min-w-[350px] sm:min-w-[300px]">
-            <div className="relative h-fit">
-              <div className="p-4 sm:overflow-auto sm:h-[calc(100vh-60px)]">
-                <div className="space-y-4">
-                  {/* Map products dynamically */}
-                  {products.map((product, index) => (
-                    <div key={index} className="flex items-start gap-4">
-                      <div className="w-32 h-28 max-lg:w-24 max-lg:h-24 flex p-2 shrink-0 bg-gray-300 rounded-md">
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-full object-contain"
-                        />
+    <LayoutOrder cart={cart} addressIndex={selectedAddIndex}>
+      <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
+        <div className="space-y-6">
+          {addressOff ? (
+            <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  <span className="bg-green-400 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    <i class="ri-check-double-line"></i>
+                  </span>
+                  <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                    Select Delivery Address
+                  </span>
+                </div>
+
+                <button
+                  className="text-blue-500 hover:text-blue-700 text-sm md:text-base focus:outline-none"
+                  onClick={() => setAddressOff(false)}
+                >
+                  Change Address
+                </button>
+              </div>
+              <hr className="my-3 border-gray-200 dark:border-gray-700" />
+            </div>
+          ) : (
+            <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    1
+                  </span>
+                  <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                    Select Delivery Address
+                  </span>
+                </div>
+
+                <button
+                  className="text-blue-500 hover:text-blue-700 text-sm md:text-base focus:outline-none"
+                  onClick={toggleAddressForm}
+                >
+                  + Add New Address
+                </button>
+              </div>
+              <hr className="my-3 border-gray-200 dark:border-gray-700" />
+
+              <form className="mt-4">
+                <fieldset>
+                  <legend className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                    Please select delivery address:
+                  </legend>
+
+                  <div className="mt-2">
+                    {addresses.map((address, index) => (
+                      <>
+                        <div
+                          key={index}
+                          className="flex justify-between items-center p-4 mb-2 border rounded-lg bg-white dark:bg-gray-800 shadow-sm"
+                        >
+                          <div className="flex items-center">
+                            <input
+                              type="radio"
+                              id={`add${index + 1}`}
+                              name="address"
+                              value={address}
+                              checked={selectedAddress === address}
+                              onChange={handleAddressChange}
+                              onClick={() => setSelectedIndex(index)}
+                              className="form-radio h-4 w-4 text-blue-600 transition duration-150 ease-in-out"
+                            />
+                            <label
+                              htmlFor={`add${index + 1}`}
+                              className="ml-2 text-sm md:text-base text-gray-800 dark:text-gray-200"
+                            >
+                              {address}
+                            </label>
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={() => removeAdd(address)}
+                            className=" text-red-600 hover:text-red-700"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                        {selectedAddIndex === index && (
+                          <div className="flex justify-start pb-3">
+                            <button
+                              onClick={() => {setAddressOff(true);setOrdersOff(false)}}
+                              type="button"
+                              className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 duration-150 px-10"
+                            >
+                              Deliver Here
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    ))}
+
+                    {addresses.length === 0 && (
+                      <div className="mt-2 text-sm md:text-base text-gray-700 dark:text-gray-300">
+                        No addresses available.
                       </div>
-                      <div className="w-full">
-                        <h3 className="text-base text-black">{product.name}</h3>
-                        <ul className="text-xs text-black-300 space-y-1 mt-2">
-                          <li className="flex flex-wrap gap-4">
-                            Size <span className="ml-auto">{product.size}</span>
-                          </li>
-                          <li className="flex flex-wrap gap-4">
-                            Quantity{" "}
-                            <span className="ml-auto">{product.quantity}</span>
-                          </li>
-                          <li className="flex flex-wrap gap-4">
-                            Total Price{" "}
-                            <span className="ml-auto">${product.price}</span>
-                          </li>
-                        </ul>
+                    )}
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          )}
+
+          {ordersOff ?    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                {addressOff ?<span className="bg-green-400 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  <i class="ri-check-double-line"></i>
+                </span> :
+                <span className="bg-gray-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  2
+                </span>}
+                <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                  Order Summary
+                </span>
+              </div>
+
+              <button  onClick={() => setOrdersOff(false)} className="text-blue-500 hover:text-blue-700 text-sm md:text-base focus:outline-none">
+                Change Order
+              </button>
+            </div>
+            <hr className="my-3 border-gray-200 dark:border-gray-700" />
+          </div> :     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+            <div className="flex justify-between">
+              <div className="flex gap-4">
+                <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  2
+                </span>
+                <span>Order Summary</span>
+              </div>
+
+              {/* <Link to={"/cart"} className="text-blue-500 hover:text-blue-700 ">
+                Change Order
+              </Link> */}
+            </div>
+
+            <div className="mt-4">
+              {cart?.products.map((carts, id) => (
+                <div key={id} className="p-2">
+                  <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+                    <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
+                      <div className="flex items-center space-x-3">
+                        <img
+                          className="h-12 w-12 rounded-lg object-cover"
+                          src={carts.product.images[0]}
+                          alt={carts.product.title}
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-base font-medium text-gray-900 dark:text-white truncate">
+                            {carts.product.title}
+                          </p>
+                          <div className="flex flex-wrap gap-2 text-sm text-gray-700 dark:text-gray-300">
+                            <span>Color: {carts.product.color}</span>
+                            <span>Size: {carts.size}</span>
+                            <span>Quantity: {carts.count}</span>
+                            <span>Price: {carts.price}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
-              <div className="md:absolute md:left-0 md:bottom-0 bg-gray-800 w-full p-4">
-                {/* Calculate total dynamically */}
-                <h4 className="flex flex-wrap gap-4 text-base text-white">
-                  Total{" "}
-                  <span className="ml-auto">
-                    $
-                    {products
-                      .reduce(
-                        (acc, product) =>
-                          acc + product.price * product.quantity,
-                        0
-                      )
-                      .toFixed(2)}
-                  </span>
-                </h4>
+              ))}
+            </div>
+            <div className="flex justify-start pb-3">
+              <button
+                onClick={() => setOrdersOff(true)}
+                type="button"
+                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 duration-150 px-10"
+              >
+                Continue
+              </button>
+            </div>
+          </div> }
+
+       
+
+      
+
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+            <div className="flex justify-between">
+              <div className="flex gap-4">
+                <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  3
+                </span>
+                <span>Payment Method</span>
+                <button type="button" onClick={Order} className="bg-black py-4 text-white px-5 rounded">Pay and Order</button>
               </div>
             </div>
           </div>
-          <div className="max-w-4xl mx-auto w-full h-max rounded-md p-4 sticky top-0">
-            <h2 className="text-xl font-bold text-gray-800">
-              Complete your order
-            </h2>
-            <form className="mt-8">
-              <div>
-                <h3 className="text-base font-semibold text-gray-800 mb-4">
-                  Personal Details
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div className="relative flex items-center">
-                    <input
-                      type="text"
-                      placeholder="First Name"
-                      className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#bbb"
-                      stroke="#bbb"
-                      className="w-[18px] h-[18px] absolute right-4"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle cx={10} cy={7} r={6} data-original="#000000" />
-                      <path
-                        d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                        data-original="#000000"
-                      />
-                    </svg>
-                  </div>
-                  <div className="relative flex items-center">
-                    <input
-                      type="text"
-                      placeholder="Last Name"
-                      className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#bbb"
-                      stroke="#bbb"
-                      className="w-[18px] h-[18px] absolute right-4"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle cx={10} cy={7} r={6} data-original="#000000" />
-                      <path
-                        d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                        data-original="#000000"
-                      />
-                    </svg>
-                  </div>
-                  <div className="relative flex items-center">
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="#bbb"
-                      stroke="#bbb"
-                      className="w-[18px] h-[18px] absolute right-4"
-                      viewBox="0 0 682.667 682.667"
-                    >
-                      <defs>
-                        <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                          <path d="M0 512h512V0H0Z" data-original="#000000" />
-                        </clipPath>
-                      </defs>
-                      <g
-                        clipPath="url(#a)"
-                        transform="matrix(1.33 0 0 -1.33 0 682.667)"
-                      >
-                        <path
-                          fill="none"
-                          strokeMiterlimit={10}
-                          strokeWidth={40}
-                          d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                          data-original="#000000"
-                        />
-                        <path
-                          d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                          data-original="#000000"
-                        />
-                      </g>
-                    </svg>
-                  </div>
-                  <div className="relative flex items-center">
-                    <input
-                      type="number"
-                      placeholder="Phone No."
-                      className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                    />
-                    <svg
-                      fill="#bbb"
-                      className="w-[18px] h-[18px] absolute right-4"
-                      viewBox="0 0 64 64"
-                    >
-                      <path
-                        d="m52.148 42.678-6.479-4.527a5 5 0 0 0-6.963 1.238l-1.504 2.156c-2.52-1.69-5.333-4.05-8.014-6.732-2.68-2.68-5.04-5.493-6.73-8.013l2.154-1.504a4.96 4.96 0 0 0 2.064-3.225 4.98 4.98 0 0 0-.826-3.739l-4.525-6.478C20.378 10.5 18.85 9.69 17.24 9.69a4.69 4.69 0 0 0-1.628.291 8.97 8.97 0 0 0-1.685.828l-.895.63a6.782 6.782 0 0 0-.63.563c-1.092 1.09-1.866 2.472-2.303 4.104-1.865 6.99 2.754 17.561 11.495 26.301 7.34 7.34 16.157 11.9 23.011 11.9 1.175 0 2.281-.136 3.29-.406 1.633-.436 3.014-1.21 4.105-2.302.199-.199.388-.407.591-.67l.63-.899a9.007 9.007 0 0 0 .798-1.64c.763-2.06-.007-4.41-1.871-5.713z"
-                        data-original="#000000"
-                      />
-                    </svg>
-                  </div>
-                </div>
+        </div>
+
+        {showAddressForm && (
+          <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50 ">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md mx-4 max-h-full overflow-y-auto ">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold">Add New Address</h2>
+                <button
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={toggleAddressForm}
+                >
+                  &times;
+                </button>
               </div>
-              <div className="mt-8">
-                <h3 className="text-base font-semibold text-gray-800 mb-4">
-                  Shipping Address
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium">Post Code</label>
                   <input
                     type="text"
-                    placeholder="Address Line"
-                    className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                  />
-                  <input
-                    type="text"
-                    placeholder="City"
-                    className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                  />
-                  <input
-                    type="text"
-                    placeholder="State"
-                    className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
-                  />
-                  <input
-                    type="text"
-                    placeholder="Zip Code"
-                    className="px-4 py-3.5 bg-white text-gray-800 w-full text-sm border-b focus:border-gray-800 outline-none"
+                    name="postCode"
+                    value={newAddress.postCode}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    placeholder="Enter postcode here"
+                    required
                   />
                 </div>
-                <div className="flex gap-4 max-md:flex-col mt-8">
+                <div>
+                  <label className="block text-sm font-medium">State</label>
+                  <input
+                    type="text"
+                    name="state"
+                    value={newAddress.state}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    placeholder="Delivery state"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium">City/Town</label>
+                  <input
+                    type="text"
+                    name="city"
+                    value={newAddress.city}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    placeholder="Delivery city/town"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Address 1</label>
+                  <input
+                    type="text"
+                    name="address1"
+                    value={newAddress.address1}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    placeholder="Enter delivery address here"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Address 2</label>
+                  <input
+                    type="text"
+                    name="address2"
+                    value={newAddress.address2}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    placeholder="Enter delivery area, colony, street, sector, village"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium">Landmark</label>
+                  <input
+                    type="text"
+                    name="landmark"
+                    value={newAddress.landmark}
+                    onChange={handleInputChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                    placeholder="Eg. Behind the park"
+                    required
+                  />
+                </div>
+
+                <div className="flex justify-end gap-2">
                   <button
                     type="button"
-                    className="rounded-md px-4 py-3 w-full text-sm font-semibold bg-transparent hover:bg-gray-100 border-2 text-gray-800 max-md:order-1"
+                    className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md"
+                    onClick={toggleAddressForm}
                   >
                     Cancel
                   </button>
                   <button
-                    type="button"
-                    className="rounded-md px-4 py-3 w-full text-sm font-semibold bg-gray-800 text-white hover:bg-gray-900"
+                    type="submit"
+                    className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded-md"
                   >
-                    Complete Purchase
+                    Submit
                   </button>
                 </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
       </div>
-    </Layout>
+      <ToastContainer />
+    </LayoutOrder>
   );
 };
 

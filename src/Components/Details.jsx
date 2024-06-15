@@ -44,6 +44,7 @@ const Details = () => {
 
   const handleAddToCart = async () => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    
     if (!selectedSize) {
       setShowSelectSizeMsg(true);
       setShakeAnimation(true);
@@ -66,11 +67,16 @@ const Details = () => {
             },
           }
         );
-        // console.log("product added to cart ");
+        console.log(res,"product added to cart ");
         toast.success("Product added to cart successfully")
       } catch (error) {
-        // console.log(error, "error");
-        toast.error("Something Went Wrong")
+        console.log(error, "error");
+        if(error.response.data.message.length > 25){
+          toast.warn(error.response.data.message)
+        }else{
+          toast.error("Something Went Wrong")
+
+        }
 
       }
     }

@@ -527,3 +527,68 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
+export const addAddress = async (req, res) => {
+  try {
+    const { userId, newAddress } = req.body;
+
+    if (!userId || !newAddress) {
+      return res.status(400).json({ message: "User ID and address are required" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.address.length >= 10) {
+      return res.status(400).json({ message: "You cannot add more than 10 addresses" });
+    }
+
+    const addressExists = user.address.some(
+      address => address.toLowerCase() === newAddress.toLowerCase()
+    );
+
+    if (addressExists) {
+      return res.status(400).json({ message: "Address already exists" });
+    }
+
+    user.address.push(newAddress);
+    await user.save();
+
+    res.status(200).json({ message: "Address added successfully", addresses: user.address });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};
+
+// Controller to remove an address from the user's address list
+export const removeAddress = async (req, res) => {
+  try {
+    const { userId, addressToRemove } = req.body;
+
+    if (!userId || !addressToRemove) {
+      return res.status(400).json({ message: "User ID and address are required" });
+    }
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const addressIndex = user.address.indexOf(addressToRemove);
+
+    if (addressIndex === -1) {
+      return res.status(400).json({ message: "Address not found" });
+    }
+
+    user.address.splice(addressIndex, 1);
+    await user.save();
+
+    res.status(200).json({ message: "Address removed successfully", addresses: user.address });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error", error: error.message });
+  }
+};

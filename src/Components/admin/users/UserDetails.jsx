@@ -7,62 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import Spinner from "../others/Spinner";
 import Loaders from "../../../common/loaders/Loaders";
 
-const user = {
-  firstname: "Vasim",
-  lastname: "Shaikh",
-  email: "vasimn2@gmail.com",
-  mobile: "8155918232",
-  role: "admin",
-  isBlocked: false,
-  cart: [
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description of product 1111",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "Description of product 2",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description: "Description of product 3",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 4,
-      name: "Product 4",
-      description: "Description of product 4",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 5,
-      name: "Product 5",
-      description: "Description of product 5",
-      image: "https://via.placeholder.com/150",
-    },
-  ],
-  address: [],
-  wishlist: [
-    {
-      id: 1,
-      name: "Wishlist Product 1",
-      description: "Description of wishlist product 1",
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Wishlist Product 2",
-      description: "Description of wishlist product 2",
-      image: "https://via.placeholder.com/150",
-    },
-  ],
-};
-
 const UserDetails = () => {
   const [data, setData] = useState();
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
@@ -70,6 +14,7 @@ const UserDetails = () => {
   const [msg, setMsg] = useState("");
   const [deleteId, setDeleteId] = useState(null);
   const [wishList, setWishList] = useState([]);
+  const [cart, setCart] = useState([]);
 
   const navigate = useNavigate();
   // console.log(params);
@@ -93,7 +38,7 @@ const UserDetails = () => {
       if (response.data) {
         setData(response?.data?.getUser);
         setMsg("");
-        console.log(response.data.getUser,"userrrr")
+        // console.log(response.data.getUser,"userrxxxxxxxxxxrr")
       }
     } catch (error) {
       toast.error("Something went Wrong");
@@ -187,7 +132,7 @@ const UserDetails = () => {
 
   const getUserDataWish = async () => {
     setMsg(<Spinner />);
-    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    // const bearerToken = JSON.parse(localStorage.getItem("userData"));
     // console.log(bearerToken,'token')
 
     try {
@@ -201,9 +146,10 @@ const UserDetails = () => {
             },
           }
         );
-        console.log(response,'className=')
+        // console.log(response,'className=')
         if (response.data) {
           setWishList(response?.data?.products);
+          console.log(response.data, "adminwishlistttttttt");
           setMsg("");
         }
       }
@@ -213,44 +159,47 @@ const UserDetails = () => {
     }
   };
 
-  // useEffect(() => {
-  //   getWishLists();
-  // }, []);
+  useEffect(() => {
+    getCart();
+  }, []);
 
-  // const getWishLists = async () => {
-  //   // const bearerToken = JSON.parse(localStorage.getItem("userData"));
+  const getCart = async () => {
+    setMsg(<Spinner />);
 
-  //   setMsg(<Loaders />);
-  //   try {
-  //     const Response = await axios.put(
-  //       `http://localhost:5000/api/wishlist/${params?.id}`,
-  //       { prodId: id },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${bearerToken.token}`,
-  //         },
-  //       }
-  //     );
-  //     if (Response.data) {
-  //       await getUserDataWish();
 
-  //       // console.log(Response.data, "Wishlist");
-  //     }
-  //     setMsg("");
-  //     setWishList(arr);
-  //   } catch (error) {
-  //     setMsg("Something Went Wrong");
-  //   }
-  // };
+    try {
+      if (bearerToken) {
+        const response = await axios.get(
+          `http://localhost:5000/api/cart/${params?.id}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken.token}`,
+            },
+          }
+        );
+        // console.log(response,'className=')
+        if (response.data) {
+          setCart(response?.data?.products);
+          console.log(response, "adminCart");
+          setMsg("");
+        }
+      }
+    } catch (error) {
+      setMsg("no cart ");
+      // toast.error(error?.response?.data?.message);
+      // console.log(error,"errorrrrrrrrrrrrrrrrrrrrrrr")
+    }
+  };
+
 
 
   return (
     <>
-      <AdminLayout>
-        {!msg ? (
-          <div className="p-4 sm:ml-64">
-            <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <AdminLayout >
+        {/* {!msg ? ( */}
+          <div className="p-2">
+            <div className=" border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* User Details Box */}
               <div className="bg-white shadow-lg rounded-lg p-4">
                 <h2 className="text-2xl font-semibold text-gray-800">
@@ -281,12 +230,15 @@ const UserDetails = () => {
               </div>
 
               {/* Address Box */}
-              <div className="bg-white shadow-lg rounded-lg p-4">
+              <div className="bg-white shadow-lg rounded-lg p-4 max-h-96 overflow-y-auto">
                 <h3 className="text-xl font-semibold text-gray-800">Address</h3>
                 {data?.address?.length > 0 ? (
                   data?.address?.map((addr, index) => (
-                    <p key={index} className="text-gray-600 mt-2">
-                      {addr}
+                    <p key={index} className="text-gray-600 mt-2 flex">
+                      <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                        {index + 1}
+                      </span>
+                      <span> &nbsp;{addr}</span>
                     </p>
                   ))
                 ) : (
@@ -297,19 +249,34 @@ const UserDetails = () => {
               {/* Cart Box */}
               <div className="bg-white shadow-lg rounded-lg p-4 max-h-96 overflow-y-auto">
                 <h3 className="text-xl font-semibold text-gray-800">Cart</h3>
-                {user.cart.length > 0 ? (
-                  user.cart.map((item, index) => (
-                    <div key={index} className="flex items-center mt-4">
+                {cart?.length > 0 ? (
+                  cart.map((carts, id) => (
+                    <div key={id} className="flex items-center mt-4">
                       <img
-                        src={item.image}
-                        alt={item.name}
+                        src={
+                          carts?.product?.images[0] ||
+                          "https://placehold.co/600x400"
+                        }
+                        alt={carts?.color}
                         className="w-16 h-16 mr-4"
                       />
                       <div>
                         <p className="text-gray-800 font-semibold">
-                          {item.name}
+                          {carts?.product?.title}
                         </p>
-                        <p className="text-gray-600">{item.description}</p>
+
+                        <div className="flex  gap-4">
+                          <p className="text-gray-800 font-semibold">
+                            ₹ {carts?.price}
+                          </p>
+                          <p className="text-gray-800 font-semibold">
+                            Ouantity: {carts?.count}
+                          </p>
+                          <p className="text-gray-800 font-semibold">
+                            Size: {carts?.size}
+                          </p>
+                          <p className="text-gray-800">Color: {carts?.color}</p>
+                        </div>
                       </div>
                     </div>
                   ))
@@ -320,14 +287,13 @@ const UserDetails = () => {
 
               {/* Wishlist Box */}
 
-          
               <div className="bg-white shadow-lg rounded-lg p-4 max-h-96 overflow-y-auto">
                 <h3 className="text-xl font-semibold text-gray-800">
                   Wishlist
                 </h3>
                 {wishList?.length > 0 ? (
-                  wishList?.map((wish) => (
-                    <div key={wish._id} className="flex items-center mt-4">
+                  wishList?.map((wish, id) => (
+                    <div key={id} className="flex items-center mt-4">
                       <img
                         src={wish?.images[0] || "https://placehold.co/600x400"}
                         alt={wish?.title}
@@ -335,7 +301,7 @@ const UserDetails = () => {
                       />
                       <div>
                         <p className="text-gray-800 font-semibold">
-                          {wish.title}
+                          {wish?.title}
                         </p>
                         <p className="text-gray-600">{wish?.price}</p>
                       </div>
@@ -347,11 +313,9 @@ const UserDetails = () => {
               </div>
             </div>
           </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-screen">
-            {msg}
-          </div>
-        )}
+        {/* ) : ( */}
+       
+        {/* )} */}
       </AdminLayout>
 
       {deleteId && (

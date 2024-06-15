@@ -113,8 +113,8 @@ const CreateProduct = () => {
 
   return (
     <AdminLayout>
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-10">
+      <div className="p-1 ">
+        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 ">
           <h1 className="text-3xl font-bold text-center ">
             Create New Product
           </h1>

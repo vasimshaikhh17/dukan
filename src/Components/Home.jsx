@@ -253,7 +253,7 @@ const Home = () => {
       <div className="text-center mt-8 mb-8">
         <button
           onClick={() => navigate("/view-products")}
-          className="group bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-4 border border-red-500 hover:border-transparent rounded inline-flex items-center"
+          className="group bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
         >
           View All Products
           <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>

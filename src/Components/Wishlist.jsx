@@ -10,6 +10,7 @@ import Loaders from "../common/loaders/Loaders";
 const Wishlist = () => {
   const [msg, setMsg] = useState("");
   const [wishList, setWishList] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     getUserData();
@@ -114,7 +115,7 @@ const Wishlist = () => {
                         <button className="text-slate-500  hover:text-black duration-300 text-sm">
                           Remove
                         </button>
-                        <button className="text-red-600 hover:text-red-700 duration-300 text-sm">
+                        <button onClick={()=>navigate(`/details/${wish?._id}`)} className="text-red-600 hover:text-red-700 duration-300 text-sm">
                           Move to bag
                         </button>
                       </div>

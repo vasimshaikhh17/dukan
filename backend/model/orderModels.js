@@ -34,6 +34,10 @@ const orderSchema = new mongoose.Schema(
       ref: "user",
       required: true
     },
+    shippingAddress: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

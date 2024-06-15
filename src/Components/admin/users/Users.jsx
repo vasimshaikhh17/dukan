@@ -32,10 +32,10 @@ const Users = () => {
   return (
     <AdminLayout>
       {!msg ? (
-        <div className="p-4 sm:ml-64">
-          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-            <div className="container mx-auto p-4">
-              <div className="overflow-x-auto">
+       
+          <div className=" border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 container mx-auto">
+            <div >
+              <div>
                 <table className="min-w-full bg-white border border-gray-300 shadow-lg rounded-lg hidden md:table">
                   <thead>
                     <tr className="bg-gray-800 text-white uppercase text-sm leading-normal">
@@ -129,7 +129,7 @@ const Users = () => {
               </div>
             </div>
           </div>
-        </div>
+    
       ) : (
         <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">
           {msg}

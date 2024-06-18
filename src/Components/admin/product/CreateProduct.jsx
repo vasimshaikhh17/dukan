@@ -114,14 +114,15 @@ const CreateProduct = () => {
   return (
     <AdminLayout>
       <div className="p-1 ">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 ">
+        <div className="p-4 border-2 border-dashed rounded-lg ">
           <h1 className="text-3xl font-bold text-center ">
             Create New Product
           </h1>
+          {msg && <div className="mt-4 text-center">{msg}</div>}
           <form
             onSubmit={handleSubmit}
             encType="multipart/form-data"
-            className="space-y-4 w-full mx-auto bg-gray-300 p-6 rounded-lg shadow-lg"
+            className="space-y-4 w-full mx-auto p-6 rounded-lg shadow-lg"
           >
             <div>
               <label
@@ -231,7 +232,6 @@ const CreateProduct = () => {
               </div>
             </div>
 
-        
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label
@@ -280,8 +280,6 @@ const CreateProduct = () => {
                 </select>
               </div>
             </div>
-
-     
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
@@ -359,7 +357,7 @@ const CreateProduct = () => {
             </button>
           </form>
         </div>
-        {msg && <div className="mt-4 text-center">{msg}</div>}
+  
       </div>
     </AdminLayout>
   );

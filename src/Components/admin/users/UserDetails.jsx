@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams ,Link} from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -112,7 +112,7 @@ const UserDetails = () => {
         );
         setMsg("");
         setTimeout(() => {
-          navigate("/admin/users");
+          navigate("/admin");
         }, 4000);
       }
     } catch (error) {
@@ -199,6 +199,10 @@ const UserDetails = () => {
       <AdminLayout >
         {/* {!msg ? ( */}
           <div className="p-2">
+            <div className="mb-3">
+
+        <Link to="/admin" className="bg-yellow-200 p-2 rounded-lg text-black font-bold hover:bg-yellow-300 duration-300" >Go Back</Link>
+            </div>
             <div className=" border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* User Details Box */}
               <div className="bg-white shadow-lg rounded-lg p-4">
@@ -234,9 +238,9 @@ const UserDetails = () => {
                 <h3 className="text-xl font-semibold text-gray-800">Address</h3>
                 {data?.address?.length > 0 ? (
                   data?.address?.map((addr, index) => (
-                    <p key={index} className="text-gray-600 mt-2 flex">
-                      <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
-                        {index + 1}
+                    <p key={index} className="text-gray-600 mt-2">
+                      <span >
+                        {index + 1} {"⇒"}
                       </span>
                       <span> &nbsp;{addr}</span>
                     </p>

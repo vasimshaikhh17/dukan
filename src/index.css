@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .box-shadow-3d {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
   }
@@ -13,7 +14,7 @@
 
   .image-slider-container {
     margin: 0 auto;
-    width: 60vw;
+    width: 90vw;
   }
   
   .image-slider-container .slick-prev:before,
@@ -31,8 +32,8 @@
   }
   
   .category-image {
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     object-fit: cover;
     display: block;
     margin: 0 auto;
@@ -42,6 +43,7 @@
     margin-top: 10px;
     font-size: 14px;
   }
+
 
   /* Details.css */
 

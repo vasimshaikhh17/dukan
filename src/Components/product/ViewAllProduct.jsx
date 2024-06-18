@@ -110,11 +110,10 @@ const ViewAllProduct = () => {
         <div className="container mx-auto">
           {/* Header section */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">
-            <h1 className="text-3xl mb-5 font-bold">Our Products</h1>
-            <p className="text-sm text-gray-600">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sit
-              asperiores modi Sit asperiores modi
-            </p>
+          <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
+            Our Products
+              <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
+            </h2>
           </div>
           {!msg ? (
             <div>
@@ -129,7 +128,7 @@ const ViewAllProduct = () => {
                       <Link to={`/details/${data?._id}`}>
                         <img
                           src={
-                            data?.images[0] || "https://placehold.co/600x400"
+                            data?.images[3] || "https://placehold.co/600x400"
                           }
                           alt=""
                           className="w-full h-full object-cover rounded-md hover:scale-105 duration-200"

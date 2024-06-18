@@ -8,7 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import Loaders from "../common/loaders/Loaders";
 
-export default function AllCategories() {
+const AllCategories = () => {
   const [categories, setCategories] = useState([]);
   const [msg, setMsg] = useState();
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
@@ -22,7 +22,7 @@ export default function AllCategories() {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 5,
+    slidesToShow: 6,
     slidesToScroll: 1,
     responsive: [
       {
@@ -45,7 +45,7 @@ export default function AllCategories() {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -82,30 +82,39 @@ export default function AllCategories() {
   };
 
   return (
-    <div className="image-slider-container pt-12">
-      <h2 className="text-center md:text-2xl  font-bold mb-4 sm:text-sm">
-        Shop By Category
+    <div className="image-slider-container mx-auto">
+      <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
+        Explore Products
+        <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
       </h2>
       {msg ? (
         <div className="flex flex-col items-center justify-center h-28">
-        {msg}
-      </div>
+          {msg}
+        </div>
       ) : (
-        <Slider {...settings} className="slider">
+        <Slider {...settings} className="slider" >
           {categories.map((category, index) => (
-            <div key={index} className="slide">
-              <Link to={`/categories/${category._id}`}>
+            <div
+              key={index}
+              className="slide p-2 transition-transform transform hover:scale-105"
+            >
+              <Link to={`/categories/${category._id}`} className="block">
                 <img
                   src={category.imageUrl}
                   alt={category.title}
-                  className="category-image"
+                  className="category-image w-full h-64 md:h-48 object-cover rounded-lg"
                 />
               </Link>
-              <div className=" text-center  md:text-xl text-[10px]">{category.title}</div>
+              <div className="text-center text-lg md:text-xl text-xs mt-2">
+                {category.title}
+              </div>
             </div>
           ))}
         </Slider>
       )}
+      <ToastContainer />
     </div>
   );
-}
+};
+
+export default AllCategories;

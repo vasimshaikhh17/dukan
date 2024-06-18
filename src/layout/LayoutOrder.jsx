@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Footer from "../common/footer/Footer";
+import Footer from "../common/footer/Footer"
 import { Link, useLocation } from "react-router-dom";
 import NavbarOrder from "../common/Navbar/NavbarOrder";
-import axios from "axios";
+
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -18,7 +18,7 @@ const LayoutOrder = ({ children ,cart , addressIndex }) => {
 
   console.log(cart,'this ismy cart')
   const { pathname } = useLocation();
-  const [orderData,setOrderData] = useState()
+
 
 
   // useEffect(()=>{
@@ -104,7 +104,7 @@ const LayoutOrder = ({ children ,cart , addressIndex }) => {
                       Total
                     </dt>
                     <dd className="text-base font-bold text-gray-900 dark:text-white">
-                        {Math.trunc(cart?.cartTotal)}
+                    ₹ {parseInt(cart?.cartTotal)}
                     </dd>
                   </dl>
                 </div>
@@ -135,7 +135,7 @@ const LayoutOrder = ({ children ,cart , addressIndex }) => {
         </div>
       </section>
 
-      <Footer />
+      <Footer/>
     </>
   );
 };

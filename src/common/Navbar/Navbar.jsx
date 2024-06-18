@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Logo from "../../assets/Logo.png";
+import Logo from "../../assets/lo.png";
 import Spinner from "../../Components/admin/others/Spinner";
 import axios from "axios";
 
@@ -120,12 +120,16 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white fixed top-0 w-full z-50 shadow-md h-16 py-2 md:px-10">
-        <div className="flex items-center font-medium justify-between mx-3 md:mx-0">
+      <nav className="bg-white fixed top-0 w-full z-50 shadow-md  py-2 md:px-10 ">
+        <div className="flex items-center font-medium justify-between mx-3 md:mx-0 ">
           <Link to="/">
-            {/* <img src={Logo} alt="logo" className="md:cursor-pointer z-50" /> */}
-            <p className="md:cursor-pointer z-50 text-4xl" >    Dukan</p>
-       
+            <img
+              src={Logo}
+              alt="logo"
+              width={150}
+              className="md:cursor-pointer z-50"
+            />
+            {/* <p className="md:cursor-pointer z-50 text-4xl" >    Dukan</p> */}
           </Link>
           <div className="flex gap-5 items-center">
             <ul className="md:flex hidden uppercase items-center gap-8">
@@ -188,12 +192,26 @@ const Navbar = () => {
                 )}
               </div>
             </ul>
-            <Link to="/wishlist" className="hover:text-red-600 duration-300">
-              <i className="ri-heart-line text-2xl"></i>
+            <Link
+              to="/wishlist"
+              className="relative group hover:text-red-600 duration-300"
+            >
+              <i className="ri-heart-line text-xl"></i>
+              <span className="tooltip-text absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 duration-300">
+                Wishlist
+              </span>
             </Link>
-            <Link to="/cart" className="hover:text-red-600 duration-300">
-              <i className="ri-shopping-bag-3-line text-2xl"></i>
+
+            <Link
+              to="/cart"
+              className="relative group hover:text-red-600 duration-300"
+            >
+              <i className="ri-shopping-cart-line text-xl"></i>
+              <span className="tooltip-text absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-gray-700 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 duration-300">
+                Cart
+              </span>
             </Link>
+
             <i
               className="ri-search-line lg:hidden text-2xl"
               onClick={() => setSearchOpen(!searchOpen)}
@@ -209,7 +227,7 @@ const Navbar = () => {
               <>
                 <div className="relative" ref={dropdownRef}>
                   <i
-                    className="ri-user-line text-2xl cursor-pointer hover:text-red-600 duration-300"
+                    className="ri-user-line text-xl cursor-pointer hover:text-red-600 duration-300"
                     onClick={() => setUserDropdownOpen(!userDropdownOpen)}
                   ></i>
                   {userDropdownOpen && (

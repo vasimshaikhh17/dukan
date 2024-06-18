@@ -36,8 +36,13 @@ import DynamicPage from "./Components/product/DynamicPage";
 import Checkout from "./Components/checkout/Checkout";
 import Test from "./Components/test/Test";
 import UpdateProduct from "./Components/admin/product/UpdateProduct";
+import OrdersDetails from "./Components/admin/orderDetail/OrdersDetails";
 
 const App = () => {
+
+  // toast.success("Success Notification !", {
+  //   position: toast.POSITION.TOP_RIGHT,
+  // });
   return (
     <>
       <Routes>
@@ -89,7 +94,8 @@ const App = () => {
         <Route path="/admin/delete-subCategory" element={<DeleteSubCat />} />
         <Route path="/admin/update-subCategory" element={<UpdateSubCat />} />
         <Route path="/admin/create-subCategory" element={<CreateSubCat />} />
-
+        <Route path="all-orders" element={<OrdersDetails/>}/> 
+ 
 
         <Route path="/checkout" element={<Checkout/>} />
 

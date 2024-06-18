@@ -4,6 +4,7 @@ import Spinner from "../admin/others/Spinner";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import CartItems from "../CartItems";
 
 const Checkout = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -334,32 +335,7 @@ const Checkout = () => {
             </div>
 
             <div className="mt-4">
-              {cart?.products.map((carts, id) => (
-                <div key={id} className="p-2">
-                  <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
-                      <div className="flex items-center space-x-3">
-                        <img
-                          className="h-12 w-12 rounded-lg object-cover"
-                          src={carts.product.images[0]}
-                          alt={carts.product.title}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="text-base font-medium text-gray-900 dark:text-white truncate">
-                            {carts.product.title}
-                          </p>
-                          <div className="flex flex-wrap gap-2 text-sm text-gray-700 dark:text-gray-300">
-                            <span>Color: {carts.product.color}</span>
-                            <span>Size: {carts.size}</span>
-                            <span>Quantity: {carts.count}</span>
-                            <span>Price: {carts.price}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <CartItems/>
             </div>
             <div className="flex justify-start pb-3">
               <button

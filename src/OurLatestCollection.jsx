@@ -75,8 +75,9 @@ const OurLatestCollection = () => {
 
   return (
     <section className="pt-16">
-      <h2 className="text-2xl font-bold tracking-tight text-gray-900 text-center">
-        Our Latest Collection
+      <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
+        Our Latest Collection 
+        <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
       </h2>
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3 lg:items-stretch">

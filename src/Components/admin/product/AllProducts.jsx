@@ -163,8 +163,16 @@ const AllProducts = () => {
                       <td className="py-3 px-4 flex space-x-2">
                         <button
                           className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                          onClick={()=> navigate(`/admin/update-product/${product._id}`)
-                          }
+                          onClick={() => {
+                            setProductUpdate(product._id);
+                            setUpdateData({
+                              title: product.title,
+                              color: product.color,
+                              brand: product.brand,
+                              sub_category: product.sub_category,
+                              price: product.price,
+                            });
+                          }}
                         >
                           Update
                         </button>

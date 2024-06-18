@@ -4,6 +4,7 @@ import Layout from "../layout/Layout";
 import { useParams } from "react-router-dom";
 import Loaders from "../common/loaders/Loaders";
 import { ToastContainer, toast } from "react-toastify";
+import FeaturedProducts from "./FeaturedProducts";
 
 
 const Details = () => {
@@ -227,6 +228,8 @@ const Details = () => {
           </div>
         </div>
       </div>
+
+      <FeaturedProducts/>
       <ToastContainer/>
     </Layout>
   );

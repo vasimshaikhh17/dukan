@@ -164,6 +164,7 @@ const Admin = () => {
                   </span>
                 </Link>
               </li>
+           
               <li>
                 <Link
                   to="/admin/top-products"
@@ -172,6 +173,18 @@ const Admin = () => {
                   <i className="ri-align-top flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
                   <span className="flex-1 ms-3 whitespace-nowrap">
                     Top Products
+                  </span>
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/all-orders"
+                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                >
+                  <i className="ri-shape-line flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                  <span className="flex-1 ms-3 whitespace-nowrap">
+                    Orders
                   </span>
                 </Link>
               </li>

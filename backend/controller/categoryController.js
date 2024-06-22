@@ -117,12 +117,12 @@ export const getSubCategories = async (req, res, next) => {
 
 export const updateSubCategory = async (req, res, next) => {
   const { id } = req.params;
-  const { category } = req.body;
+  const { sub_category } = req.body;
   validateMongoDbId(id);
   try {
     const subCategory = await SubCategory.findByIdAndUpdate(
       id,
-      { category },
+      { sub_category },
       { new: true }
     );
     if (!subCategory) {

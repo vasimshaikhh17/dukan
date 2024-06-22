@@ -40,8 +40,8 @@ const DeleteSubCat = () => {
   return (
     <AdminLayout>
       {!msg ? (
-        <div className="p-4 sm:ml-64">
-          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
+        <div className="p-2 ">
+          <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-4">
             <h1 className="text-xl font-semibold mb-4">Delete Subcategory</h1>
             <div className="overflow-x-auto">
               <table className="min-w-full bg-white border">
@@ -54,7 +54,7 @@ const DeleteSubCat = () => {
                 <tbody>
                   {subCat.map((subcat) => (
                     <tr key={subcat._id} className="border-t">
-                      <td className="px-4 py-2">{subcat.category}</td>
+                      <td className="px-4 py-2">{subcat.sub_category}</td>
                       <td className="px-4 py-2">
                         <button
                           className="text-red-600 hover:text-red-800"

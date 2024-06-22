@@ -26,13 +26,15 @@ const CategoryDetail = () => {
 
   const fetchProducts = async () => {
     try {
-      let url = `http://localhost:5000/api/product/getAll?title=${category}`;
+      let url = `http://localhost:5000/api/product/getAll`;
+      if (category) {
+        url += `?category=${category}`;
+      }
       if (selectedSubCategory) {
-        url += `&sub_category=${selectedSubCategory}`;
+        url += category ? `&sub_category=${selectedSubCategory}` : `?sub_category=${selectedSubCategory}`;
       }
       const response = await axios.get(url);
       setProducts(response.data);
-      console.log(response,"mihirchomu");
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -40,11 +42,8 @@ const CategoryDetail = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/category/getAll`
-      );
+      const response = await axios.get(`http://localhost:5000/api/category/getAll`);
       setCategories(response.data);
-      // console.log(response,"cool");
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -52,9 +51,7 @@ const CategoryDetail = () => {
 
   const fetchSubCategories = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/category/subcategories`
-      );
+      const response = await axios.get(`http://localhost:5000/api/category/subcategories`);
       setSubCategories(response.data);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
@@ -107,8 +104,8 @@ const CategoryDetail = () => {
               >
                 <option value="">All Sub Category</option>
                 {subCategories.map((sub_category, index) => (
-                  <option key={index} value={sub_category.category}>
-                    {sub_category.category}
+                  <option key={index} value={sub_category._id}>
+                    {sub_category.title}
                   </option>
                 ))}
               </select>

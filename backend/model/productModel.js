@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Wishlist } from "./wishList.js";
 import { TopProducts } from "./topProducts.js";
+import { Cart } from "./cartModel.js";
 
 const productSchema = new mongoose.Schema(
   {
@@ -83,6 +84,7 @@ productSchema.pre("remove", async function (next) {
   try {
     await Wishlist.updateMany({}, { $pull: { products: this._id } });
     await TopProducts.updateMany({}, { $pull: { products: this._id } });
+    await Cart.updateMany({}, { $pull: { products: this._id } });
     next();
   } catch (err) {
     console.log(err);

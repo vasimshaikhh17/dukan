@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import CartItems from "../CartItems";
 
+import netbank from "../../assets/payments/netbank.jpeg"
+
 const Checkout = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [msg, setMsg] = useState("");
@@ -24,9 +26,8 @@ const Checkout = () => {
   const [addressOff, setAddressOff] = useState(false);
   const [ordersOff, setOrdersOff] = useState(true);
 
-  const [orderData,setOrderData] = useState()
+  const [orderData, setOrderData] = useState();
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
-
 
   console.log(selectedAddIndex, "selectedAddress");
 
@@ -151,44 +152,49 @@ const Checkout = () => {
     setSelectedAddress(event.target.value);
   };
 
-
-  useEffect(()=>{
+  useEffect(() => {
     if (cart.products && cart.products.length > 0) {
-    const transformedProducts = cart?.products?.map(item => ({
-      product: item.product._id,
-      count: item.count,
-      color: item.color,
-      size: item.size
-    }))
-    setOrderData({ products: transformedProducts,paymentIntent: {
-    "id": "pi_1GqIC8Ez4e5GAbFDS7hJI9K5",
-    "amount": 1000,
-    "currency": "usd",
-    "status": "succeeded"
-  },orderby: cart?.orderby, addressIndex:selectedAddIndex });
-  // return()=>{transformedProducts}
-}
-  },[cart , selectedAddIndex])
+      const transformedProducts = cart?.products?.map((item) => ({
+        product: item.product._id,
+        count: item.count,
+        color: item.color,
+        size: item.size,
+      }));
+      setOrderData({
+        products: transformedProducts,
+        paymentIntent: {
+          id: "pi_1GqIC8Ez4e5GAbFDS7hJI9K5",
+          amount: 1000,
+          currency: "usd",
+          status: "succeeded",
+        },
+        orderby: cart?.orderby,
+        addressIndex: selectedAddIndex,
+      });
+      // return()=>{transformedProducts}
+    }
+  }, [cart, selectedAddIndex]);
 
-  const Order = async()=>{
-    const url = `http://localhost:5000/api/order/create-order`
+  const Order = async () => {
+    const url = `http://localhost:5000/api/order/create-order`;
     try {
-      const Response = await axios.post(url,orderData,{
+      const Response = await axios.post(url, orderData, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${bearerToken.token}`,
         },
-      })
-      console.log(Response,'payment Check')
+      });
+      console.log(Response, "payment Check");
       // alert()
     } catch (error) {
-        console.log(error,'rerer')
-        if (error.response.data.error){
-          toast.warn  (error.response.data.error)
-        }
+      console.log(error, "rerer");
+      if (error.response.data.error) {
+        toast.warn(error.response.data.error);
+      }
     }
-   
-  } 
+  };
+
+
 
   return (
     <LayoutOrder cart={cart} addressIndex={selectedAddIndex}>
@@ -279,7 +285,10 @@ const Checkout = () => {
                         {selectedAddIndex === index && (
                           <div className="flex justify-start pb-3">
                             <button
-                              onClick={() => {setAddressOff(true);setOrdersOff(false)}}
+                              onClick={() => {
+                                setAddressOff(true);
+                                setOrdersOff(false);
+                              }}
                               type="button"
                               className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 duration-150 px-10"
                             >
@@ -301,68 +310,87 @@ const Checkout = () => {
             </div>
           )}
 
-          {ordersOff ?    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                {addressOff ?<span className="bg-green-400 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
-                  <i class="ri-check-double-line"></i>
-                </span> :
-                <span className="bg-gray-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
-                  2
-                </span>}
-                <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
-                  Order Summary
-                </span>
-              </div>
+          {ordersOff ? (
+            <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  {addressOff ? (
+                    <span className="bg-green-400 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                      <i class="ri-check-double-line"></i>
+                    </span>
+                  ) : (
+                    <span className="bg-gray-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                      2
+                    </span>
+                  )}
+                  <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                    Order Summary
+                  </span>
+                </div>
 
-              <button  onClick={() => setOrdersOff(false)} className="text-blue-500 hover:text-blue-700 text-sm md:text-base focus:outline-none">
-                Change Order
-              </button>
+                <button
+                  onClick={() => setOrdersOff(false)}
+                  className="text-blue-500 hover:text-blue-700 text-sm md:text-base focus:outline-none"
+                >
+                  Change Order
+                </button>
+              </div>
+              <hr className="my-3 border-gray-200 dark:border-gray-700" />
             </div>
-            <hr className="my-3 border-gray-200 dark:border-gray-700" />
-          </div> :     <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
-            <div className="flex justify-between">
-              <div className="flex gap-4">
-                <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
-                  2
-                </span>
-                <span>Order Summary</span>
-              </div>
+          ) : (
+            <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+              <div className="flex justify-between">
+                <div className="flex gap-4">
+                  <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    2
+                  </span>
+                  <span>Order Summary</span>
+                </div>
 
-              {/* <Link to={"/cart"} className="text-blue-500 hover:text-blue-700 ">
+                {/* <Link to={"/cart"} className="text-blue-500 hover:text-blue-700 ">
                 Change Order
               </Link> */}
-            </div>
+              </div>
 
-            <div className="mt-4">
-            <CartItems/>
-            </div>
-            <div className="flex justify-start pb-3">
-              <button
-                onClick={() => setOrdersOff(true)}
-                type="button"
-                className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 duration-150 px-10"
-              >
-                Continue
-              </button>
-            </div>
-          </div> }
-
-       
-
-      
-
-          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
-            <div className="flex justify-between">
-              <div className="flex gap-4">
-                <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
-                  3
-                </span>
-                <span>Payment Method</span>
-                <button type="button" onClick={Order} className="bg-black py-4 text-white px-5 rounded">Pay and Order</button>
+              <div className="mt-4">
+                <CartItems />
+              </div>
+              <div className="flex justify-start pb-3">
+                <button
+                  onClick={() => setOrdersOff(true)}
+                  type="button"
+                  className="bg-red-500 text-white p-2 rounded-md hover:bg-red-700 duration-150 px-10"
+                >
+                  Continue
+                </button>
               </div>
             </div>
-          </div>
+          )}
+
+
+
+
+<div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-4">
+                  <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    3
+                  </span>
+                  <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                    Select Delivery Address
+                  </span>
+                </div>
+
+                <button
+                 className="bg-green-400 text-white py-2 px-6 rounded-lg hover:bg-green-600 duration-200"
+                 onClick={Order}
+                >
+                 Pay Now
+                </button>
+              </div>
+              <hr className="my-3 border-gray-200 dark:border-gray-700" />
+            </div>
+
         </div>
 
         {showAddressForm && (

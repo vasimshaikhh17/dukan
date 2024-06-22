@@ -6,7 +6,6 @@ import Loaders from "../common/loaders/Loaders";
 import { ToastContainer, toast } from "react-toastify";
 import FeaturedProducts from "./FeaturedProducts";
 
-
 const Details = () => {
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
@@ -68,17 +67,15 @@ const Details = () => {
             },
           }
         );
-        console.log(res,"product added to cart ");
-        toast.success("Product added to cart successfully")
+        console.log(res, "product added to cart ");
+        toast.success("Product added to cart successfully");
       } catch (error) {
         console.log(error, "error");
-        if(error.response.data.message.length > 25){
-          toast.warn(error.response.data.message)
-        }else{
-          toast.error("Something Went Wrong")
-
+        if (error.response.data.message.length > 25) {
+          toast.warn(error.response.data.message);
+        } else {
+          toast.error("Something Went Wrong");
         }
-
       }
     }
   };
@@ -112,6 +109,18 @@ const Details = () => {
     }
   };
 
+  const handlePreviousImage = () => {
+    const currentIndex = product.images.indexOf(mainImage);
+    const previousIndex = (currentIndex - 1 + product.images.length) % product.images.length;
+    setMainImage(product.images[previousIndex]);
+  };
+
+  const handleNextImage = () => {
+    const currentIndex = product.images.indexOf(mainImage);
+    const nextIndex = (currentIndex + 1) % product.images.length;
+    setMainImage(product.images[nextIndex]);
+  };
+
   if (!product) {
     return (
       <Layout>
@@ -124,16 +133,27 @@ const Details = () => {
 
   return (
     <Layout>
-
       <div className="max-w-6xl mx-auto p-4 pt-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex flex-col md:flex-row md:items-start">
-            <div className="flex-1 md:order-2">
+            <div className="relative flex-1 md:order-2">
               <img
                 src={mainImage}
                 alt="Product"
                 className="w-full h-auto rounded-lg shadow-lg"
               />
+              <button
+                className="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-500 bg-opacity-50 text-white p-2 rounded-full"
+                onClick={handlePreviousImage}
+              >
+                &lt;
+              </button>
+              <button
+                className="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-500 bg-opacity-50 text-white p-2 rounded-full"
+                onClick={handleNextImage}
+              >
+                &gt;
+              </button>
             </div>
             <div className="flex flex-row md:flex-col space-x-2 md:space-x-0 md:space-y-2 mt-4 md:mt-0 md:order-1 mr-3">
               {product.images.map((image, index) => (
@@ -229,8 +249,8 @@ const Details = () => {
         </div>
       </div>
 
-      <FeaturedProducts/>
-      <ToastContainer/>
+      <FeaturedProducts />
+      <ToastContainer />
     </Layout>
   );
 };

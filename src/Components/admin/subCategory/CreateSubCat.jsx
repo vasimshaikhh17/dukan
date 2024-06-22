@@ -1,113 +1,104 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import axios from "axios";
-import Spinner from "../others/Spinner";
 
 const CreateSubCat = () => {
-  const [category, setCategory] = useState("");
-  const [msg, setMsg] = useState();
-  const [loading, setLoading] = useState(false);
-  const [subCat, setSubCat] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [newSubCategory, setNewSubCategory] = useState("");
+  const [message, setMessage] = useState("");
 
-  const getAllSubCat = async () => {
-    setLoading(true);
+  const getAllSubcat = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/category/subcategories"
-      );
-      setSubCat(res.data);
+      const res = await axios.get(`http://localhost:5000/api/category/subcategories`);
+      setSubCategories(res.data);
     } catch (error) {
-      setMsg("Something went wrong while fetching subcategories");
-    } finally {
-      setLoading(false);
+      console.log(error, "cool");
     }
+  };
+
+  const createSubCategory = async () => {
+    // Check if the sub-category already exists
+    const exists = subCategories.some(
+      (subCategory) => subCategory.sub_category.toLowerCase() === newSubCategory.toLowerCase()
+    );
+
+    if (exists) {
+      setMessage("Sub-category already exists");
+      clearMessageAfterDelay();
+      return;
+    }
+
+    // If not, proceed to create a new sub-category
+    try {
+      const res = await axios.post(`http://localhost:5000/api/category/subcategory`, {
+        sub_category: newSubCategory,
+      });
+
+      // Add the new sub-category to the state
+      setSubCategories([...subCategories, res.data]);
+      setMessage("Sub-category created successfully");
+    } catch (error) {
+      console.log(error);
+      setMessage("Failed to create sub-category");
+    }
+
+    clearMessageAfterDelay();
+
+    // Clear the input field
+    setNewSubCategory("");
+  };
+
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
   };
 
   useEffect(() => {
-    getAllSubCat();
+    getAllSubcat();
   }, []);
 
-  const handleCreate = async () => {
-    if (subCat.some((subcat) => subcat.category.toLowerCase() === category.toLowerCase())) {
-      setMsg("Category already exists");
-      return;
+  useEffect(() => {
+    let timer;
+    if (message) {
+      timer = setTimeout(() => {
+        setMessage("");
+      }, 3000);
     }
-    setLoading(true);
-    setMsg("");
-    try {
-      await axios.post("http://localhost:5000/api/category/subcategory", {
-        category,
-      });
-      setMsg("Subcategory created successfully");
-      setCategory("");
-      getAllSubCat();
-      setTimeout(() => setMsg(""), 1000);
-    } catch (error) {
-      setMsg("Failed to create subcategory");
-    } finally {
-      setLoading(false);
-    }
-  };
+    return () => clearTimeout(timer);
+  }, [message]);
 
   return (
     <AdminLayout>
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-          <h1 className="text-xl font-semibold mb-4">Create Subcategory</h1>
-          <div className="bg-white rounded-lg p-6 max-w-md mx-auto">
-            {loading ? (
-              <div className="flex justify-center items-center h-60">
-                <Spinner />
-              </div>
-            ) : (
-              <div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="category"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Enter New Sub Category
-                  </label>
-                  <input
-                    type="text"
-                    id="category"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
-                </div>
-                <div className="flex justify-end">
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={handleCreate}
-                    disabled={!category}
-                  >
-                    Create
-                  </button>
-                </div>
-              </div>
-            )}
-            {msg && (
-              <div className="mt-4 text-center text-gray-700">
-                {msg}
-              </div>
-            )}
+      <div className="p-2">
+        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-2">
+          <div className="mb-4 flex flex-col sm:flex-row">
+            <input
+              type="text"
+              value={newSubCategory}
+              onChange={(e) => setNewSubCategory(e.target.value)}
+              placeholder="Enter sub-category name"
+              className="border px-4 py-2 mb-2 sm:mb-0 sm:mr-2 flex-grow"
+            />
+            <button
+              onClick={createSubCategory}
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Create Sub-Category
+            </button>
           </div>
-        </div>
-
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-          <h1 className="text-xl font-semibold mb-4">All Subcategories</h1>
+          {message && <div className="mb-4 text-red-500">{message}</div>}
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border">
-              <thead className="bg-gray-200">
+            <table className="min-w-full bg-white dark:bg-gray-800">
+              <thead>
                 <tr>
-                  <th className="px-4 py-2 text-start">Category</th>
+                  <th className="w-1/2 px-4 py-2">Sub Category</th>
                 </tr>
               </thead>
               <tbody>
-                {subCat.map((subcat) => (
-                  <tr key={subcat._id} className="border-t">
-                    <td className="px-4 py-2">{subcat.category}</td>
+                {subCategories.map((subCategory, index) => (
+                  <tr key={index}>
+                    <td className="border px-4 py-2">{subCategory.sub_category}</td>
                   </tr>
                 ))}
               </tbody>

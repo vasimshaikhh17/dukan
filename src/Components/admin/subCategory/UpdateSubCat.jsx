@@ -1,116 +1,120 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import axios from "axios";
-import Spinner from "../others/Spinner";
-
-
-// import { FaEdit } from "react-icons/fa";
 
 const UpdateSubCat = () => {
-  const [subCat, setSubCat] = useState([]);
-  const [msg, setMsg] = useState();
-  const [editId, setEditId] = useState(null);
-  const [editCategory, setEditCategory] = useState("");
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [updatedSubCategory, setUpdatedSubCategory] = useState("");
+  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const getAllSubCat = async () => {
-    setMsg(<Spinner />);
+  const getAllSubcat = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/category/subcategories"
-      );
-      setSubCat(res.data);
-      setMsg("");
+      const res = await axios.get(`http://localhost:5000/api/category/subcategories`);
+      setSubCategories(res.data);
     } catch (error) {
-      setMsg("Something went wrong");
+      console.log(error, "cool");
     }
   };
 
   const updateSubCategory = async (id) => {
     try {
       await axios.put(`http://localhost:5000/api/category/subcategory/${id}`, {
-        category: editCategory,
+        sub_category: updatedSubCategory,
       });
-      setSubCat(
-        subCat.map((subcat) =>
-          subcat._id === id ? { ...subcat, category: editCategory } : subcat
-        )
-      );
-      setEditId(null);
-      setMsg("Subcategory updated successfully");
-      setTimeout(() => setMsg(""), 1000);
+
+      setMessage("Sub-category updated successfully");
+      getAllSubcat(); // Fetch updated data from the backend
     } catch (error) {
-      setMsg("Failed to update subcategory");
+      console.log(error);
+      setMessage("Failed to update sub-category");
     }
+    clearMessageAfterDelay();
+    setShowModal(false);
+  };
+
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage("");
+    }, 3000);
+  };
+
+  const handleUpdateClick = (subCategory) => {
+    setSelectedSubCategory(subCategory);
+    setUpdatedSubCategory(subCategory.sub_category);
+    setShowModal(true);
   };
 
   useEffect(() => {
-    getAllSubCat();
+    getAllSubcat();
   }, []);
+
+  useEffect(() => {
+    let timer;
+    if (message) {
+      timer = setTimeout(() => {
+        setMessage("");
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [message]);
 
   return (
     <AdminLayout>
-      {!msg ? (
-        <div className="p-4 sm:ml-64">
-          <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14">
-            <h1 className="text-xl font-semibold mb-4">Update Subcategory</h1>
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white border">
-                <thead className="bg-gray-200">
-                  <tr>
-                    <th className="px-4 py-2 text-start">Category</th>
-                    <th className="px-4 py-2 text-start">Actions</th>
+      <div className="p-2">
+        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-2">
+          {message && <div className="mb-4 text-red-500">{message}</div>}
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white dark:bg-gray-800">
+              <thead>
+                <tr>
+                  <th className="w-1/2 px-4 py-2">Sub Category</th>
+                  <th className="w-1/2 px-4 py-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subCategories.map((subCategory, index) => (
+                  <tr key={index}>
+                    <td className="border px-4 py-2">{subCategory.sub_category}</td>
+                    <td className="border px-4 py-2">
+                      <button
+                        onClick={() => handleUpdateClick(subCategory)}
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                      >
+                        Update
+                      </button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {subCat.map((subcat) => (
-                    <tr key={subcat._id} className="border-t">
-                      <td className="px-4 py-2">{subcat.category}</td>
-                      <td className="px-4 py-2">
-                        <button
-                          className="text-blue-600 hover:text-blue-800"
-                          onClick={() => {
-                            setEditId(subcat._id);
-                            setEditCategory(subcat.category);
-                          }}
-                        >
-                          Update
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      ) : (
-        <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">
-          {msg}
-        </div>
-      )}
+      </div>
 
-      {editId && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg mx-auto">
-            <h2 className="text-xl font-semibold mb-4">Update Subcategory</h2>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full">
+            <h2 className="text-xl mb-4">Update Sub-Category</h2>
             <input
               type="text"
-              className="w-full border p-2 mb-4"
-              value={editCategory}
-              onChange={(e) => setEditCategory(e.target.value)}
+              value={updatedSubCategory}
+              onChange={(e) => setUpdatedSubCategory(e.target.value)}
+              className="border px-4 py-2 mb-4 w-full"
             />
             <div className="flex justify-end">
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                onClick={() => updateSubCategory(editId)}
-              >
-                Update
-              </button>
-              <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-                onClick={() => setEditId(null)}
+                onClick={() => setShowModal(false)}
+                className="bg-gray-300 text-black px-4 py-2 rounded mr-2"
               >
                 Cancel
+              </button>
+              <button
+                onClick={() => updateSubCategory(selectedSubCategory._id)}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Update
               </button>
             </div>
           </div>

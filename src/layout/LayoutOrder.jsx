@@ -14,7 +14,7 @@ const ScrollToTop = () => {
   return null; // Ensure that ScrollToTop component returns null or JSX
 }
 
-const LayoutOrder = ({ children ,cart , addressIndex }) => {
+const LayoutOrder = ({ children ,cart , addressIndex  }) => {
 
   console.log(cart,'this ismy cart')
   const { pathname } = useLocation();

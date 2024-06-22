@@ -123,13 +123,13 @@ const Navbar = () => {
       <nav className="bg-white fixed top-0 w-full z-50 shadow-md  py-2 md:px-10 ">
         <div className="flex items-center font-medium justify-between mx-3 md:mx-0 ">
           <Link to="/">
-            <img
+            {/* <img
               src={Logo}
               alt="logo"
               width={150}
               className="md:cursor-pointer z-50"
-            />
-            {/* <p className="md:cursor-pointer z-50 text-4xl" >    Dukan</p> */}
+            /> */}
+            <p className="md:cursor-pointer z-50 text-xl" >Bytefaze Clothing</p>
           </Link>
           <div className="flex gap-5 items-center">
             <ul className="md:flex hidden uppercase items-center gap-8">
@@ -157,7 +157,7 @@ const Navbar = () => {
                             to="/tshirts/casual-shirts"
                             className="hover:text-red-600 duration-100 pl-3 text-[12px]"
                           >
-                            {subcat?.category}
+                            {subcat?.sub_category}
                           </Link>
                         </div>
                       </div>
@@ -295,7 +295,7 @@ const Navbar = () => {
                           className="hover:text-red-600 duration-100 pl-3 text-[12px]"
                           onClick={handleLinkClick}
                         >
-                          {subcat?.category}
+                          {subcat?.sub_category}
                         </Link>
                       </div>
                     ))}

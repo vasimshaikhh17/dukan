@@ -29,6 +29,7 @@ const AllProducts = () => {
       );
       setProducts(response.data);
       setMsg("");
+      console.log(response.data , "bring")
     } catch (error) {
       setMsg("Something went wrong");
     }
@@ -78,7 +79,7 @@ const AllProducts = () => {
       );
       toast.success("Product added to top product");
 
-      console.log(Response, "topproduct");
+      // console.log(Response, "topproduct");
     } catch (error) {
       console.log(error);
       toast.error("Unable to add top product");
@@ -106,6 +107,7 @@ const AllProducts = () => {
         toast.success("Product Updated Successfully");
         bringProducts();
         setProductUpdate(null);
+      
       }
     } catch (error) {
       toast.error("Something went wrong");

@@ -5,12 +5,13 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "react-router-dom";
+
 const OurLatestCollection = () => {
-  const [productListId, setproductListId] = useState("");
+  const [productListId, setProductListId] = useState("");
   const [productList, setProductList] = useState("");
   const [msg, setMsg] = useState("");
 
-  useEffect(() => {   
+  useEffect(() => {
     const TopProducts = async () => {
       setMsg(<Spinner />);
       try {
@@ -22,7 +23,6 @@ const OurLatestCollection = () => {
         }
         setMsg("");
       } catch (error) {
-        // console.error(error);
         setMsg("Something Went Wrong");
       }
     };
@@ -30,14 +30,10 @@ const OurLatestCollection = () => {
     TopProducts();
   }, []);
 
-
-
-
-
   const settings = {
     autoplay: true,
     autoplaySpeed: 1200,
-    arrows: true,
+    arrows: false,
     pauseOnFocus: false,
     pauseOnHover: true,
     dots: true,
@@ -66,7 +62,7 @@ const OurLatestCollection = () => {
       {
         breakpoint: 480,
         settings: {
-          slidesToShow: 2,
+          slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
@@ -85,7 +81,7 @@ const OurLatestCollection = () => {
             <div className="mx-auto max-w-md text-center lg:text-left">
               <header>
                 <h2 className="text-xl font-bold text-gray-900 sm:text-3xl">
-                  Latest Sale
+                  Latest Collection
                 </h2>
                 <p className="mt-4 text-gray-500">
                   Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quas
@@ -101,21 +97,20 @@ const OurLatestCollection = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-2 lg:py-8  container mx-auto">
+          <div className="lg:col-span-2 lg:py-8 container mx-auto">
             <Slider {...settings} className="slider">
               {productList && productList?.length > 0 ? (
                 productList?.map((product, index) => (
                   <div key={index} className="px-4">
                     <div className="group block product-item">
                       <Link to={`/details/${product?._id}`}>
-                      
-                      <img
-                        src={
-                          product?.images[0] || "https://placehold.co/600x400"
-                        }
-                        alt={product?.title}
-                        className="aspect-square w-full rounded object-cover"
-                      />
+                        <img
+                          src={
+                            product?.images[0] || "https://placehold.co/600x400"
+                          }
+                          alt={product?.title}
+                          className="aspect-square w-full rounded object-cover"
+                        />
                       </Link>
                       <div className="mt-3">
                         <h3 className="font-medium text-gray-900 group-hover:underline group-hover:underline-offset-4">

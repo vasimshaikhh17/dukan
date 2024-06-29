@@ -105,6 +105,8 @@ const OrdersDetails = () => {
                   </div>
                   <div className="mt-2">
                     <h2 className="font-semibold">Products:</h2>
+                    <div className="flex">
+
                     {selectedOrder.products.map((prod, prodIndex) => (
                       <div key={prodIndex} className="w-fit mt-2 p-2 border rounded-lg bg-gray-50">
                         <h3 className="font-semibold">Product {prodIndex + 1}:</h3>
@@ -123,6 +125,7 @@ const OrdersDetails = () => {
                         )}
                       </div>
                     ))}
+                    </div>
                   </div>
                 </div>
               </div>

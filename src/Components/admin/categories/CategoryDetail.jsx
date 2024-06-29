@@ -15,8 +15,7 @@ const CategoryDetail = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchCategories();
-    fetchSubCategories();
+
     fetchProducts();
   }, []);
 
@@ -35,6 +34,7 @@ const CategoryDetail = () => {
       }
       const response = await axios.get(url);
       setProducts(response.data);
+      // console.log(response.data,"clg")
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -53,6 +53,7 @@ const CategoryDetail = () => {
     try {
       const response = await axios.get(`http://localhost:5000/api/category/subcategories`);
       setSubCategories(response.data);
+      console.log(response.data,"sub")
     } catch (error) {
       console.error("Error fetching subcategories:", error);
     }
@@ -105,7 +106,7 @@ const CategoryDetail = () => {
                 <option value="">All Sub Category</option>
                 {subCategories.map((sub_category, index) => (
                   <option key={index} value={sub_category._id}>
-                    {sub_category.title}
+                    {sub_category.sub_category}
                   </option>
                 ))}
               </select>
@@ -130,7 +131,9 @@ const CategoryDetail = () => {
                   <th className="text-start border-b">Image</th>
                   <th className="text-start py-2 px-4 border-b">Title</th>
                   <th className="text-start py-2 px-4 border-b">Price</th>
+                  <th className="text-start py-2 px-4 border-b">Category</th>
                   <th className="text-start py-2 px-4 border-b">SubCategory</th>
+
                   <th className="text-start py-2 px-4 border-b">Brand</th>
                   <th className="text-start py-2 px-4 border-b">Color</th>
                 </tr>
@@ -147,6 +150,7 @@ const CategoryDetail = () => {
                     </td>
                     <td className="py-2 px-4 border-b">{product.title}</td>
                     <td className="py-2 px-4 border-b">{product.price}</td>
+                    <td className="py-2 px-4 border-b">{product.category}</td>
                     <td className="py-2 px-4 border-b">{product.sub_category}</td>
                     <td className="py-2 px-4 border-b">{product.brand}</td>
                     <td className="py-2 px-4 border-b">{product.color}</td>

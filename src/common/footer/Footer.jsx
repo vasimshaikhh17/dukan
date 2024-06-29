@@ -97,10 +97,8 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-    <i className="ri-instagram-line"></i>
+                <i className="ri-instagram-line"></i>
               </a>
-
-
             </div>
           </div>
 
@@ -109,7 +107,7 @@ const Footer = () => {
               <strong className="font-medium text-gray-900"> Category </strong>
 
               <ul className="mt-6 ">
-              {cat.map((category) => (
+                {cat.map((category) => (
                   <li key={category._id}>
                     <Link
                       className="text-gray-700 transition hover:text-gray-700/75"
@@ -118,7 +116,7 @@ const Footer = () => {
                       {category.title}
                     </Link>
                   </li>
-              ))}
+                ))}
               </ul>
             </div>
 
@@ -156,7 +154,7 @@ const Footer = () => {
                 <li>
                   <Link
                     className="text-gray-700 transition hover:text-gray-700/75"
-                   to={"/privacy-policy"}
+                    to={"/privacy-policy"}
                   >
                     Privacy Policy
                   </Link>
@@ -165,7 +163,7 @@ const Footer = () => {
                 <li>
                   <Link
                     className="text-gray-700 transition hover:text-gray-700/75"
-                   to="/how-to-order"
+                    to="/how-to-order"
                   >
                     How to Order
                   </Link>

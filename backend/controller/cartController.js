@@ -112,6 +112,60 @@ export const addItemToCart = asyncHandler(async (req, res) => {
 });
 
 
+export const UpdateItemToCart = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const { productId, quantity, color, size, price } = req.body;
+
+  // Find the product by ID
+  const product = await Product.findById(productId);
+  if (!product) {
+    return res.status(404).json({ message: "Product not found" });
+  }
+
+  // Find the specific quantity for the requested size
+  const productSize = product.quantity.find(item => item.size === size);
+  if (!productSize) {
+    return res.status(400).json({ message: "Invalid product size" });
+  }
+
+  const availableQuantity = productSize.quantity;
+
+  // Find the user's cart
+  let cart = await Cart.findOne({ orderby: userId });
+  if (!cart) {
+    return res.status(404).json({ message: "Cart not found" });
+  }
+
+  const existingItemIndex = cart.products.findIndex(
+    (item) =>
+      item.product.toString() === productId &&
+      item.color === color &&
+      item.size === size
+  );
+
+  if (existingItemIndex > -1) {
+    const existingItem = cart.products[existingItemIndex];
+
+    if (quantity > availableQuantity) {
+      return res.status(400).json({
+        message: `Requested quantity exceeds available quantity. Only ${availableQuantity} products are available.`,
+      });
+    }
+
+    existingItem.count = quantity;
+    existingItem.price = price; // Update the price if necessary
+
+  } else {
+    return res.status(404).json({ message: "Item not found in the cart" });
+  }
+
+  cart.cartTotal = cart.products.reduce((total, item) => total + item.price * item.count, 0);
+
+  await cart.save();
+  res.status(200).json(cart);
+});
+
+
 
 // Remove item from cart
 export const removeItemFromCart = asyncHandler(async (req, res) => {

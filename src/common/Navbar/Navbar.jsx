@@ -41,7 +41,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, []); 
 
   useEffect(() => {
     const handleResize = () => {
@@ -71,6 +71,7 @@ const Navbar = () => {
       setCat(res.data);
       setMsg("");
     } catch (error) {
+      // console.log(error,'erre')
       setMsg("something went wrong");
     }
   };
@@ -120,7 +121,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-white fixed top-0 w-full z-50 shadow-md  py-2 md:px-10 ">
+      <nav className="bg-white sticky top-0 w-full z-50 shadow-md  py-2 md:px-10 ">
         <div className="flex items-center font-medium justify-between mx-3 md:mx-0 ">
           <Link to="/">
             {/* <img
@@ -129,7 +130,7 @@ const Navbar = () => {
               width={150}
               className="md:cursor-pointer z-50"
             /> */}
-            <p className="md:cursor-pointer z-50 text-xl" >Bytefaze Clothing</p>
+            <p className="md:cursor-pointer z-50 text-xl" >Bytefaze Cloathing</p>
           </Link>
           <div className="flex gap-5 items-center">
             <ul className="md:flex hidden uppercase items-center gap-8">

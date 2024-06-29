@@ -7,7 +7,7 @@ const NavbarOrder = () => {
 
   return (
     <>
-      <nav className="flex items-center justify-between top-0 z-100 fixed w-full bg-white border-b-2 py-5 px-10">
+      <nav className=" flex items-center justify-between top-0 z-50 fixed w-full bg-white border-b-2 py-5 px-10">
         <div className="relative">
           <Link to={"/"} className="font-bold">Dukan</Link>
           <img

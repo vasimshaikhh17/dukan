@@ -48,7 +48,7 @@ const Home = () => {
     <Layout>
       {/* // --------------------image Slider ----------------------------- */}
 
-      <div className="relative w-full pt-12 ">
+      <div className="relative w-full  ">
         {/* Carousel wrapper */}
         <div className="relative h-56 overflow-hidden md:h-[500px]">
           {slides.map((slide, index) => (

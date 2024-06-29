@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Footer from "../common/footer/Footer"
 import { Link, useLocation } from "react-router-dom";
 import NavbarOrder from "../common/Navbar/NavbarOrder";
@@ -16,7 +16,7 @@ const ScrollToTop = () => {
 
 const LayoutOrder = ({ children ,cart , addressIndex  }) => {
 
-  console.log(cart,'this ismy cart')
+  // console.log(cart,'this ismy cart')
   const { pathname } = useLocation();
 
 

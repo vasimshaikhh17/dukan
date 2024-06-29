@@ -12,7 +12,12 @@ const CartItems = () => {
   const navigate = useNavigate();
   const [msg, setMsg] = useState("");
   const [cart, setCart] = useState([]);
+  const [count, setCount] = useState();
+  const bearerToken = JSON.parse(localStorage.getItem("userData"));
 
+  // console.log(count,'countTdjskdnmsk')
+
+  // console.log(cart,'cart')
   useEffect(() => {
     getCart();
   }, []);
@@ -20,21 +25,28 @@ const CartItems = () => {
   const getCart = async () => {
     setMsg(<Spinner />);
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
+if(bearerToken){
+  try {
+    const response = await axios.get("http://localhost:5000/api/cart", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${bearerToken.token}`,
+      },
+    });
+    setMsg("");
+    setCart(response.data.products);
 
-    try {
-      const response = await axios.get("http://localhost:5000/api/cart", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${bearerToken.token}`,
-        },
-      });
-      setMsg("");
-      setCart(response.data.products);
-      // console.log(response,"cart")
-    } catch (error) {
-      setMsg("Something went wrong");
-      toast.error("Something went wrong");
-    }
+    
+    // console.log(response,"cart")
+  } catch (error) {
+    console.log(error,'err Cart')
+    setMsg("Something went wrong");
+    toast.error("Something went wrong");
+  }
+}else{
+  navigate('/login')
+}
+
   };
 
   const handleRemoveFromCart = async (color, product, size) => {
@@ -67,7 +79,7 @@ const CartItems = () => {
   useEffect(() => {
     if (cart.length === 0 && location.pathname === "/checkout") {
       const timer = setTimeout(() => {
-        navigate('/');
+        navigate("/");
       }, 3000);
       return () => clearTimeout(timer); // Cleanup the timer if the component unmounts
     }
@@ -85,13 +97,93 @@ const CartItems = () => {
     }
   }
 
+  const handleIncrement = async (product) => {
+    const outOfStock = product?.product?.quantity.every(
+      ({ quantity }) => quantity === 0
+    );
+    // console.log(outOfStock,'outOfStock')
+    const currentCount = product.count + 1;
+    // console.log(currentCount,'currentCount')
+    try {
+      if (!outOfStock) {
+        const res = await axios.put(
+          "http://localhost:5000/api/cart/update",
+          {
+            productId: product?.product?._id,
+            quantity: currentCount,
+            color: product.color,
+            size: product.size,
+            price: product.price,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${bearerToken.token}`,
+            },
+          }
+        );
+        if (res.data) {
+          await getCart();
+        }
+        console.log(res, "resdnjslbadiyfhaskdd ");
+      } else {
+        alert("Out of Stock hpogya ha");
+      }
+    } catch (error) {
+      console.log(error, "error");
+      if (error?.response?.data?.message) {
+        alert("Maximum quantity exceed");
+      }
+    }
+
+    if (product) {
+      setCount(product[0]?.count + 1);
+    }
+  };
+
+  const handleDecrement = async (product) => {
+
+    if (product.count <= 1) {
+      alert("At least one quantity is needed.");
+      return;
+    }
+    const currentCount = product.count - 1;
+    try {
+      const res = await axios.put(
+        "http://localhost:5000/api/cart/update",
+        {
+          productId: product?.product?._id,
+          quantity: currentCount,
+          color: product.color,
+          size: product.size,
+          price: product.price,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
+      if (res.data) {
+        await getCart();
+      }
+      // console.log(res, "resdnjslbadiyfhaskdd ");
+    } catch (error) {
+        console.log(error)
+    }
+
+    if (product) {
+      setCount(product[0]?.count - 1);
+    }
+  };
+
   return (
     <>
       {location.pathname !== "/checkout" ? (
-           
         <LayoutOrder>
           <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-          <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
+            <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
               Your Bag
               <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
             </h2>
@@ -102,8 +194,11 @@ const CartItems = () => {
                     <div className="md:w-1/4 mb-4 md:mb-0">
                       <img
                         className="h-20 w-20 dark:hidden"
-                        src={carts?.product?.images[0] || "https://placehold.co/600x400"}
-                        alt={carts?.product?.title} 
+                        src={
+                          carts?.product?.images[0] ||
+                          "https://placehold.co/600x400"
+                        }
+                        alt={carts?.product?.title}
                       />
                     </div>
 
@@ -128,7 +223,9 @@ const CartItems = () => {
                       <div className="flex items-center  mb-4 md:mb-0">
                         <button
                           className="bg-white text-black px-3 py-1 rounded-l-md border border-r-0 border-gray-300"
-                          // onClick={handleDecrement}
+                          onClick={() => {
+                            handleDecrement(carts);
+                          }}
                           // disabled={count === 1}
                         >
                           -
@@ -138,7 +235,9 @@ const CartItems = () => {
                         </p>
                         <button
                           className="bg-white text-black px-3 py-1 rounded-r-md border border-l-0 border-gray-300"
-                          // onClick={handleIncrement}
+                          onClick={() => {
+                            handleIncrement(carts);
+                          }}
                           // disabled={count === availableQuantity || isOutOfStock}
                         >
                           +
@@ -192,8 +291,8 @@ const CartItems = () => {
                       Size: {carts?.size}
                     </p>
                     <p className="text-base font-medium text-gray-900 dark:text-white">
-                          Price: ₹ {carts?.product?.price}
-                        </p>
+                      Price: ₹ {carts?.product?.price}
+                    </p>
                   </div>
                 </div>
 
@@ -201,8 +300,9 @@ const CartItems = () => {
                   <div className="flex items-center  mb-4 md:mb-0">
                     <button
                       className="bg-white text-black px-3 py-1 rounded-l-md border border-r-0 border-gray-300"
-                      // onClick={handleDecrement}
-                      // disabled={count === 1}
+                      onClick={() => {
+                        handleDecrement(carts);
+                      }}
                     >
                       -
                     </button>
@@ -211,8 +311,10 @@ const CartItems = () => {
                     </p>
                     <button
                       className="bg-white text-black px-3 py-1 rounded-r-md border border-l-0 border-gray-300"
-                      // onClick={handleIncrement}
-                      // disabled={count === availableQuantity || isOutOfStock}
+                      onClick={() => {
+                        handleIncrement(carts);
+                      }}
+                  
                     >
                       +
                     </button>

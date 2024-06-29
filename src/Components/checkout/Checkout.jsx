@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import CartItems from "../CartItems";
 
-import netbank from "../../assets/payments/netbank.jpeg"
+import netbank from "../../assets/payments/netbank.jpeg";
 
 const Checkout = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
@@ -87,7 +87,7 @@ const Checkout = () => {
       });
       setMsg("");
       setCart(response.data);
-    } catch (error) {
+    } catch (error) { 
       console.error("Error fetching cart:");
       setMsg("Something went wrong");
     }
@@ -96,7 +96,6 @@ const Checkout = () => {
   const getUserData = async () => {
     setMsg(<Spinner />);
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
-
     try {
       if (bearerToken) {
         const response = await axios.get(
@@ -142,10 +141,10 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    return () => {
+    // return () => {
       getCart();
       getUserData();
-    };
+    // };
   }, []);
 
   const handleAddressChange = (event) => {
@@ -156,6 +155,7 @@ const Checkout = () => {
     if (cart.products && cart.products.length > 0) {
       const transformedProducts = cart?.products?.map((item) => ({
         product: item.product._id,
+
         count: item.count,
         color: item.color,
         size: item.size,
@@ -194,7 +194,7 @@ const Checkout = () => {
     }
   };
 
-
+  
 
   return (
     <LayoutOrder cart={cart} addressIndex={selectedAddIndex}>
@@ -367,30 +367,26 @@ const Checkout = () => {
             </div>
           )}
 
-
-
-
-<div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
-                    3
-                  </span>
-                  <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
-                    Select Delivery Address
-                  </span>
-                </div>
-
-                <button
-                 className="bg-green-400 text-white py-2 px-6 rounded-lg hover:bg-green-600 duration-200"
-                 onClick={Order}
-                >
-                 Pay Now
-                </button>
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-6">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <span className="bg-zinc-600 dark:bg-white text-white rounded-full w-6 h-6 flex items-center justify-center">
+                  3
+                </span>
+                <span className="text-sm md:text-base font-medium text-gray-800 dark:text-gray-200">
+                  Select Delivery Address
+                </span>
               </div>
-              <hr className="my-3 border-gray-200 dark:border-gray-700" />
-            </div>
 
+              <button
+                className="bg-green-400 text-white py-2 px-6 rounded-lg hover:bg-green-600 duration-200"
+                onClick={Order}
+              >
+                Pay Now
+              </button>
+            </div>
+            <hr className="my-3 border-gray-200 dark:border-gray-700" />
+          </div>
         </div>
 
         {showAddressForm && (

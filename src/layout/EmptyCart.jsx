@@ -4,7 +4,17 @@ import { useNavigate } from "react-router-dom";
 import emptycart from "../assets/bagempty.png";
 
 const EmptyCart = () => {
+  const bearerToken = JSON.parse(localStorage.getItem("userData"));
+  console.log(bearerToken,'sdsd')
   const navigate = useNavigate();
+
+  const notLogged = ()=>{
+    alert("You are not Logged in , you arfe now being redirected to login page")
+    setTimeout(() => {
+        navigate('/login')
+    }, 3000);
+  }
+
   return (
     <>
    
@@ -31,7 +41,7 @@ const EmptyCart = () => {
             There is nothing in your bag. Let's add some items.
             </p>
             <button
-              onClick={() => navigate("/wishlist")}
+              onClick={() => { !bearerToken ? notLogged() : navigate("/wishlist")}}
               className="group bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
             >
               ADD ITEMS FROM WISHLIST

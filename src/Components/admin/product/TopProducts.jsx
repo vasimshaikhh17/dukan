@@ -15,9 +15,10 @@ const TopProducts = () => {
   // console.log(positionId)
 
   useEffect(() => {
-    return () => {
+    // return () => {
       getTopProducts();
-    };
+
+    // };
   }, [refreshData]);
 
   const getTopProducts = async () => {
@@ -84,6 +85,9 @@ const TopProducts = () => {
       // toast.error("Something went wrong");
     }
   };
+
+
+  
 
   return (
     <AdminLayout>

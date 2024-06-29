@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Layout from "../layout/Layout";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Loaders from "../common/loaders/Loaders";
 import { ToastContainer, toast } from "react-toastify";
 import FeaturedProducts from "./FeaturedProducts";
@@ -17,7 +17,10 @@ const Details = () => {
   const [shakeAnimation, setShakeAnimation] = useState(false);
   const [count, setCount] = useState(1);
   const [maxCountReached, setMaxCountReached] = useState(false); // State to track max count reached
+  const [oneUnitLeft, setOneUnitLeft] = useState(false); // State to track if only 1 unit is left
   const params = useParams();
+  const navigate = useNavigate()
+  console.log(product,'productXY')
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -42,9 +45,12 @@ const Details = () => {
     fetchProduct();
   }, [params.id]);
 
+
+  
+
   const handleAddToCart = async () => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
-    
+    if(bearerToken){
     if (!selectedSize) {
       setShowSelectSizeMsg(true);
       setShakeAnimation(true);
@@ -77,6 +83,14 @@ const Details = () => {
           toast.error("Something Went Wrong");
         }
       }
+
+    }
+    }else{
+      alert('You are no Logged in and Now you are beeing redirect to Login page ')
+      setTimeout(()=>{
+        navigate('/login')
+      },2000)
+
     }
   };
 
@@ -86,6 +100,7 @@ const Details = () => {
     setShowSelectSizeMsg(false);
     setCount(1); // Reset count to 1 when a new size is selected
     setMaxCountReached(false); // Reset max count reached when a new size is selected
+    setOneUnitLeft(quantity === 1); // Check if only 1 unit is left
   };
 
   const handleIncrement = () => {
@@ -133,7 +148,7 @@ const Details = () => {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto p-4 pt-24">
+      <div className="max-w-6xl mx-auto p-4 mt-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex flex-col md:flex-row md:items-start">
             <div className="relative flex-1 md:order-2">
@@ -226,6 +241,10 @@ const Details = () => {
 
             {maxCountReached && (
               <p className="text-red-500">Maximum units selected</p>
+            )}
+
+            {oneUnitLeft && (
+              <p className="text-red-500">Only 1 unit left</p>
             )}
 
             {isOutOfStock && (

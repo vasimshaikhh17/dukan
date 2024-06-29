@@ -10,14 +10,6 @@ const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [msg, setMsg] = useState();
   const [prodDelete, setProductDelete] = useState(null);
-  const [prodUpdate, setProductUpdate] = useState(null);
-  const [updateData, setUpdateData] = useState({
-    title: "",
-    color: "",
-    brand: "",
-    sub_category: "",
-    price: "",
-  });
   const navigate = useNavigate();
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
 
@@ -29,7 +21,7 @@ const AllProducts = () => {
       );
       setProducts(response.data);
       setMsg("");
-      console.log(response.data , "bring")
+      console.log(response.data , "bring product ")
     } catch (error) {
       setMsg("Something went wrong");
     }
@@ -78,44 +70,11 @@ const AllProducts = () => {
         }
       );
       toast.success("Product added to top product");
-
-      // console.log(Response, "topproduct");
     } catch (error) {
-      console.log(error);
       toast.error("Unable to add top product");
     }
   };
 
-  const handleUpdateInputChange = (e) => {
-    const { name, value } = e.target;
-    setUpdateData({ ...updateData, [name]: value });
-  };
-
-  const updateProduct = async (id) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/product/updateProduct/${id}`,
-        updateData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken.token}`,
-          },
-        }
-      );
-      if (response.data) {
-        toast.success("Product Updated Successfully");
-        bringProducts();
-        setProductUpdate(null);
-      
-      }
-    } catch (error) {
-      toast.error("Something went wrong");
-    }
-  };
-
-
-  
   return (
     <AdminLayout>
       {!msg ? (
@@ -135,6 +94,7 @@ const AllProducts = () => {
                 <thead className="bg-gray-800 text-white">
                   <tr>
                     <th className="py-3 px-4 text-start">Image</th>
+                    <th className="py-3 px-4 text-start">productid</th>
                     <th className="py-3 px-4 text-start">Title</th>
                     <th className="py-3 px-4 text-start">Color</th>
                     <th className="py-3 px-4 text-start">Brand</th>
@@ -156,7 +116,7 @@ const AllProducts = () => {
                           className="w-16 h-16 object-cover rounded"
                         />
                       </td>
-
+                      <td className="py-3 px-4">{product._id}</td>
                       <td className="py-3 px-4">{product.title}</td>
                       <td className="py-3 px-4">{product.color}</td>
                       <td className="py-3 px-4">{product.brand}</td>
@@ -164,17 +124,8 @@ const AllProducts = () => {
                       <td className="py-3 px-4">₹{product.price}</td>
                       <td className="py-3 px-4 flex space-x-2">
                         <button
-                          className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                          onClick={() => {
-                            setProductUpdate(product._id);
-                            setUpdateData({
-                              title: product.title,
-                              color: product.color,
-                              brand: product.brand,
-                              sub_category: product.sub_category,
-                              price: product.price,
-                            });
-                          }}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                          onClick={() => navigate(`/admin/update-product/${product._id}`)}
                         >
                           Update
                         </button>
@@ -213,16 +164,7 @@ const AllProducts = () => {
                   <div className="flex space-x-2 mt-4">
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                      onClick={() => {
-                        setProductUpdate(product._id);
-                        setUpdateData({
-                          title: product.title,
-                          color: product.color,
-                          brand: product.brand,
-                          sub_category: product.sub_category,
-                          price: product.price,
-                        });
-                      }}
+                      onClick={() => navigate(`/admin/update-product/${product._id}`)}
                     >
                       Update
                     </button>
@@ -247,9 +189,7 @@ const AllProducts = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-white shadow-lg rounded-lg p-4 h-60 flex items-center justify-center">
-          {msg}
-        </div>
+        msg
       )}
 
       {prodDelete && (
@@ -274,83 +214,6 @@ const AllProducts = () => {
                 Cancel
               </button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {prodUpdate && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-auto">
-            <h2 className="text-xl font-semibold mb-4 text-center">Update Product</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                updateProduct(prodUpdate);
-              }}
-            >
-              <div className="mb-4">
-                <label className="block text-gray-700">Title</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={updateData.title}
-                  onChange={handleUpdateInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Color</label>
-                <input
-                  type="text"
-                  name="color"
-                  value={updateData.color}
-                  onChange={handleUpdateInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Brand</label>
-                <input
-                  type="text"
-                  name="brand"
-                  value={updateData.brand}
-                  onChange={handleUpdateInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Sub Category</label>
-                <input
-                  type="text"
-                  name="sub_category"
-                  value={updateData.sub_category}
-                  onChange={handleUpdateInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700">Price</label>
-                <input
-                  type="number"
-                  name="price"
-                  value={updateData.price}
-                  onChange={handleUpdateInputChange}
-                  className="w-full px-3 py-2 border rounded"
-                />
-              </div>
-              <div className="flex justify-end">
-                <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mr-2">
-                  Update
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
-                  onClick={() => setProductUpdate(null)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
           </div>
         </div>
       )}

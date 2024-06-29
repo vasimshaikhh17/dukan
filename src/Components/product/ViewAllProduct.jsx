@@ -106,7 +106,7 @@ const ViewAllProduct = () => {
   };
   return (
     <Layout>
-      <div className="mt-20 mb-12">
+      <div className="mt-4 mb-12">
         <div className="container mx-auto">
           {/* Header section */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">

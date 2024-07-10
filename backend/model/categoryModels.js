@@ -3,10 +3,6 @@ import mongoose from "mongoose";
 //schema
 const categorySchema = new mongoose.Schema(
   {
-    // category: {
-    //   type: String,
-    //   required: [true, "category title is required"],
-    // },
     title: {
       type: String,
       required: [true, "Category Title is required"],
@@ -15,6 +11,7 @@ const categorySchema = new mongoose.Schema(
       type: String,
       required: [true, "Image is required"],
     },
+    sub_category: [{type: mongoose.Schema.Types.ObjectId,ref: "SubCategory",}],
   },
   { timestamps: true }
 );

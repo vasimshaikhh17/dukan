@@ -9,7 +9,6 @@ import cloudinary from "cloudinary";
 import fs from "fs";
 import mongoose from "mongoose";
 
-
 export const createCategory = async (req, res, next) => {
   const { title, subCategoryIds } = req.body;
   try {
@@ -85,6 +84,13 @@ export const createSubCategory = async (req, res, next) => {
         error: "A Subcategory with this title already exists.",
       });
     }
+      // Check if file was uploaded
+      if (!req.file) {
+        return res.status(400).json({
+          error: "No file uploaded.",
+        });
+      }
+      console.log("File received:", req.file);  
 
     // Upload image to Cloudinary
     const uploadResults = await cloudinary.uploader.upload(req.file.path);
@@ -200,11 +206,15 @@ export const deleteSubCategory = async (req, res, next) => {
   try {
     const subCategory = await SubCategory.findByIdAndDelete(id);
     if (!subCategory) {
-      res.status(404).json({ message: "SubCategory not found!" });
-    } else {
-      res.json({ message: "SubCategory deleted successfully!" });
+      return res.status(404).json({ message: "SubCategory not found!" });
     }
+
+    // Remove the subCategory ID from all categories
+    await Category.updateMany({}, { $pull: { sub_category: id } });
+    console.log(`SubCategory with ID ${id} deleted and removed from all categories`);
+    res.json({ message: "SubCategory deleted successfully!" });
   } catch (error) {
+    console.error("Error in Delete SubCategory API:", error);
     next(new Error("Error in Delete SubCategory API!"));
   }
 };
@@ -379,7 +389,6 @@ export const categoryById = asyncHandler(async(req,res)=>{
     res.status(500).json({ error: error.message });
   }
 })
-
 // Fetch All Products Category
 export const fetchAllCategory = asyncHandler(async (req, res) => {
   try {
@@ -390,7 +399,7 @@ export const fetchAllCategory = asyncHandler(async (req, res) => {
   }
 });
 
-export const removeSubCategoryFromList = async (req, res) => {
+export const removeSubCategoryFromList = asyncHandler(async (req, res) => {
   const { categoryId, subCategoryId } = req.body;
 
   try {
@@ -409,5 +418,80 @@ export const removeSubCategoryFromList = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
+  }
+})
+
+export const addSubCategoriesToCategory = asyncHandler(async (req, res, next) => {
+  const { categoryId } = req.params; // Extract category ID from request parameters
+  const { subCategoryIds } = req.body; // Extract subCategoryIds from request body
+
+  try {
+    // Find the category by ID
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ error: "Category not found" });
+    }
+
+    // Ensure subCategoryIds is an array and parse if needed
+    let parsedSubCategoryIds = [];
+    if (subCategoryIds) {
+      if (typeof subCategoryIds === "string") {
+        parsedSubCategoryIds = JSON.parse(subCategoryIds);
+      } else {
+        parsedSubCategoryIds = subCategoryIds;
+      }
+    }
+
+    // Check for duplicate subcategory IDs within the provided array
+    const uniqueSubCategoryIds = [...new Set(parsedSubCategoryIds)];
+    if (uniqueSubCategoryIds.length !== parsedSubCategoryIds.length) {
+      return res.status(400).json({ error: "Duplicate subcategory IDs are not allowed." });
+    }
+
+    // Check if any of the subcategory IDs already exist in another category
+    const existingSubCategories = await Category.find({
+      _id: { $ne: categoryId },
+      sub_category: { $in: uniqueSubCategoryIds },
+    });
+    if (existingSubCategories.length > 0) {
+      return res.status(400).json({
+        error: "One or more subcategory IDs already exist in another category.",
+      });
+    }
+
+    // Check for duplicate subcategory IDs within the category's current sub_category array
+    const newSubCategoryIds = uniqueSubCategoryIds.filter(id => !category.sub_category.includes(id));
+    if (newSubCategoryIds.length !== uniqueSubCategoryIds.length) {
+      return res.status(400).json({ error: "One or more subcategory IDs already exist in this category." });
+    }
+
+    // Add new subcategory IDs to the category's sub_category array
+    category.sub_category = [...category.sub_category, ...newSubCategoryIds];
+    await category.save();
+
+    res.json(category);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
+  }
+})
+
+export const getUnassignedSubCategories = async (req, res, next) => {
+  try {
+    // Get all subCategory IDs that are in use
+    const categories = await Category.find({}, 'sub_category');
+    const usedSubCategoryIds = categories.reduce((acc, category) => {
+      return acc.concat(category.sub_category);
+    }, []);
+
+    // Find subcategories that are not in the usedSubCategoryIds array
+    const unassignedSubCategories = await SubCategory.find({
+      _id: { $nin: usedSubCategoryIds }
+    });
+
+    res.json(unassignedSubCategories);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
   }
 };

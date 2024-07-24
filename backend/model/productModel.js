@@ -36,10 +36,10 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     brand: {
-      type: String,
-      enum: ["Apple", "Samsung", "Lenovo"],
+      type: mongoose.Schema.Types.ObjectId,
       type: String,
       required: true,
+      ref: "Brand",
     },
     quantity: [
       {
@@ -80,16 +80,16 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-productSchema.pre("remove", async function (next) {
-  try {
-    await Wishlist.updateMany({}, { $pull: { products: this._id } });
-    await TopProducts.updateMany({}, { $pull: { products: this._id } });
-    await Cart.updateMany({}, { $pull: { products: this._id } });
-    next();
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-});
+// productSchema.pre("remove", async function (next) {
+//   try {
+//     await Wishlist.updateMany({}, { $pull: { products: this._id } });
+//     await TopProducts.updateMany({}, { $pull: { products: this._id } });
+//     // await Cart.updateMany({}, { $pull: { products: { product: this._id } } });
+//     next();
+//   } catch (err) {
+//     console.log(err);
+//     next(err);
+//   }
+// });
 
 export const Product = mongoose.model("Product", productSchema);

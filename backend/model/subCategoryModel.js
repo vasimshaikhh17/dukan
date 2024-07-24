@@ -16,15 +16,17 @@ const subCategorySchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-subCategorySchema.pre("remove", async function (next) {
-  try{
-    await Category.updateMany({}, { $pull: { products: this._id } });
-    next();
-  }catch(err){
-    console.log(err)
-    next();
-  }
-});
+// subCategorySchema.pre("remove", async function (next) {
+//   console.log(`Pre-remove hook triggered for SubCategory ID: ${this._id}`);
+//   try {
+//     const result = await Category.updateMany({}, { $pull: { sub_category: this._id } });
+//     console.log("Subcategory ID removed from all categories", result);
+//     next();
+//   } catch (err) {
+//     console.error("Error during update:", err);
+//     next(err);
+//   }
+// });
 
 //export
 export const SubCategory = mongoose.model("SubCategory", subCategorySchema);

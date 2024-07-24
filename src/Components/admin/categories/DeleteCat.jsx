@@ -85,7 +85,10 @@ const DeleteCat = () => {
                       </td>
                       <td className="px-4 py-2">{category.title}</td>
                       <td className="px-4 py-2">
-                        <button onClick={() => setCatDelete(category._id)} className="text-red-600 hover:text-red-800">
+                        <button
+                          onClick={() => setCatDelete(category._id)}
+                          className="text-red-600 hover:text-red-800"
+                        >
                           <i className="ri-delete-bin-6-line"></i>
                         </button>
                       </td>
@@ -102,7 +105,7 @@ const DeleteCat = () => {
         </div>
       )}
 
-{catDelete && (
+      {catDelete && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-auto">
             <h2 className="text-xl font-semibold mb-4 text-center">

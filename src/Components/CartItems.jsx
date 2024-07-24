@@ -25,28 +25,26 @@ const CartItems = () => {
   const getCart = async () => {
     setMsg(<Spinner />);
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
-if(bearerToken){
-  try {
-    const response = await axios.get("http://localhost:5000/api/cart", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${bearerToken.token}`,
-      },
-    });
-    setMsg("");
-    setCart(response.data.products);
+    if (bearerToken) {
+      try {
+        const response = await axios.get("http://localhost:5000/api/cart", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        });
+        setMsg("");
+        setCart(response.data.products);
 
-    
-    // console.log(response,"cart")
-  } catch (error) {
-    console.log(error,'err Cart')
-    setMsg("Something went wrong");
-    toast.error("Something went wrong");
-  }
-}else{
-  navigate('/login')
-}
-
+        // console.log(response,"cart")
+      } catch (error) {
+        console.log(error, "err Cart");
+        setMsg("Something went wrong");
+        toast.error("Something went wrong");
+      }
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleRemoveFromCart = async (color, product, size) => {
@@ -142,7 +140,6 @@ if(bearerToken){
   };
 
   const handleDecrement = async (product) => {
-
     if (product.count <= 1) {
       alert("At least one quantity is needed.");
       return;
@@ -170,7 +167,7 @@ if(bearerToken){
       }
       // console.log(res, "resdnjslbadiyfhaskdd ");
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
 
     if (product) {
@@ -314,7 +311,6 @@ if(bearerToken){
                       onClick={() => {
                         handleIncrement(carts);
                       }}
-                  
                     >
                       +
                     </button>

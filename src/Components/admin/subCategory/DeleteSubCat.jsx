@@ -15,6 +15,7 @@ const DeleteSubCat = () => {
         "http://localhost:5000/api/category/subcategories"
       );
       setSubCat(res.data);
+      console.log(res.data , "ccc")
       setMsg("");
     } catch (error) {
       setMsg("Something went wrong");
@@ -47,6 +48,7 @@ const DeleteSubCat = () => {
               <table className="min-w-full bg-white border">
                 <thead className="bg-gray-200">
                   <tr>
+                    <th className="px-4 py-2 text-start">Images</th>
                     <th className="px-4 py-2 text-start">Category</th>
                     <th className="px-4 py-2 text-start">Actions</th>
                   </tr>
@@ -54,7 +56,9 @@ const DeleteSubCat = () => {
                 <tbody>
                   {subCat.map((subcat) => (
                     <tr key={subcat._id} className="border-t">
-                      <td className="px-4 py-2">{subcat.sub_category}</td>
+                      <td className="px-4 py-2"><img width={50} src={subcat?.image} alt="" /></td>
+                      <td className="px-4 py-2">{subcat?.title}</td>
+                 
                       <td className="px-4 py-2">
                         <button
                           className="text-red-600 hover:text-red-800"

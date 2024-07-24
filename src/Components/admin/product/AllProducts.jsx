@@ -106,38 +106,38 @@ const AllProducts = () => {
                 <tbody className="text-gray-700">
                   {products.map((product) => (
                     <tr
-                      key={product._id}
+                      key={product?._id}
                       className="border-b hover:bg-gray-100"
                     >
                       <td className="py-3 px-4">
                         <img
-                          src={product.images[0] || "/placeholder.png"}
-                          alt={product.title}
+                          src={product?.images[0] || "/placeholder.png"}
+                          alt={product?.title}
                           className="w-16 h-16 object-cover rounded"
                         />
                       </td>
-                      <td className="py-3 px-4">{product._id}</td>
-                      <td className="py-3 px-4">{product.title}</td>
-                      <td className="py-3 px-4">{product.color}</td>
-                      <td className="py-3 px-4">{product.brand}</td>
-                      <td className="py-3 px-4">{product.sub_category}</td>
-                      <td className="py-3 px-4">₹{product.price}</td>
+                      <td className="py-3 px-4">{product?._id}</td>
+                      <td className="py-3 px-4">{product?.title}</td>
+                      <td className="py-3 px-4">{product?.color}</td>
+                      {/* <td className="py-3 px-4">{product?.brand}</td> */}
+                      {/* <td className="py-3 px-4">{product?.sub_category}</td> */}
+                      <td className="py-3 px-4">₹{product?.price}</td>
                       <td className="py-3 px-4 flex space-x-2">
                         <button
                           className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                          onClick={() => navigate(`/admin/update-product/${product._id}`)}
+                          onClick={() => navigate(`/admin/update-product/${product?._id}`)}
                         >
                           Update
                         </button>
                         <button
-                          onClick={() => setProductDelete(product._id)}
+                          onClick={() => setProductDelete(product?._id)}
                           className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                         >
                           Delete
                         </button>
                         <button
                           className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                          onClick={() => setTopProduct(product._id)}
+                          onClick={() => setTopProduct(product?._id)}
                         >
                           Add
                         </button>
@@ -150,33 +150,33 @@ const AllProducts = () => {
             <div className="block md:hidden mt-6">
               {products.map((product) => (
                 <div
-                  key={product._id}
+                  key={product?._id}
                   className="bg-white shadow-md rounded-lg p-4 mb-4"
                 >
                   <img
-                    src={product.images[0] || "/placeholder.png"}
-                    alt={product.title}
+                    src={product?.images[0] || "/placeholder.png"}
+                    alt={product?.title}
                     className="w-full h-32 object-cover rounded-md mb-4"
                   />
-                  <p className="text-xl font-bold">{product.color}</p>
-                  <p className="text-gray-700">{product.brand}</p>
-                  <p className="text-gray-700">${product.price}</p>
+                  <p className="text-xl font-bold">{product?.color}</p>
+                  {/* <p className="text-gray-700">{product?.brand}</p> */}
+                  <p className="text-gray-700">${product?.price}</p>
                   <div className="flex space-x-2 mt-4">
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                      onClick={() => navigate(`/admin/update-product/${product._id}`)}
+                      onClick={() => navigate(`/admin/update-product/${product?._id}`)}
                     >
                       Update
                     </button>
                     <button
-                      onClick={() => setProductDelete(product._id)}
+                      onClick={() => setProductDelete(product?._id)}
                       className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                     >
                       Delete
                     </button>
                     <div>
                       <button
-                        onClick={() => setTopProduct(product._id)}
+                        onClick={() => setTopProduct(product?._id)}
                         className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                       >
                         Add

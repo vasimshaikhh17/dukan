@@ -28,40 +28,25 @@ const Admin = () => {
   }, []);
 
   const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
+    setIsDrawerOpen((prevState) => !prevState);
   };
 
   useEffect(() => {
-    getUserData();
+    const handleKeyPress = (event) => {
+      if (event.ctrlKey && event.key === "b") {
+        event.preventDefault();
+        toggleDrawer();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
   }, []);
 
-  const getUserData = async () => {
-    setMsg(<Spinner />);
-    const bearerToken = JSON.parse(localStorage.getItem("userData"));
 
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/api/user/${bearerToken._id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken.token}`,
-          },
-        }
-      );
-      if (response.data) {
-        if (response?.data?.getUser?.role !== "admin") {
-          toast.error("Sorry You are not an Admin");
-          navigate("/");
-        }
-        setMsg("");
-      }
-    } catch (error) {
-      setMsg("Something went wrong");
-      toast.error("Sorry You are not an Admin");
-      navigate("/");
-    }
-  };
+
 
   return (
     <>
@@ -164,7 +149,6 @@ const Admin = () => {
                   </span>
                 </Link>
               </li>
-           
               <li>
                 <Link
                   to="/admin/top-products"
@@ -176,7 +160,6 @@ const Admin = () => {
                   </span>
                 </Link>
               </li>
-
               <li>
                 <Link
                   to="/all-orders"
@@ -191,7 +174,6 @@ const Admin = () => {
             </ul>
           </div>
         </aside>
-   
       </div>
       <ToastContainer />
     </>

@@ -11,7 +11,9 @@ const UpdateSubCat = () => {
 
   const getAllSubcat = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/category/subcategories`);
+      const res = await axios.get(
+        `http://localhost:5000/api/category/subcategories`
+      );
       setSubCategories(res.data);
     } catch (error) {
       console.log(error, "cool");
@@ -19,10 +21,20 @@ const UpdateSubCat = () => {
   };
 
   const updateSubCategory = async (id) => {
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
     try {
-      await axios.put(`http://localhost:5000/api/category/subcategory/${id}`, {
-        sub_category: updatedSubCategory,
-      });
+      await axios.put(
+        `http://localhost:5000/api/category/subcategory/${id}`,
+        {
+          title: updatedSubCategory,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${bearerToken.token}`,
+          },
+        }
+      );
 
       setMessage("Sub-category updated successfully");
       getAllSubcat(); // Fetch updated data from the backend
@@ -42,7 +54,7 @@ const UpdateSubCat = () => {
 
   const handleUpdateClick = (subCategory) => {
     setSelectedSubCategory(subCategory);
-    setUpdatedSubCategory(subCategory.sub_category);
+    setUpdatedSubCategory(subCategory.title);
     setShowModal(true);
   };
 
@@ -69,14 +81,16 @@ const UpdateSubCat = () => {
             <table className="min-w-full bg-white dark:bg-gray-800">
               <thead>
                 <tr>
-                  <th className="w-1/2 px-4 py-2">Sub Category</th>
+                  <th className="w-1/4 px-4 py-2">Images</th>
+                  <th className="w-1/4 px-4 py-2">Sub Category</th>
                   <th className="w-1/2 px-4 py-2">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {subCategories.map((subCategory, index) => (
                   <tr key={index}>
-                    <td className="border px-4 py-2">{subCategory.sub_category}</td>
+                    <td className="border px-4 py-2"><img src={subCategory?.image} alt="" width={50} /></td>
+                    <td className="border px-4 py-2">{subCategory?.title}</td>
                     <td className="border px-4 py-2">
                       <button
                         onClick={() => handleUpdateClick(subCategory)}

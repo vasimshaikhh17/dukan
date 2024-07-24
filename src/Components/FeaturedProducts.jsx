@@ -126,7 +126,7 @@ const FeaturedProducts = () => {
                       <Link to={`/details/${data?._id}`}>
                         <img
                           src={
-                            data?.images[3] || "https://placehold.co/600x400"
+                            data?.images[0] || "https://placehold.co/600x400"
                           }
                           alt=""
                           className="w-full h-full object-cover rounded-md hover:scale-105 duration-300"

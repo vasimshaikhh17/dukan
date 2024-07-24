@@ -12,6 +12,7 @@ import { Wishlist } from "../model/wishList.js";
 import mongoose from "mongoose";
 import { Category } from "../model/categoryModels.js";
 import { SubCategory } from "../model/subCategoryModel.js";
+import { Cart } from "../model/cartModel.js";
 
 // export const createProduct = asyncHandler(async (req, res) => {
 //   const {
@@ -95,7 +96,6 @@ import { SubCategory } from "../model/subCategoryModel.js";
 // });
 
 
-
 export const createProduct = asyncHandler(async (req, res) => {
   const {
     title,
@@ -123,10 +123,9 @@ export const createProduct = asyncHandler(async (req, res) => {
     let parsedQuantity;
     try {
       parsedQuantity = JSON.parse(quantity);
-      console.log("Parsed Quantity:", parsedQuantity);
+      // console.log("Parsed Quantity:", parsedQuantity);
     } catch (error) {
       console.error("Failed to parse quantity:", error);
-      return res.status(400).json({ message: "Invalid quantity format" });
     }
 
     // Validate the parsed quantity
@@ -134,12 +133,10 @@ export const createProduct = asyncHandler(async (req, res) => {
     const uploadResults = await Promise.all(
       req.files.map((file) => cloudinary.uploader.upload(file.path))
     );
-    console.log('heyy2')
 
     const imageUrls = uploadResults.map(
       (uploadResult) => uploadResult.secure_url
     );
-    console.log('heyy3')
     const newProduct = new Product({
       title: title,
       images: imageUrls,
@@ -185,8 +182,6 @@ export const createProduct = asyncHandler(async (req, res) => {
   }
 });
 
-
-
 export const updateProduct = asyncHandler(async (req, res) => {
   const id = req.params.id;
   // console.log(id);
@@ -221,7 +216,7 @@ export const getProduct = asyncHandler(async (req, res) => {
   const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const findProduct = await Product.findById(id);
+    const findProduct = await Product.findById(id).populate('category').populate('sub_category').populate('brand')
     res.json(findProduct);
   } catch (error) {
     if (error.code === 11000) {
@@ -281,7 +276,6 @@ export const getProduct = asyncHandler(async (req, res) => {
 //   }
 // });
 
-
 export const getAllProduct = asyncHandler(async (req, res) => {
   try {
     // Filtering
@@ -312,12 +306,15 @@ export const getAllProduct = asyncHandler(async (req, res) => {
 
     // Construct the query
     const queryString = JSON.stringify(queryObj);
-    let query = Product.find(JSON.parse(queryString));
-
+    let query = Product.find(JSON.parse(queryString))
+    // console.log(query,'query')
     // Sorting, Field Selection, Pagination - Remaining code should be here
     // ...
-
+    query.populate('category').populate('sub_category').populate('brand')
+    // console.log(products,'products')
     const product = await query;
+    // console.log(product[0]?.brand, 'brand of the first product'); // Should log the brand of the first product if available
+
     res.json(product);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch products", error: error.message });
@@ -391,17 +388,26 @@ export const searchProducts = asyncHandler(async (req, res) => {
 });
 
 
-
-export const deleteProduct = asyncHandler(async (req, res) => {
-  const id = req.params.id;
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
   validateMongoDbId(id);
   try {
-    const deletedProduct = await Product.findOneAndDelete({ _id: id });
-    res.json(deletedProduct);
+    const product = await Product.findByIdAndDelete(id);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found!' });
+    }
+   // Remove the Product from Cart
+    await Cart.updateMany({}, { $pull: { products: { product: id } } });
+    await Wishlist.updateMany({}, { $pull: { products: id } });
+    await TopProducts.updateMany({}, { $pull: { products: id } });
+    console.log(`Product with ID ${id} deleted and removed from everywhere`);
+
+    res.json({ message: 'Product deleted successfully!' });
   } catch (error) {
-    throw new Error(error);
+    console.error('Error in Delete Product API:', error);
+    res.status(500).json({ message: 'Error in Delete Product API!' });
   }
-});
+};
 
 // Add to WishList Functionality
 // export const addToWishList = asyncHandler(async (req, res) => {

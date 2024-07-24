@@ -70,8 +70,9 @@ const Navbar = () => {
       const res = await axios.get("http://localhost:5000/api/category/getAll");
       setCat(res.data);
       setMsg("");
+      console.log(res.data , "cat")
     } catch (error) {
-      // console.log(error,'erre')
+      console.log(error,'erre')
       setMsg("something went wrong");
     }
   };
@@ -84,22 +85,22 @@ const Navbar = () => {
     setMobileDropdownOpen((prev) => (prev === index ? null : index));
   };
 
-  useEffect(() => {
-    getAllSubCat();
-  }, []);
+  // useEffect(() => {
+  //   getAllSubCat();
+  // }, []);
 
-  const getAllSubCat = async () => {
-    setMsg(<Spinner />);
-    try {
-      const res = await axios.get(
-        "http://localhost:5000/api/category/subcategories"
-      );
-      setSubCat(res.data);
-      setMsg("");
-    } catch (error) {
-      setMsg("Something went wrong");
-    }
-  };
+  // const getAllSubCat = async () => {
+  //   setMsg(<Spinner />);
+  //   try {
+  //     const res = await axios.get(
+  //       "http://localhost:5000/api/category/subcategories"
+  //     );
+  //     setSubCat(res.data);
+  //     setMsg("");
+  //   } catch (error) {
+  //     setMsg("Something went wrong");
+  //   }
+  // };
 
   const handleSearch = async (query) => {
     setMsg(<Spinner />);
@@ -143,14 +144,14 @@ const Navbar = () => {
                     {cats?.title}
                   </Link>
                   <div className="absolute top-8 left-1/2 transform -translate-x-1/2 hidden group-hover:md:block hover:md:block w-56 transition-all duration-300 ease-in-out opacity-0 group-hover:opacity-100">
-                    {subCat.map((subcat) => (
+                    {cats?.sub_category?.map((newsubcat) => (
                       <div
-                        key={subcat._id}
+                        // key={subcat._id}
                         className="bg-white mx-auto p-2 grid grid-cols-1 w-52 container "
                       >
                         <div className="flex items-center justify-start ">
                           <img
-                            src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
+                            src={newsubcat?.image}
                             alt=""
                             className="w-10 h-10 "
                           />
@@ -158,11 +159,13 @@ const Navbar = () => {
                             to="/tshirts/casual-shirts"
                             className="hover:text-red-600 duration-100 pl-3 text-[12px]"
                           >
-                            {subcat?.sub_category}
+                            {newsubcat?.title}
                           </Link>
                         </div>
                       </div>
                     ))}
+
+
                   </div>
                 </div>
               ))}

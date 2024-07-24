@@ -4,63 +4,81 @@ import axios from 'axios'
 import crypto from 'crypto'
 import { User } from '../model/userModel.js';
 
-// export const createOrder = async (req, res) => {
-//     const { products, paymentIntent, orderby } = req.body;
-//     try {
-//       // Validate the products array
-//       if (!products || !Array.isArray(products)) {
-//         return res.status(400).json({ error: "Products array is required" });
-//       }
-  
-//       // Check product availability and update quantities and sold counts
-//       for (let i = 0; i < products.length; i++) {
-//         const productData = products[i];
-//         if (!productData.product || productData.count === undefined) {
-//           return res.status(400).json({ error: "Product ID and count are required" });
-//         }
-  
-//         // Convert count to a number and validate it
-//         const count = Number(productData.count);
-//         if (isNaN(count) || count <= 0) {
-//           return res.status(400).json({ error: `Invalid count for product: ${productData.product}` });
-//         }
-  
-//         let product = await Product.findById(productData.product).select("+quantity +sold");
-//         if (!product) {
-//           return res.status(404).json({ error: "Product not found" });
-//         }
-//         if (product.quantity < count) {
-//           return res.status(400).json({ error: `Not enough quantity for product: ${product.title}` });
-//         }
-  
-//         // Deduct product quantity and update sold count
-//         product.quantity -= count;
-//         product.sold += count;
-//         await product.save();
-//       }
-  
-//       // Create the order
-//       const newOrder = new Order({
-//         products,
-//         paymentIntent,
-//         orderby,
-//       });
-  
-//       await newOrder.save();
-//       res.status(201).json(newOrder);
-//     } catch (error) {
-//       console.error("Error creating order:", error);
-//       res.status(500).json({ error: error.message });
-//     }
-// };
   
 
 // Function to update product quantity
 
 
+// export const createOrder = async (req, res) => {
+//   const { products, paymentIntent, orderby, addressIndex } = req.body;
+//   console.log(products,orderby,addressIndex,'products')
+
+//   try {
+//     // Validate the products array
+//     if (!products || !Array.isArray(products) || products.length === 0) {
+//       return res.status(400).json({ error: "Products array is required and should not be empty" });
+//     }
+
+//     // Validate the user and address
+//     const user = await User.findById(orderby);
+//     if (!user) {
+//       return res.status(404).json({ error: "User not found" });
+//     }
+
+//     if (addressIndex === undefined || addressIndex < 0 || addressIndex >= user.address.length) {
+//       return res.status(400).json({ error: "Invalid address index" });
+//     }
+
+//     const shippingAddress = user.address[addressIndex];
+
+//     // Check product availability and update quantities and sold counts
+//     for (let i = 0; i < products.length; i++) {
+//       const productData = products[i];
+//       if (!productData.product || productData.count === undefined || isNaN(productData.count) || productData.count <= 0) {
+//         return res.status(400).json({ error: "Product ID and a valid count are required for each product" });
+//       }
+
+//       const count = Number(productData.count);
+
+//       let product = await Product.findById(productData.product);
+//       if (!product) {
+//         return res.status(404).json({ error: "Product not found" });
+//       }
+
+//       // Find the correct size of the product
+//       const sizeObj = product.quantity.find(q => q.size === productData.size);
+//       if (!sizeObj) {
+//         return res.status(400).json({ error: "Size not found for the product" });
+//       } 
+
+//       if (sizeObj.quantity < count) {
+//         return res.status(400).json({ error: `Not enough quantity for product: ${product.title}` });
+//       }
+
+//       // Deduct product quantity and update sold count
+//       sizeObj.quantity -= count;
+//       product.sold += count;
+//       await product.save();
+//     }
+
+//     // Create the order
+//     const newOrder = new Order({
+//       products,
+//       paymentIntent,
+//       orderby,
+//       shippingAddress,
+//     });
+
+//     await newOrder.save();
+//     res.status(201).json(newOrder);
+//   } catch (error) {
+//     console.error("Error creating order:", error);
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
 export const createOrder = async (req, res) => {
   const { products, paymentIntent, orderby, addressIndex } = req.body;
-  console.log(products,orderby,addressIndex,'products')
 
   try {
     // Validate the products array
@@ -79,6 +97,9 @@ export const createOrder = async (req, res) => {
     }
 
     const shippingAddress = user.address[addressIndex];
+
+    // Array to hold order items
+    let orderItems = [];
 
     // Check product availability and update quantities and sold counts
     for (let i = 0; i < products.length; i++) {
@@ -108,11 +129,22 @@ export const createOrder = async (req, res) => {
       sizeObj.quantity -= count;
       product.sold += count;
       await product.save();
+
+      // Create an order item for each size and quantity variation
+      const orderItem = {
+        product: product._id,
+        size: productData.size,
+        color: productData.color,
+        quantity: count, // Ensure count is included
+        price: product.price,
+      };
+
+      orderItems.push(orderItem);
     }
 
-    // Create the order
+    // Create the order with all order items
     const newOrder = new Order({
-      products,
+      products: orderItems, // Use orderItems array with correct structure
       paymentIntent,
       orderby,
       shippingAddress,
@@ -125,6 +157,8 @@ export const createOrder = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
 
 export const updateProductQuantity = async (req, res) => {
   const { productId, count } = req.body;

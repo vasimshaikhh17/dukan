@@ -47,6 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/user", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/brand", brandRoutes);
 app.use("/api/blogCat", blogCatRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/testing", testingRoutes);

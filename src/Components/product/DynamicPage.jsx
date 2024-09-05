@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import Layout from "../../layout/Layout";
 import Loaders from "../../common/loaders/Loaders";
 import Spinner from "../admin/others/Spinner";
+import FeaturedProducts from "../FeaturedProducts";
 
 const DynamicPage = () => {
   const { category } = useParams();
@@ -61,7 +62,7 @@ const DynamicPage = () => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
     try {
       if (!bearerToken) {
-        toast.error("Login Required");
+        toast.info("Login Required");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
@@ -143,6 +144,8 @@ const DynamicPage = () => {
           )}
         </div>
       </div>
+
+
   
       <div className="text-center mt-8 mb-8">
         <button
@@ -152,7 +155,7 @@ const DynamicPage = () => {
           View All Products
           <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
         </button>
-        <ToastContainer />
+        
       </div>
     </Layout>
   );

@@ -3,7 +3,7 @@ import axios from "axios";
 import Layout from "../layout/Layout";
 import { useNavigate, useParams } from "react-router-dom";
 import Loaders from "../common/loaders/Loaders";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import FeaturedProducts from "./FeaturedProducts";
 
 const Details = () => {
@@ -86,11 +86,10 @@ const Details = () => {
 
     }
     }else{
-      alert('You are no Logged in and Now you are beeing redirect to Login page ')
-      setTimeout(()=>{
-        navigate('/login')
-      },2000)
-
+      toast.info("Login Required to add item in cart")
+      setTimeout(() => {
+          navigate('/login')
+      }, 3000);
     }
   };
 
@@ -269,7 +268,7 @@ const Details = () => {
       </div>
 
       <FeaturedProducts />
-      <ToastContainer />
+      
     </Layout>
   );
 };

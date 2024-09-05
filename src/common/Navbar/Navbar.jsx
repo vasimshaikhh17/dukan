@@ -41,7 +41,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -70,9 +70,9 @@ const Navbar = () => {
       const res = await axios.get("http://localhost:5000/api/category/getAll");
       setCat(res.data);
       setMsg("");
-      console.log(res.data , "cat")
+      console.log(res.data, "cat");
     } catch (error) {
-      console.log(error,'erre')
+      console.log(error, "erre");
       setMsg("something went wrong");
     }
   };
@@ -131,14 +131,14 @@ const Navbar = () => {
               width={150}
               className="md:cursor-pointer z-50"
             /> */}
-            <p className="md:cursor-pointer z-50 text-xl" >Bytefaze Cloathing</p>
+            <p className="md:cursor-pointer z-50 text-xl">Bytefaze Cloathing</p>
           </Link>
           <div className="flex gap-5 items-center">
             <ul className="md:flex hidden uppercase items-center gap-8">
               {cat.map((cats) => (
                 <div className="group relative" key={cats?._id}>
                   <Link
-                     to={`/products/${cats?.title.toLowerCase()}`} 
+                    to={`/products/${cats?.title.toLowerCase()}`}
                     className="py-2 flex justify-between items-center md:pr-0 pr-5 group hover:text-red-600 text-[12px]"
                   >
                     {cats?.title}
@@ -156,7 +156,7 @@ const Navbar = () => {
                             className="w-10 h-10 "
                           />
                           <Link
-                            to={`/product/${newsubcat?.title.toLowerCase()}`} 
+                            to={`/product/${newsubcat?.title.toLowerCase()}`}
                             className="hover:text-red-600 duration-100 pl-3 text-[12px]"
                           >
                             {newsubcat?.title}
@@ -164,8 +164,6 @@ const Navbar = () => {
                         </div>
                       </div>
                     ))}
-
-
                   </div>
                 </div>
               ))}
@@ -265,48 +263,47 @@ const Navbar = () => {
               duration-500 ${open ? "left-0" : "left-[-100%]"}
             `}
           >
-            {cat.map((cats, index) => (
-              <li key={cats._id}>
-                <div className="flex justify-between items-center mx-6">
-                  <Link
-                    to="/tshirts"
-                    className="text-[12px]"
-                    onClick={handleLinkClick}
-                  >
-                    {cats?.title}
-                  </Link>
-                  <button
-                    className="text-lg"
-                    onClick={() => toggleMobileDropdown(index)}
-                  >
-                    {mobileDropdownOpen === index ? "-" : "+"}
-                  </button>
-                </div>
-                {mobileDropdownOpen === index && (
-                  <div className="pl-5">
-                    {subCat.map((subcat) => (
-                      <div
-                        key={subcat._id}
-                        className="flex items-center justify-start mt-2"
-                      >
-                        <img
-                          src="https://www.powerlook.in/_next/image?url=https%3A%2F%2Fcdn-media.powerlook.in%2Fcatalog%2Fproduct%2Fd%2Fp%2Fdp101-1046910.jpg&w=256&q=75"
-                          alt=""
-                          className="w-10 h-10"
-                        />
-                        <Link
-                          to="/tshirts/casual-shirts"
-                          className="hover:text-red-600 duration-100 pl-3 text-[12px]"
-                          onClick={handleLinkClick}
-                        >
-                          {subcat?.sub_category}
-                        </Link>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </li>
-            ))}
+       {cat.map((cats, index) => (
+  <li key={cats._id}>
+    <div className="flex justify-between items-center mx-6 p-2">
+      <Link
+        to={`/products/${cats?.title.toLowerCase()}`}
+        className="text-[12px]"
+        onClick={handleLinkClick}
+      >
+        {cats?.title}
+      </Link>
+      {cats?.sub_category?.length > 0 && (
+        <button
+          className="text-lg"
+          onClick={() => toggleMobileDropdown(index)}
+        >
+          {mobileDropdownOpen === index ? "-" : "+"}
+        </button>
+      )}
+    </div>
+    {mobileDropdownOpen === index && cats?.sub_category?.length > 0 && (
+      <div className="pl-5">
+        {cats?.sub_category.map((subcat) => (
+          <div
+            key={subcat._id}
+            className="flex items-center justify-start mt-2"
+          >
+            <img src={subcat?.image} alt="" className="w-10 h-10" />
+            <Link
+                      to={`/product/${subcat?.title.toLowerCase()}`}
+              className="hover:text-red-600 duration-100 pl-3 text-[12px]"
+              onClick={handleLinkClick}
+            >
+              {subcat.title}
+            </Link>
+          </div>
+        ))}
+      </div>
+    )}
+  </li>
+))}
+
           </ul>
         </div>
       </nav>

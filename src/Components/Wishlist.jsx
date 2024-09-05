@@ -2,18 +2,45 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../layout/Layout";
 import Spinner from "./admin/others/Spinner";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Loaders from "../common/loaders/Loaders";
 import nowishlist from "../assets/nowishlist.svg";
+
 const Wishlist = () => {
   const [msg, setMsg] = useState("");
   const [wishList, setWishList] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // Track login state
   const navigate = useNavigate();
 
   useEffect(() => {
-    getUserData();
+    const bearerToken = JSON.parse(localStorage.getItem("userData"));
+    setIsLoggedIn(!!bearerToken); // Check if the user is logged in
+    if (bearerToken) {
+      getUserData();
+    } else {
+      setMsg(
+        <div className="flex items-center justify-center">
+          <div className="p-8 max-w-lg text-center">
+            <img src={nowishlist} alt="wishlist illustration" className="mx-auto mb-4" />
+            <p className="text-zinc-600 dark:text-zinc-300 mb-2">
+              Your wish is our command but you haven’t wishlisted any products.
+            </p>
+            <p className="text-zinc-800 dark:text-zinc-100 font-semibold mb-6">
+              You can wishlist products and buy them later
+            </p>
+            <button
+              onClick={() => navigate("/view-products")}
+              className="group bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded inline-flex items-center"
+            >
+              View All Products
+              <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
+            </button>
+          </div>
+        </div>
+      );
+    }
   }, []);
 
   const getUserData = async () => {
@@ -43,44 +70,13 @@ const Wishlist = () => {
     }
   };
 
-  useEffect(() => {
-    getWishLists();
-  }, []);
-
-  const getWishLists = async () => {
-    const bearerToken = JSON.parse(localStorage.getItem("userData"));
-
-    setMsg(<Loaders />);
-    try {
-      const Response = await axios.put(
-        `http://localhost:5000/api/wishlist/${bearerToken._id}`,
-        { prodId: id },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${bearerToken.token}`,
-          },
-        }
-      );
-      if (Response.data) {
-        await getUserData();
-      }
-      setMsg("");
-    } catch (error) {
-      setMsg("Something Went Wrong");
-    }
-  };
-
   const setToWishList = async (id) => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
     try {
-
-      if(!bearerToken){
-        toast.error("Login Required")
-        setTimeout(()=>{
-          navigate('/login')
-        },3000)
-      }else{
+      if (!bearerToken) {
+        toast.info("Login Required");
+        // No redirection here
+      } else {
         const Response = await axios.put(
           `http://localhost:5000/api/wishlist/getWishlist`,
           { prodId: id },
@@ -91,13 +87,12 @@ const Wishlist = () => {
             },
           }
         );
-        if(Response.data){
-          await getUserData()
-          toast.success("Product removed from wishlist" , {position: "top-center"});
+        if (Response.data) {
+          await getUserData();
+          toast.success("Product removed from wishlist");
           // console.log(Response.data, "Wishlist");
         }
       }
-     
     } catch (error) {
       // console.log(error);
       toast.error("Something went wrong");
@@ -142,7 +137,10 @@ const Wishlist = () => {
                         </p>
                         <hr />
                         <div className="flex justify-between mx-2 py-2 items-center">
-                          <button    onClick={() => setToWishList(wish?._id)} className="text-slate-500 hover:text-black duration-300 text-sm">
+                          <button
+                            onClick={() => setToWishList(wish?._id)}
+                            className="text-slate-500 hover:text-black duration-300 text-sm"
+                          >
                             Remove
                           </button>
                           <button
@@ -158,15 +156,10 @@ const Wishlist = () => {
                 </div>
               ) : (
                 <div className="flex items-center justify-center">
-                  <div className=" p-8 max-w-lg text-center">
-                    <img
-                      src={nowishlist}
-                      alt="wishlist illustration"
-                      className="mx-auto mb-4"
-                    />
+                  <div className="p-8 max-w-lg text-center">
+                    <img src={nowishlist} alt="wishlist illustration" className="mx-auto mb-4" />
                     <p className="text-zinc-600 dark:text-zinc-300 mb-2">
-                      Your wish is our command but you haven’t wishlisted any
-                      products.
+                      Your wish is our command but you haven’t wishlisted any products.
                     </p>
                     <p className="text-zinc-800 dark:text-zinc-100 font-semibold mb-6">
                       You can wishlist products and buy them later
@@ -189,8 +182,6 @@ const Wishlist = () => {
           )}
         </div>
       </div>
-      <ToastContainer />
-
     </Layout>
   );
 };

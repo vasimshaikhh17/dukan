@@ -3,7 +3,7 @@ import axios from 'axios';
 import AdminLayout from "../layout/AdminLayout";
 import Spinner from "../others/Spinner";
 import { Link, useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 
 const Category = () => {
   const [categories, setCategories] = useState([]);
@@ -65,7 +65,7 @@ const Category = () => {
 
   return (
     <AdminLayout>
-      <ToastContainer />
+      
       <div className="p-2 ">
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-4">
           {loading && (

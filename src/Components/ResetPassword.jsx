@@ -46,7 +46,7 @@ const navigate = useNavigate()
             <p className="text-gray-700">Remember your password? <Link to={"/login"} className="text-indigo-600 hover:underline">Login</Link></p>
           </div> */}
         </div>
-        <ToastContainer/>
+        
       </div>
     </>
   );

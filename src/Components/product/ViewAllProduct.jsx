@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 
 import Layout from "../../layout/Layout";
 
@@ -25,7 +25,7 @@ const ViewAllProduct = () => {
       );
       setMsg("");
       // const data = result.data;
-      // console.log(data);
+      console.log(result.data);
 
       // const slicedProducts = result.data.slice(0, 3);
 
@@ -78,7 +78,7 @@ const ViewAllProduct = () => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
     try {
       if (!bearerToken) {
-        toast.error("Login Required");
+        toast.info("Login Required");
         setTimeout(() => {
           navigate("/login");
         }, 3000);
@@ -160,7 +160,7 @@ const ViewAllProduct = () => {
           )}
         </div>
       </div>
-      <ToastContainer />
+      
     </Layout>
   );
 };

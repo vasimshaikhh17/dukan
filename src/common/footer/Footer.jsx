@@ -111,7 +111,7 @@ const Footer = () => {
                   <li key={category._id}>
                     <Link
                       className="text-gray-700 transition hover:text-gray-700/75"
-                      to=""
+                      to={`/products/${category?.title.toLowerCase()}`} 
                     >
                       {category.title}
                     </Link>

@@ -27,7 +27,7 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    setMsg(<Spinner/>);
+    setMsg(<Spinner />);
     setDisable(true);
     try {
       const response = await axios.post(
@@ -132,7 +132,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </>
   );
 };

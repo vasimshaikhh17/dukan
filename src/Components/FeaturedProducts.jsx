@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 import Loaders from '../common/loaders/Loaders';
 import Spinner from './admin/others/Spinner';
 import {Link, useNavigate } from 'react-router-dom';
@@ -71,7 +71,7 @@ const FeaturedProducts = () => {
         const bearerToken = JSON.parse(localStorage.getItem("userData"));
         try {
           if (!bearerToken) {
-            toast.error("Login Required");
+            toast.info("Login Required");
             setTimeout(() => {
               navigate("/login");
             }, 3000);
@@ -86,9 +86,11 @@ const FeaturedProducts = () => {
                 },
               }
             );
+            console.log(Response.data, "Wishlist");
+
             if (Response.data) {
               await getUserData();
-              toast.success(Response.data.msg , {position:'top-center'});
+              toast.success(Response.data.msg );
               // console.log(Response.data, "Wishlist");
             }
           }
@@ -168,7 +170,7 @@ const FeaturedProducts = () => {
           View All Products
           <i className="ri-arrow-right-line ml-2 group-hover:translate-x-1 transition-transform duration-300"></i>
         </button>
-        <ToastContainer />
+        
       </div></>
   )
 }

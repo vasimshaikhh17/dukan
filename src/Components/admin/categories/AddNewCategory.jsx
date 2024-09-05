@@ -44,6 +44,7 @@ const AddNewCategory = () => {
         }
       );
       setMsg(res.data.message || "Category created successfully");
+      getAllCat();
     } catch (error) {
       console.error(
         "Error creating category:",
@@ -153,84 +154,72 @@ const AddNewCategory = () => {
 
   return (
     <AdminLayout>
-      <div className="p-2">
-        <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-4">
-          <h2 className="text-2xl mb-4">Add New Category</h2>
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
-              <label
-                htmlFor="categoryTitle"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Title
-              </label>
-              <input
-                value={mainCat?.categoryTitle}
-                onChange={handleInputChange}
-                type="text"
-                name="categoryTitle"
-                id="categoryTitle"
-                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                required
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="categoryImage"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Image
-              </label>
-              <input
-                type="file"
-                name="categoryImage"
-                id="categoryImage"
-                onChange={handleFileChange}
-                className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:border-indigo-500"
-                required
-              />
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 text-white py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Add Category
-              </button>
-            </div>
-          </form>
-          {msg && <div className="mt-4 text-red-600">{msg}</div>}
+<div className="p-4">
+  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    {/* Add New Category */}
+    <div className="p-4 bg-white shadow-md rounded-lg border dark:bg-gray-800 dark:border-gray-700">
+      <h2 className="text-xl font-bold mb-4 dark:text-gray-200">Add New Category</h2>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="categoryTitle" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Title
+          </label>
+          <input
+            value={mainCat?.categoryTitle}
+            onChange={handleInputChange}
+            type="text"
+            name="categoryTitle"
+            id="categoryTitle"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-300"
+            required
+          />
         </div>
-      </div>
+        <div>
+          <label htmlFor="categoryImage" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Image
+          </label>
+          <input
+            type="file"
+            name="categoryImage"
+            id="categoryImage"
+            onChange={handleFileChange}
+            className="mt-1 block w-full text-sm text-gray-900 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:border-indigo-500 dark:bg-gray-700 dark:text-gray-300"
+            required
+          />
+        </div>
+        <button
+          type="submit"
+          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm text-sm font-medium hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-700"
+        >
+          Add Category
+        </button>
+      </form>
+      {msg && <div className="mt-4 text-red-600">{msg}</div>}
+    </div>
 
-      <h1 className="text-4xl">Unassigned Subcategories</h1>
-      <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+    {/* Unassigned Subcategories */}
+    <div className="p-4 bg-white shadow-md rounded-lg border dark:bg-gray-800 dark:border-gray-700">
+      <h1 className="text-2xl font-bold mb-4 dark:text-gray-200">Unassigned Subcategories</h1>
+      <table className="min-w-full table-auto divide-y divide-gray-200 dark:divide-gray-700">
+        <thead className="bg-gray-50 dark:bg-gray-700">
           <tr>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-300">
               Unassigned Subcategory
             </th>
-            <th
-              scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            >
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-300">
               Action
             </th>
           </tr>
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
           {unassignedSubCat.map((uac) => (
             <tr key={uac._id}>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-300">
                 {uac?.title}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm">
                 <button
-                  className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                  className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-green-600 dark:hover:bg-green-700"
                   onClick={() => handelSubcat(uac)}
                 >
                   Add to Category
@@ -240,67 +229,51 @@ const AddNewCategory = () => {
           ))}
         </tbody>
       </table>
+    </div>
 
-<div>
-  <h1 className="text-2xl font-bold mb-4">Categories with their Subcategories</h1>
-  <table className="min-w-full divide-y divide-gray-200">
-    <thead className="bg-gray-50">
-      <tr>
-        <th
-          scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          Image
-        </th>
-        <th
-          scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          All Categories
-        </th>
-        <th
-          scope="col"
-          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-        >
-          All Subcategories Related to Category
-        </th>
-      </tr>
-    </thead>
-    <tbody className="bg-white divide-y divide-gray-200">
-      {cat.map((allcat) => (
-        <tr key={allcat._id}>
-          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-            <img
-              src={allcat.imageUrl}
-              width={50}
-              alt=""
-              className="mx-auto"
-            />
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-            {allcat.title}
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            <ul className="flex flex-wrap gap-2">
-              {allcat.sub_category.map((subCat) => (
-                <li key={subCat._id} className="flex items-center">
-                  <span>{subCat.title}</span>
-                  <button
-                    className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 transition duration-300"
-                    onClick={() => {
-                      handelremovesubcatfromcat(allcat._id, subCat._id);
-                    }}
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+    {/* Categories with Subcategories */}
+    <div className="p-4 bg-white shadow-md rounded-lg border dark:bg-gray-800 dark:border-gray-700">
+      <h1 className="text-2xl font-bold mb-4 dark:text-gray-200">Categories with Subcategories</h1>
+      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <thead className="bg-gray-50 dark:bg-gray-700">
+          <tr>
+       
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-300">
+              All Categories
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-300">
+              Subcategories
+            </th>
+          </tr>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
+          {cat.map((allcat) => (
+            <tr key={allcat._id}>
+            
+              <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-300">
+                {allcat.title}
+              </td>
+              <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-300">
+                <ul className="flex flex-wrap gap-2">
+                  {allcat.sub_category.map((subCat) => (
+                    <li key={subCat._id} className="flex items-center">
+                      <span>{subCat.title}</span>
+                      <button
+                        className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 transition duration-300"
+                        onClick={() => handelremovesubcatfromcat(allcat._id, subCat._id)}
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 

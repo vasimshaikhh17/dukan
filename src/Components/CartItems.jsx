@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Spinner from "./admin/others/Spinner";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 import EmptyCart from "../layout/EmptyCart";
 import Layout from "../layout/Layout";
@@ -36,14 +36,18 @@ const CartItems = () => {
         setMsg("");
         setCart(response.data.products);
 
-        // console.log(response,"cart")
+        console.log(response,"main cart cart")
       } catch (error) {
         console.log(error, "err Cart");
         setMsg("Something went wrong");
         toast.error("Something went wrong");
       }
     } else {
-      navigate("/login");
+      toast.info("You are not Logged in , you are now being redirected to login page")
+      setTimeout(() => {
+          navigate('/login')
+      }, 3000);
+ 
     }
   };
 
@@ -130,7 +134,7 @@ const CartItems = () => {
     } catch (error) {
       console.log(error, "error");
       if (error?.response?.data?.message) {
-        alert("Maximum quantity exceed");
+        toast.error("Maximum quantity exceed");
       }
     }
 
@@ -141,7 +145,7 @@ const CartItems = () => {
 
   const handleDecrement = async (product) => {
     if (product.count <= 1) {
-      alert("At least one quantity is needed.");
+      toast.error("Atleast one item needed");
       return;
     }
     const currentCount = product.count - 1;
@@ -337,7 +341,6 @@ const CartItems = () => {
           </div>
         ))
       )}
-      <ToastContainer />
     </>
   );
 };

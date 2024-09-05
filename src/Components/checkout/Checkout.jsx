@@ -87,7 +87,7 @@ const Checkout = () => {
       });
       setMsg("");
       setCart(response.data);
-    } catch (error) { 
+    } catch (error) {
       console.error("Error fetching cart:");
       setMsg("Something went wrong");
     }
@@ -142,8 +142,8 @@ const Checkout = () => {
 
   useEffect(() => {
     // return () => {
-      getCart();
-      getUserData();
+    getCart();
+    getUserData();
     // };
   }, []);
 
@@ -193,8 +193,6 @@ const Checkout = () => {
       }
     }
   };
-
-  
 
   return (
     <LayoutOrder cart={cart} addressIndex={selectedAddIndex}>
@@ -347,9 +345,7 @@ const Checkout = () => {
                   <span>Order Summary</span>
                 </div>
 
-                {/* <Link to={"/cart"} className="text-blue-500 hover:text-blue-700 ">
-                Change Order
-              </Link> */}
+             
               </div>
 
               <div className="mt-4">
@@ -496,7 +492,6 @@ const Checkout = () => {
           </div>
         )}
       </div>
-      <ToastContainer />
     </LayoutOrder>
   );
 };

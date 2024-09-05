@@ -75,7 +75,7 @@ const SignUp = () => {
                   name="firstname"
                   value={formData.firstname}
                   onChange={handleChange}
-                  placeholder="Enter your first name"
+                  placeholder="First name"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                   required
                 />
@@ -90,7 +90,7 @@ const SignUp = () => {
                   name="lastname"
                   value={formData.lastname}
                   onChange={handleChange}
-                  placeholder="Enter your last name"
+                  placeholder="Last name"
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                   required
                 />
@@ -106,7 +106,7 @@ const SignUp = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="Enter your email"
+                placeholder="Email"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                 required
               />
@@ -121,7 +121,7 @@ const SignUp = () => {
                 name="mobile"
                 value={formData.mobile}
                 onChange={handleChange}
-                placeholder="Enter your mobile number"
+                placeholder="Mobile Number"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                 required
               />
@@ -136,7 +136,7 @@ const SignUp = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                placeholder="Enter your password"
+                placeholder="Password"
                 className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-indigo-500"
                 required
               />
@@ -165,7 +165,7 @@ const SignUp = () => {
             </p>
           </div>
         </div>
-        <ToastContainer />
+        
       </div>
     </>
   );

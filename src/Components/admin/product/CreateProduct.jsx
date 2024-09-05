@@ -5,6 +5,7 @@ import Spinner from "../others/Spinner";
 
 const CreateProduct = () => {
   const [subcategories, setSubcategories] = useState([]);
+  const [newBrand, setNewBrand] = useState([]);
   const [categories, setCategories] = useState([]);
   const [msg, setMsg] = useState("");
   const [productData, setProductData] = useState({
@@ -18,15 +19,30 @@ const CreateProduct = () => {
     tags: "",
     sold: "0",
     quantity: [
-      { size: "S", quantity: 0 },
-      { size: "M", quantity: 0 },
-      { size: "L", quantity: 0 },
-      { size: "XL", quantity: 0 },
-      { size: "XXL", quantity: 0 },
-      { size: "XXXL", quantity: 0 },
+      { size: "S", quantity: 0 , price: 0},
+      { size: "M", quantity: 0 , price: 0},
+      { size: "L", quantity: 0 , price: 0},
+      { size: "XL", quantity: 0 , price: 0},
+      { size: "XXL", quantity: 0 , price: 0},
+      { size: "XXXL", quantity: 0 , price: 0},
+
     ],
   });
   const [imageFiles, setImageFiles] = useState([]);
+
+  const fetchBrand = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/brand/getAll`
+      );
+      setNewBrand(response.data);
+      console.log(response.data, "sub branddss");
+
+      setMsg("");
+    } catch (error) {
+      console.error("Error brand fetch:", error);
+    }
+  };
 
   const fetchSubcategories = async () => {
     setMsg(<Spinner />);
@@ -56,6 +72,7 @@ const CreateProduct = () => {
   useEffect(() => {
     fetchSubcategories();
     fetchCategories();
+    fetchBrand();
   }, []);
 
   const handleInputChange = (e) => {
@@ -205,15 +222,21 @@ const CreateProduct = () => {
                 >
                   Brand
                 </label>
-                <input
-                  type="text"
+                <select
                   id="brand"
                   name="brand"
                   value={productData?.brand}
                   onChange={handleInputChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                   required
-                />
+                >
+                  <option value="">Select Category</option>
+                  {newBrand?.map((brandy) => (
+                    <option value={brandy._id} key={brandy._id}>
+                      {brandy.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label
@@ -326,6 +349,18 @@ const CreateProduct = () => {
                       value={q.quantity}
                       onChange={(e) =>
                         handleQuantityChange(index, "quantity", e.target.value)
+                      }
+                      className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    />
+                    <label htmlFor="price" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Price for {q.size}
+                    </label>
+                     <input
+                      type="number"
+                      name={`price-${index}`}
+                      value={q.price}
+                      onChange={(e) =>
+                        handleQuantityChange(index, "price", e.target.value)
                       }
                       className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     />

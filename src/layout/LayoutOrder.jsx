@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
-import Footer from "../common/footer/Footer"
+import Footer from "../common/footer/Footer";
 import { Link, useLocation } from "react-router-dom";
 import NavbarOrder from "../common/Navbar/NavbarOrder";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -12,14 +13,11 @@ const ScrollToTop = () => {
   }, [pathname]);
 
   return null; // Ensure that ScrollToTop component returns null or JSX
-}
+};
 
-const LayoutOrder = ({ children ,cart , addressIndex  }) => {
-
+const LayoutOrder = ({ children, cart, addressIndex }) => {
   // console.log(cart,'this ismy cart')
   const { pathname } = useLocation();
-
-
 
   // useEffect(()=>{
   //   const transformedProducts = cart.products.map(item => ({
@@ -28,7 +26,7 @@ const LayoutOrder = ({ children ,cart , addressIndex  }) => {
   //     color: item.color,
   //     size: item.size
   //   }));
-    
+
   //   setOrderData({ products: transformedProducts,paymentIntent: {
   //   "id": "pi_1GqIC8Ez4e5GAbFDS7hJI9K5",
   //   "amount": 1000,
@@ -46,7 +44,7 @@ const LayoutOrder = ({ children ,cart , addressIndex  }) => {
   //     },
   //   })
   //   console.log(Response)
-  // } 
+  // }
 
   return (
     <>
@@ -104,7 +102,7 @@ const LayoutOrder = ({ children ,cart , addressIndex  }) => {
                       Total
                     </dt>
                     <dd className="text-base font-bold text-gray-900 dark:text-white">
-                    ₹ {parseInt(cart?.cartTotal)}
+                      ₹ {parseInt(cart?.cartTotal)}
                     </dd>
                   </dl>
                 </div>
@@ -135,7 +133,19 @@ const LayoutOrder = ({ children ,cart , addressIndex  }) => {
         </div>
       </section>
 
-      <Footer/>
+      <Footer />
+      <ToastContainer
+        position="top-left"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover={true}
+        theme="colored"
+      />
     </>
   );
 };

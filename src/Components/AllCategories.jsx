@@ -3,7 +3,7 @@ import axios from "axios";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 
 import { Link } from "react-router-dom";
 import Loaders from "../common/loaders/Loaders";
@@ -98,21 +98,21 @@ const AllCategories = () => {
               key={index}
               className="slide p-2 transition-transform transform hover:scale-105"
             >
-              <Link to={`/categories/${category._id}`} className="block">
+              <Link      to={`/products/${category?.title.toLowerCase()}`}   className="block">
                 <img
                   src={category.imageUrl}
                   alt={category.title}
                   className="category-image w-full h-64 md:h-48 object-cover rounded-lg"
                 />
               </Link>
-              <div className="text-center text-lg md:text-xl text-xs mt-2">
+              <div className="text-center text-lg md:text-xl  mt-2">
                 {category.title}
               </div>
             </div>
           ))}
         </Slider>
       )}
-      <ToastContainer />
+      
     </div>
   );
 };

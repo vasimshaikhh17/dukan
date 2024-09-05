@@ -61,7 +61,7 @@ const UserDetails = () => {
       );
       if (response.data) {
         await getUserData();
-        // toast.success("User Blocked Successfully");
+        toast.success("User Blocked Successfully");
         setMsg("");
       }
     } catch (error) {
@@ -85,7 +85,7 @@ const UserDetails = () => {
       );
       if (response.data) {
         await getUserData();
-        // toast.success("User UnBlocked Successfully");
+        toast.success("User UnBlocked Successfully");
         setMsg("");
       }
     } catch (error) {
@@ -107,7 +107,7 @@ const UserDetails = () => {
         }
       );
       if (response.data) {
-        toast.success(
+        toast.info(
           "User Deleted Successfully, You are being redirected to dashboard!"
         );
         setMsg("");
@@ -346,7 +346,7 @@ const UserDetails = () => {
         </div>
       )}
 
-      <ToastContainer />
+      
     </>
   );
 };

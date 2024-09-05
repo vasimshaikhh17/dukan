@@ -2,6 +2,7 @@ import React from "react";
 import Layout from "./Layout";
 import { useNavigate } from "react-router-dom";
 import emptycart from "../assets/bagempty.png";
+import { toast,ToastContainer } from "react-toastify";
 
 const EmptyCart = () => {
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
@@ -9,7 +10,7 @@ const EmptyCart = () => {
   const navigate = useNavigate();
 
   const notLogged = ()=>{
-    alert("You are not Logged in , you arfe now being redirected to login page")
+    toast.error("You are not Logged in , you are now being redirected to login page")
     setTimeout(() => {
         navigate('/login')
     }, 3000);
@@ -50,6 +51,7 @@ const EmptyCart = () => {
           </div>
         </div>
         </div>
+      
  
     </>
   );

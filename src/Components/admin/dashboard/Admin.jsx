@@ -186,7 +186,7 @@ const Admin = () => {
           </div>
         </aside>
       </div>
-      <ToastContainer />
+      
     </>
   );
 };

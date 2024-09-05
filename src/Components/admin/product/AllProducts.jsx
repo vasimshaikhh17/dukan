@@ -23,6 +23,8 @@ const AllProducts = () => {
       setMsg("");
       console.log(response.data , "bring product ")
     } catch (error) {
+ 
+      console.log("error in all product", error);
       setMsg("Something went wrong");
     }
   };
@@ -94,11 +96,11 @@ const AllProducts = () => {
                 <thead className="bg-gray-800 text-white">
                   <tr>
                     <th className="py-3 px-4 text-start">Image</th>
-                    <th className="py-3 px-4 text-start">productid</th>
-                    <th className="py-3 px-4 text-start">Title</th>
+                    <th className="py-3 px-4 text-start">Name</th>
+                    <th className="py-3 px-4 text-start">Category</th>
+                    <th className="py-3 px-4 text-start">Sub Category</th>
                     <th className="py-3 px-4 text-start">Color</th>
                     <th className="py-3 px-4 text-start">Brand</th>
-                    <th className="py-3 px-4 text-start">Sub Category</th>
                     <th className="py-3 px-4 text-start">Price</th>
                     <th className="py-3 px-4 text-start">Actions</th>
                   </tr>
@@ -116,10 +118,11 @@ const AllProducts = () => {
                           className="w-16 h-16 object-cover rounded"
                         />
                       </td>
-                      <td className="py-3 px-4">{product?._id}</td>
-                      <td className="py-3 px-4">{product?.title}</td>
+                      <td className="py-3 px-4">{product?.title.toUpperCase()}</td>
+                      <td className="py-3 px-4">{product?.category?.title}</td>
+                      <td className="py-3 px-4">{product?.sub_category?.title}</td>
                       <td className="py-3 px-4">{product?.color}</td>
-                      {/* <td className="py-3 px-4">{product?.brand}</td> */}
+                      <td className="py-3 px-4">{product?.brand?.name || "Non Branded"}</td>
                       {/* <td className="py-3 px-4">{product?.sub_category}</td> */}
                       <td className="py-3 px-4">₹{product?.price}</td>
                       <td className="py-3 px-4 flex space-x-2">

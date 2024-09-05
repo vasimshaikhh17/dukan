@@ -30,7 +30,9 @@ const ViewAllProduct = () => {
       // const slicedProducts = result.data.slice(0, 3);
 
       setProducts(result.data);
+      console.log(result.data, " all prod result.data");
     } catch (error) {
+      console.log("error AA RAHI HAI VIEW PRODUCTS KI", error);
       setMsg("Something Went Wrong");
     }
   };
@@ -58,12 +60,12 @@ const ViewAllProduct = () => {
             },
           }
         );
-        console.log(response,'className=')
+
         if (response.data) {
           const products = response.data.products;
-          const ids = products.map(product => product._id);
+          const ids = products.map((product) => product._id);
           setWishListIds(ids);
-          setMsg("")
+          setMsg("");
         }
       }
     } catch (error) {
@@ -75,13 +77,12 @@ const ViewAllProduct = () => {
   const setToWishList = async (id) => {
     const bearerToken = JSON.parse(localStorage.getItem("userData"));
     try {
-
-      if(!bearerToken){
-        toast.error("Login Required")
-        setTimeout(()=>{
-          navigate('/login')
-        },3000)
-      }else{
+      if (!bearerToken) {
+        toast.error("Login Required");
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      } else {
         const Response = await axios.put(
           `http://localhost:5000/api/wishlist/getWishlist`,
           { prodId: id },
@@ -92,13 +93,12 @@ const ViewAllProduct = () => {
             },
           }
         );
-        if(Response.data){
-          await getUserData()
+        if (Response.data) {
+          await getUserData();
           toast.success(Response.data.msg);
           // console.log(Response.data, "Wishlist");
         }
       }
-     
     } catch (error) {
       // console.log(error);
       toast.error("Something went wronghhhhhhhhh");
@@ -110,8 +110,8 @@ const ViewAllProduct = () => {
         <div className="container mx-auto">
           {/* Header section */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">
-          <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
-            Our Products
+            <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
+              Our Products
               <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
             </h2>
           </div>
@@ -135,9 +135,13 @@ const ViewAllProduct = () => {
                         />
                       </Link>
                       <div className="absolute top-2 right-3 flex w-8 h-8 bg-white items-center justify-center rounded-full">
-                      <i
+                        <i
                           onClick={() => setToWishList(data?._id)}
-                          className={`ri-heart-fill text-xl cursor-pointer ${wishListIds?.includes(data?._id)? "text-red-500": ""}`}
+                          className={`ri-heart-fill text-xl cursor-pointer ${
+                            wishListIds?.includes(data?._id)
+                              ? "text-red-500"
+                              : ""
+                          }`}
                         ></i>
                       </div>
                     </div>

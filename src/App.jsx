@@ -37,6 +37,8 @@ import Checkout from "./Components/checkout/Checkout";
 import Test from "./Components/test/Test";
 import UpdateProduct from "./Components/admin/product/UpdateProduct";
 import OrdersDetails from "./Components/admin/orderDetail/OrdersDetails";
+import CatAndSubCat from "./Components/admin/CatAndSubCat/CatAndSubCat";
+import SubCatDynamic from "./Components/product/SubCatDynamic";
 
 const App = () => {
 
@@ -63,9 +65,10 @@ const App = () => {
           path="/category-products/:category"
           element={<ViewAllProduct />}
         />
-        {/* <Route path={"/tshirts"} element ={<Tshirts/>}/> */}
-        <Route path="/:category" element={<DynamicPage />} />
-        <Route path="/:category/:subcategory" element={<DynamicPage />} />
+       
+        {/* <Route path="/:category" element={<DynamicPage />} /> */}
+        <Route path="/products/:category" element={<DynamicPage />} />
+        <Route path="/product/:subcategory" element={<SubCatDynamic/>} />
 
         {/* <Route path="/category-products/:category/?:subcategory" element ={<ViewAllProduct/>}/> */}
 
@@ -76,6 +79,9 @@ const App = () => {
         {/* -----------------------admin routes----------------------- */}
 
         {/* <Route path="/admin" element={<Admin />} /> */}
+
+        <Route path="/catandsubcat" element={<CatAndSubCat />} />
+
         <Route path="/admin" element={<Users />} />
         <Route path="/admin/user/:id" element={<UserDetails />} />
 

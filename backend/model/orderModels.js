@@ -9,11 +9,13 @@ const orderSchema = new mongoose.Schema(
           ref: "Product",
           required: true
         },
-        count: {
+        quantity: {
           type: Number,
           required: true
         },
-        color: String,
+        color:{type: String,required:true},
+        size: {type: String,required:true},
+        price: {type: String,required:true},
       },
     ],
     paymentIntent: {},

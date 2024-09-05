@@ -6,20 +6,20 @@ import Layout from "../../layout/Layout";
 import Loaders from "../../common/loaders/Loaders";
 import Spinner from "../admin/others/Spinner";
 
-const DynamicPage = () => {
-  const { category } = useParams();
+const SubCatDynamic = () => {
+  const { subcategory } = useParams(); // Fetch subcategory from URL params
   const [products, setProducts] = useState([]);
   const [msg, setMsg] = useState("");
   const [wishListIds, setWishListIds] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch products based on the category
+  // Fetch products based on the subcategory
   const getProducts = async () => {
     setMsg(<Loaders />);
     try {
       const result = await axios.get(`http://localhost:5000/api/product/getAll`);
       const filteredProducts = result.data.filter(product => 
-        product.category.title.toLowerCase() === category.toLowerCase()
+        product.sub_category?.title.toLowerCase() === subcategory.toLowerCase()
       );
       setProducts(filteredProducts);
       setMsg("");
@@ -89,7 +89,7 @@ const DynamicPage = () => {
   useEffect(() => {
     getProducts();
     getUserData();
-  }, [category]);
+  }, [subcategory]);
 
   return (
     <Layout>
@@ -98,7 +98,7 @@ const DynamicPage = () => {
           {/* Header section */}
           <div className="text-center mb-10 max-w-[600px] mx-auto">
             <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
-    {category.charAt(0).toUpperCase() + category.slice(1)} 
+          {subcategory.charAt(0).toUpperCase() + subcategory.slice(1)} 
               <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
             </h2>
           </div>
@@ -143,7 +143,7 @@ const DynamicPage = () => {
           )}
         </div>
       </div>
-  
+     
       <div className="text-center mt-8 mb-8">
         <button
           onClick={() => navigate("/view-products")}
@@ -158,4 +158,4 @@ const DynamicPage = () => {
   );
 };
 
-export default DynamicPage;
+export default SubCatDynamic;

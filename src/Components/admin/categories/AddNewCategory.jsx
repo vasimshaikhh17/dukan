@@ -241,70 +241,68 @@ const AddNewCategory = () => {
         </tbody>
       </table>
 
-      <div>
-        <h1>Categories with their Subcategories</h1>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                Image
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                All Categories
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                All Subcategories Related to Category
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {cat.map((allcat) => (
-              <tr key={allcat._id} className="flex flex-col md:table-row">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  <img
-                    src={allcat.imageUrl}
-                    width={50}
-                    alt=""
-                    className="mx-auto md:mx-0"
-                  />
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {allcat.title}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-full md:w-96">
-                  <ul className="flex flex-col md:flex-row md:flex-wrap gap-4">
-                    {allcat?.sub_category.map((subCat) => (
-                      <li
-                        key={subCat._id}
-                        className="flex justify-between items-center"
-                      >
-                        <li>{subCat?.title}</li>
-                        <button
-                          className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 transition duration-300"
-                          onClick={() => {
-                            handelremovesubcatfromcat(allcat._id, subCat._id);
-                          }}
-                        >
-                          Remove
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+<div>
+  <h1 className="text-2xl font-bold mb-4">Categories with their Subcategories</h1>
+  <table className="min-w-full divide-y divide-gray-200">
+    <thead className="bg-gray-50">
+      <tr>
+        <th
+          scope="col"
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          Image
+        </th>
+        <th
+          scope="col"
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          All Categories
+        </th>
+        <th
+          scope="col"
+          className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+        >
+          All Subcategories Related to Category
+        </th>
+      </tr>
+    </thead>
+    <tbody className="bg-white divide-y divide-gray-200">
+      {cat.map((allcat) => (
+        <tr key={allcat._id}>
+          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            <img
+              src={allcat.imageUrl}
+              width={50}
+              alt=""
+              className="mx-auto"
+            />
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            {allcat.title}
+          </td>
+          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <ul className="flex flex-wrap gap-2">
+              {allcat.sub_category.map((subCat) => (
+                <li key={subCat._id} className="flex items-center">
+                  <span>{subCat.title}</span>
+                  <button
+                    className="ml-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700 transition duration-300"
+                    onClick={() => {
+                      handelremovesubcatfromcat(allcat._id, subCat._id);
+                    }}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
       {selectedSubCat && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 p-4">

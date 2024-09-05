@@ -35,6 +35,7 @@ const CreateProduct = () => {
         "http://localhost:5000/api/category/subcategories"
       );
       setSubcategories(res.data);
+      console.log(res.data , "subcategories");
       setMsg("");
     } catch (error) {
       setMsg("Something went wrong");
@@ -249,7 +250,7 @@ const CreateProduct = () => {
                   required
                 >
                   <option value="">Select Category</option>
-                  {categories.map((category) => (
+                  {categories?.map((category) => (
                     <option value={category._id} key={category._id}>
                       {category.title}
                     </option>
@@ -274,7 +275,7 @@ const CreateProduct = () => {
                   <option value="">Select Sub Category</option>
                   {subcategories.map((subCat) => (
                     <option value={subCat._id} key={subCat._id}>
-                      {subCat.sub_category}
+                      {subCat.title}
                     </option>
                   ))}
                 </select>

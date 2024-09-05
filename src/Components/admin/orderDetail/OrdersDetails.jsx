@@ -19,6 +19,7 @@ const OrdersDetails = () => {
         }
       );
       setOrders(res.data);
+      console.log(res.data , "order")
     } catch (error) {
       console.log(error, "errortttt");
     }
@@ -111,7 +112,8 @@ const OrdersDetails = () => {
                       <div key={prodIndex} className="w-fit mt-2 p-2 border rounded-lg bg-gray-50">
                         <h3 className="font-semibold">Product {prodIndex + 1}:</h3>
                         <p>Color: {prod?.color}</p>
-                        <p>Count: {prod?.count}</p>
+                        <p>Quantity: {prod?.quantity}</p>
+                        <p>Quantity: {prod?.size}</p>
                         <p>Brand: {prod.product?.brand}</p>
                         <p>Description: {prod.product?.description}</p>
                         <p>Price: {prod.product?.price}</p>

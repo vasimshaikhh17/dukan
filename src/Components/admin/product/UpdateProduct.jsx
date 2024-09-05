@@ -10,9 +10,11 @@ const UpdateProduct = () => {
   const { id } = useParams();
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  
+  const [newBrand, setNewBrand] = useState([]);
+
   const [catName, setCatName] = useState("");
   const [subcatName, setSubCatName] = useState("");
+  const [brandName, setBrandName] = useState("");
 
   const [msg, setMsg] = useState();
   const [updateData, setUpdateData] = useState({
@@ -36,7 +38,9 @@ const UpdateProduct = () => {
           `http://localhost:5000/api/product/get/${id}`
         );
         setUpdateData(response.data);
-        console.log(response.data, "djmnjnmwjd");
+        console.log(response.data, "updated data");
+        // setBrandName(response.data);
+        // console.log(response.data.brand , "brandy")
       } catch (error) {
         toast.error("Something went wrong");
         console.log(error, "djmnjnmwjd");
@@ -85,8 +89,10 @@ const UpdateProduct = () => {
       const res = await axios.get(`http://localhost:5000/api/category/getAll`);
       setCategories(res.data);
       if (res.data) {
-        const cat = res.data.filter((item) => item._id === updateData?.category);
-  
+        const cat = res.data.filter(
+          (item) => item._id === updateData?.category
+        );
+
         if (cat.length > 0) {
           setCatName(cat[0].title);
           console.log(cat[0].title, "cool");
@@ -101,13 +107,17 @@ const UpdateProduct = () => {
 
   const fetchSubCategories = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/category/subcategories`);
+      const response = await axios.get(
+        `http://localhost:5000/api/category/subcategories`
+      );
       setSubCategories(response.data);
       console.log(response.data, "sub");
 
       if (response.data) {
-        const subcat = response.data.filter((item) => item._id === updateData?.sub_category);
-  
+        const subcat = response.data.filter(
+          (item) => item._id === updateData?.sub_category
+        );
+
         if (subcat.length > 0) {
           setSubCatName(subcat[0].sub_category);
           console.log(subcat[0].sub_category, "cossol");
@@ -119,9 +129,24 @@ const UpdateProduct = () => {
     }
   };
 
+  const fetchBrand = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/brand/getAll`
+      );
+      setNewBrand(response.data);
+      console.log(response.data, "sub branddss");
+
+      setMsg("");
+    } catch (error) {
+      console.error("Error brand fetch:", error);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
     fetchSubCategories();
+    fetchBrand();
   }, [updateData]);
 
   return (
@@ -165,7 +190,7 @@ const UpdateProduct = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="mb-4">
+            <div className="mb-4">
               <label className="block text-gray-700">Category</label>
               <select
                 name="category"
@@ -173,12 +198,21 @@ const UpdateProduct = () => {
                 onChange={handleUpdateInputChange}
                 className="w-full px-3 py-2 border rounded"
               >
-                <option value="">{catName ? catName : "No category selected, please select"}</option>
-                {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.title}
-                  </option>
-                ))}
+                <option value="">
+                  {updateData?.category?.title
+                    ? updateData?.category?.title
+                    : "No Category Selected"}
+                </option>
+                {categories
+
+                  .filter(
+                    (category) => category.title !== updateData.category.title
+                  ) // Filter out the selected category
+                  .map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.title}
+                    </option>
+                  ))}
               </select>
             </div>
             <div className="mb-4">
@@ -189,12 +223,21 @@ const UpdateProduct = () => {
                 onChange={handleUpdateInputChange}
                 className="w-full px-3 py-2 border rounded"
               >
-                <option value="">{subcatName ? subcatName : "No subcategory selected, please select"}</option>
-                {subCategories.map((subCategory) => (
-                  <option key={subCategory._id} value={subCategory._id}>
-                    {subCategory.sub_category}
-                  </option>
-                ))}
+                <option value="">
+                  {updateData?.sub_category?.title
+                    ? updateData?.sub_category?.title
+                    : "No Category Selected"}
+                </option>
+                {subCategories
+                  .filter(
+                    (subCategory) =>
+                      subCategory.title !== updateData.sub_category.title
+                  ) // Filter out the selected category
+                  .map((subCategory) => (
+                    <option key={subCategory._id} value={subCategory._id}>
+                      {subCategory.title}
+                    </option>
+                  ))}
               </select>
             </div>
           </div>
@@ -212,13 +255,26 @@ const UpdateProduct = () => {
             </div>
             <div className="mb-4">
               <label className="block text-gray-700">Brand</label>
-              <input
-                type="text"
+              <select
                 name="brand"
                 value={updateData.brand}
                 onChange={handleUpdateInputChange}
                 className="w-full px-3 py-2 border rounded"
-              />
+              >
+                <option value="">
+                  {updateData?.brand?.name
+                    ? updateData?.brand?.name
+                    : "No Brand Selected"}
+                </option>
+                {newBrand
+                  .filter((brandy) => brandy?.name !== updateData?.brand?.name) // Filter out the selected category
+
+                  .map((brandy) => (
+                    <option key={brandy._id} value={brandy._id}>
+                      {brandy.name}
+                    </option>
+                  ))}
+              </select>
             </div>
           </div>
 

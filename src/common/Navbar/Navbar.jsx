@@ -138,7 +138,7 @@ const Navbar = () => {
               {cat.map((cats) => (
                 <div className="group relative" key={cats?._id}>
                   <Link
-                    to="/tshirts"
+                     to={`/products/${cats?.title.toLowerCase()}`} 
                     className="py-2 flex justify-between items-center md:pr-0 pr-5 group hover:text-red-600 text-[12px]"
                   >
                     {cats?.title}
@@ -156,7 +156,7 @@ const Navbar = () => {
                             className="w-10 h-10 "
                           />
                           <Link
-                            to="/tshirts/casual-shirts"
+                            to={`/product/${newsubcat?.title.toLowerCase()}`} 
                             className="hover:text-red-600 duration-100 pl-3 text-[12px]"
                           >
                             {newsubcat?.title}

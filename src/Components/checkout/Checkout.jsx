@@ -8,6 +8,7 @@ import CartItems from "../CartItems";
 
 import netbank from "../../assets/payments/netbank.jpeg";
 
+
 const Checkout = () => {
   const [showAddressForm, setShowAddressForm] = useState(false);
   const [msg, setMsg] = useState("");
@@ -154,11 +155,10 @@ const Checkout = () => {
   useEffect(() => {
     if (cart.products && cart.products.length > 0) {
       const transformedProducts = cart?.products?.map((item) => ({
-        product: item.product._id,
-
-        count: item.count,
-        color: item.color,
-        size: item.size,
+        product: item?.product?._id,
+        count: item?.count,
+        color: item?.color,
+        size: item?.size,
       }));
       setOrderData({
         products: transformedProducts,
@@ -176,7 +176,7 @@ const Checkout = () => {
   }, [cart, selectedAddIndex]);
 
   const Order = async () => {
-    const url = `http://localhost:5000/api/order/create-order`;
+    const url = `http://localhost:5000/api/order/create-order-and-pay`;
     try {
       const Response = await axios.post(url, orderData, {
         headers: {
@@ -186,6 +186,9 @@ const Checkout = () => {
       });
       console.log(Response, "payment Check");
       // alert()
+      if (Response.data.paymentUrl) {
+        window.location.href = Response.data.paymentUrl; // Redirect to PhonePe payment page
+      }
     } catch (error) {
       console.log(error, "rerer");
       if (error.response.data.error) {
@@ -195,7 +198,9 @@ const Checkout = () => {
   };
 
   return (
-    <LayoutOrder cart={cart} addressIndex={selectedAddIndex}>
+
+    <LayoutOrder cart={cart} addressIndex={selectedAddIndex} >
+
       <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
         <div className="space-y-6">
           {addressOff ? (

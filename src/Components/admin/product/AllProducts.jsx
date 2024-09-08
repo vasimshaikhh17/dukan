@@ -77,122 +77,124 @@ const AllProducts = () => {
     }
   };
 
+
+
+   const [search,setSearch] = useState("");
+
+   const searchedData = products.filter((currProduct)=> currProduct.title.toLowerCase().includes(search.toLocaleLowerCase()))
   return (
     <AdminLayout>
+
+
+      <input type="text"   placeholder="search heres" value={search}  onChange={(e)=>setSearch(e.target.value)}/>
+    <div className="container mx-auto px-4 py-8">
+
+    
       {!msg ? (
-        <div className="p-4 ">
-          <div className=" border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 ">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-2xl font-bold">All Products</h1>
-              <button
-                onClick={() => navigate(`/admin/create-product`)}
-                className="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700"
-              >
-                Create New Product
-              </button>
-            </div>
-            <div className="hidden md:block overflow-x-auto">
-              <table className="min-w-full bg-white border border-gray-200">
-                <thead className="bg-gray-800 text-white">
-                  <tr>
-                    <th className="py-3 px-4 text-start">Image</th>
-                    <th className="py-3 px-4 text-start">Name</th>
-                    <th className="py-3 px-4 text-start">Category</th>
-                    <th className="py-3 px-4 text-start">Sub Category</th>
-                    <th className="py-3 px-4 text-start">Color</th>
-                    <th className="py-3 px-4 text-start">Brand</th>
-                    <th className="py-3 px-4 text-start">Price</th>
-                    <th className="py-3 px-4 text-start">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="text-gray-700">
-                  {products.map((product) => (
-                    <tr
-                      key={product?._id}
-                      className="border-b hover:bg-gray-100"
-                    >
-                      <td className="py-3 px-4">
-                        <img
-                          src={product?.images[0] || "/placeholder.png"}
-                          alt={product?.title}
-                          className="w-16 h-16 object-cover rounded"
-                        />
-                      </td>
-                      <td className="py-3 px-4">{product?.title.toUpperCase()}</td>
-                      <td className="py-3 px-4">{product?.category?.title}</td>
-                      <td className="py-3 px-4">{product?.sub_category?.title}</td>
-                      <td className="py-3 px-4">{product?.color}</td>
-                      <td className="py-3 px-4">{product?.brand?.name || "Non Branded"}</td>
-                      {/* <td className="py-3 px-4">{product?.sub_category}</td> */}
-                      <td className="py-3 px-4">₹{product?.price}</td>
-                      <td className="py-3 px-4 flex space-x-2">
+        <div className="bg-white shadow-md rounded-lg p-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between mb-6">
+            <h1 className="text-2xl font-bold mb-4 sm:mb-0">All Products</h1>
+            <button
+              onClick={() => navigate('/admin/create-product')}
+              className="w-full sm:w-auto bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300 ease-in-out"
+            >
+              Create New Product
+            </button>
+          </div>
+          
+          <div className="hidden lg:block overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead className="bg-gray-800 text-white">
+                <tr>
+                  {['Image', 'Name', 'Category', 'Sub Category', 'Color', 'Brand', 'Price', 'Actions'].map((header) => (
+                    <th key={header} className="p-3 text-left">{header}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                {searchedData.map((product) => (
+                  <tr key={product?._id} className="border-b hover:bg-gray-50">
+                    <td className="p-3">
+                      <img
+                        src={product?.images[0] || "/api/placeholder/100/100"}
+                        alt={product?.title}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    </td>
+                    <td className="p-3">{product?.title.toUpperCase()}</td>
+                    <td className="p-3">{product?.category?.title}</td>
+                    <td className="p-3">{product?.sub_category?.title}</td>
+                    <td className="p-3">{product?.color}</td>
+                    <td className="p-3">{product?.brand?.name || "Non Branded"}</td>
+                    <td className="p-3">₹{product?.price}</td>
+                    <td className="p-3">
+                      <div className="flex space-x-2">
                         <button
-                          className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
                           onClick={() => navigate(`/admin/update-product/${product?._id}`)}
+                          className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-300 ease-in-out"
                         >
                           Update
                         </button>
                         <button
                           onClick={() => setProductDelete(product?._id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition duration-300 ease-in-out"
                         >
                           Delete
                         </button>
                         <button
-                          className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                           onClick={() => setTopProduct(product?._id)}
+                          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition duration-300 ease-in-out"
                         >
                           Add
                         </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="block md:hidden mt-6">
-              {products.map((product) => (
-                <div
-                  key={product?._id}
-                  className="bg-white shadow-md rounded-lg p-4 mb-4"
-                >
-                  <img
-                    src={product?.images[0] || "/placeholder.png"}
-                    alt={product?.title}
-                    className="w-full h-32 object-cover rounded-md mb-4"
-                  />
-                  <p className="text-xl font-bold">{product?.color}</p>
-                  {/* <p className="text-gray-700">{product?.brand}</p> */}
-                  <p className="text-gray-700">${product?.price}</p>
-                  <div className="flex space-x-2 mt-4">
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                      onClick={() => navigate(`/admin/update-product/${product?._id}`)}
-                    >
-                      Update
-                    </button>
-                    <button
-                      onClick={() => setProductDelete(product?._id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-                    >
-                      Delete
-                    </button>
-                    <div>
-                      <button
-                        onClick={() => setTopProduct(product?._id)}
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="lg:hidden space-y-6 mt-6">
+            {searchedData.map((product) => (
+              <div key={product?._id} className="bg-white shadow rounded-lg p-4">
+                <img
+                  src={product?.images[0] || "/api/placeholder/300/200"}
+                  alt={product?.title}
+                  className="w-full h-48 object-cover rounded-md mb-4"
+                />
+                <h2 className="text-xl font-bold mb-2">{product?.title.toUpperCase()}</h2>
+                <p className="text-gray-600 mb-1">Category: {product?.category?.title}</p>
+                <p className="text-gray-600 mb-1">Sub Category: {product?.sub_category?.title}</p>
+                <p className="text-gray-600 mb-1">Color: {product?.color}</p>
+                <p className="text-gray-600 mb-1">Brand: {product?.brand?.name || "Non Branded"}</p>
+                <p className="text-gray-800 font-semibold mb-4">Price: ₹{product?.price}</p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => navigate(`/admin/update-product/${product?._id}`)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300 ease-in-out"
+                  >
+                    Update
+                  </button>
+                  <button
+                    onClick={() => setProductDelete(product?._id)}
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300 ease-in-out"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setTopProduct(product?._id)}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out"
+                  >
+                    Add
+                  </button>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       ) : (
-        msg
+        <div className="text-center text-gray-700">{msg}</div>
       )}
 
       {prodDelete && (
@@ -201,17 +203,15 @@ const AllProducts = () => {
             <h2 className="text-xl font-semibold mb-4 text-center">
               Are you sure you want to delete this Product?
             </h2>
-            <div className="flex justify-end">
+            <div className="flex justify-end space-x-4">
               <button
-                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
-                onClick={() => {
-                  deleteProduct(prodDelete);
-                }}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300 ease-in-out"
+                onClick={() => deleteProduct(prodDelete)}
               >
                 Yes, Delete
               </button>
               <button
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 transition duration-300 ease-in-out"
                 onClick={() => setProductDelete(null)}
               >
                 Cancel
@@ -220,6 +220,7 @@ const AllProducts = () => {
           </div>
         </div>
       )}
+    </div>
     </AdminLayout>
   );
 };

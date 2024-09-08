@@ -23,6 +23,7 @@ const orderSchema = new mongoose.Schema(
       type: String,
       default: "Not Processed",
       enum: [
+        "Pending",
         "Not Processed",
         "Cash on Delivery",
         "Processing",
@@ -45,6 +46,57 @@ const orderSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+const tempOrderSchema = new mongoose.Schema({
+  orderId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  products: [
+    {
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true,
+      },
+      size: {
+        type: String,
+        required: true,
+      },
+      color: {
+        type: String,
+        required: true,
+      },
+      count: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
+  orderby: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  addressIndex: {
+    type: Number,
+    required: true,
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    expires: 3600, // Expire the document after 1 hour (can be adjusted as needed)
+  },
+});
+
+
+export const TempOrder = mongoose.model('TempOrder', tempOrderSchema);
+
 
 // Export the model
 export const Order = mongoose.model("Order", orderSchema);

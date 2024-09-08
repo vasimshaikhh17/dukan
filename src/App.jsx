@@ -13,9 +13,9 @@ import ResetPassword from "./Components/ResetPassword";
 // import Admin from "./Components/admin/dashboard/Admin";
 import Users from "./Components/admin/users/Users";
 import UserDetails from "./Components/admin/users/UserDetails";
-import SubCategories from "./Components/product/SubCategories";
+// import SubCategories from "./Components/product/SubCategories";
 
-import AddNewCategory from "./Components/admin/categories/AddNewCategory";
+
 import Category from "./Components/admin/categories/Category";
 import CategoryDetail from "./Components/admin/categories/CategoryDetail";
 import AllProducts from "./Components/admin/product/AllProducts";
@@ -37,8 +37,12 @@ import Checkout from "./Components/checkout/Checkout";
 import Test from "./Components/test/Test";
 import UpdateProduct from "./Components/admin/product/UpdateProduct";
 import OrdersDetails from "./Components/admin/orderDetail/OrdersDetails";
-import CatAndSubCat from "./Components/admin/CatAndSubCat/CatAndSubCat";
+// import CatAndSubCat from "./Components/admin/CatAndSubCat/CatAndSubCat";
 import SubCatDynamic from "./Components/product/SubCatDynamic";
+import Subcategory from "./Components/admin/CatAndSubCat/Subcategory";
+import CatManagement from "./Components/admin/CatAndSubCat/CatManagement";
+import CategoriesAndSubcategories from "./Components/admin/categories/CategoriesAndSubcategories";
+import BrandPage from "./Components/admin/CatAndSubCat/BrandPage";
 
 const App = () => {
 
@@ -77,16 +81,19 @@ const App = () => {
         <Route path="/how-to-order" element={<HowToOrder />} />
 
         {/* -----------------------admin routes----------------------- */}
-
+        <Route path="/categories-and-subcategories" element={<CategoriesAndSubcategories />} />
+        <Route path="/brand" element={<BrandPage />} />
         {/* <Route path="/admin" element={<Admin />} /> */}
 
-        <Route path="/catandsubcat" element={<CatAndSubCat />} />
+        <Route path="/sub-categories" element={<Subcategory />} />
+        <Route path="/categories" element={<CatManagement />} />
+
 
         <Route path="/admin" element={<Users />} />
         <Route path="/admin/user/:id" element={<UserDetails />} />
 
         <Route path="/admin/categories" element={<Category />} />
-        <Route path="/admin/add-category" element={<AddNewCategory />} />
+
         <Route path="/admin/category/:id" element={<CategoryDetail />} />
         <Route path="/admin/update-category" element={<UpdateCat />} />
         <Route path="/admin/delete-category" element={<DeleteCat />} />

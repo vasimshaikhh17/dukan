@@ -123,7 +123,7 @@ const Wishlist = () => {
                       <Link to={`/details/${wish?._id}`}>
                         <img
                           src={
-                            wish?.images[3] || "https://placehold.co/600x400"
+                            wish?.images[0] || "https://placehold.co/600x400"
                           }
                           alt=""
                           className="lg:h-[300px] lg:w-[250px] sm:h-[200px] object-cover rounded-md hover:scale-105 duration-300"

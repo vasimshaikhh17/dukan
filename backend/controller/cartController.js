@@ -67,7 +67,7 @@ const priceForSizes = productSize.price;
 
     cart = new Cart({
       orderby: userId,
-      products: [{ product: productId, count: quantity, color, size, price }],
+      products: [{ product: productId, count: quantity, color, size, price:priceForSizes }],
     });
   }
 

@@ -15,36 +15,10 @@ const ScrollToTop = () => {
   return null; // Ensure that ScrollToTop component returns null or JSX
 };
 
-const LayoutOrder = ({ children, cart, addressIndex }) => {
+const LayoutOrder = ({ children, cart, addressIndex, orderSummary }) => {
   // console.log(cart,'this ismy cart')
   const { pathname } = useLocation();
-
-  // useEffect(()=>{
-  //   const transformedProducts = cart.products.map(item => ({
-  //     product: item.product._id,
-  //     count: item.count,
-  //     color: item.color,
-  //     size: item.size
-  //   }));
-
-  //   setOrderData({ products: transformedProducts,paymentIntent: {
-  //   "id": "pi_1GqIC8Ez4e5GAbFDS7hJI9K5",
-  //   "amount": 1000,
-  //   "currency": "usd",
-  //   "status": "succeeded"
-  // },orderby: cart.orderby, addressIndex:addressIndex });
-  // },[cart])
-
-  // const Order = async()=>{
-  //   const url = `http://localhost:5000/api/order/create-order`
-  //   const Response = await axios.post(url,{orderData},{
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${bearerToken.token}`,
-  //     },
-  //   })
-  //   console.log(Response)
-  // }
+  console.log(orderSummary, "os");
 
   return (
     <>
@@ -102,7 +76,7 @@ const LayoutOrder = ({ children, cart, addressIndex }) => {
                       Total
                     </dt>
                     <dd className="text-base font-bold text-gray-900 dark:text-white">
-                      ₹ {parseInt(cart?.cartTotal)}
+                      ₹ {orderSummary?.cartTotal}
                     </dd>
                   </dl>
                 </div>
@@ -150,4 +124,4 @@ const LayoutOrder = ({ children, cart, addressIndex }) => {
   );
 };
 
-export default LayoutOrder;
+export default React.memo(LayoutOrder);

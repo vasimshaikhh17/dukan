@@ -110,9 +110,9 @@ const OrdersDetails = () => {
                 </div>
                 <div>
                   <h3 className="font-semibold">Payment Details:</h3>
-                  <p>Amount: ${selectedOrder.paymentIntent.amount}</p>
-                  <p>Currency: {selectedOrder.paymentIntent.currency}</p>
-                  <p>Status: {selectedOrder.paymentIntent.status}</p>
+                  <p>Amount: ${selectedOrder.paymentIntent?.amount}</p>
+                  <p>Currency: {selectedOrder.paymentIntent?.currency}</p>
+                  <p>Status: {selectedOrder.paymentIntent?.status}</p>
                 </div>
                 <div>
                   <h3 className="font-semibold">Products:</h3>

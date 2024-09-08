@@ -73,7 +73,7 @@ const UpdateSubCat = () => {
   }, [message]);
 
   return (
-    <AdminLayout>
+    <>
       <div className="p-2">
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-2">
           {message && <div className="mb-4 text-red-500">{message}</div>}
@@ -81,7 +81,7 @@ const UpdateSubCat = () => {
             <table className="min-w-full bg-white dark:bg-gray-800">
               <thead>
                 <tr>
-                  <th className="w-1/4 px-4 py-2">Images</th>
+              
                   <th className="w-1/4 px-4 py-2">Sub Category</th>
                   <th className="w-1/2 px-4 py-2">Actions</th>
                 </tr>
@@ -89,12 +89,12 @@ const UpdateSubCat = () => {
               <tbody>
                 {subCategories.map((subCategory, index) => (
                   <tr key={index}>
-                    <td className="border px-4 py-2"><img src={subCategory?.image} alt="" width={50} /></td>
+
                     <td className="border px-4 py-2">{subCategory?.title}</td>
-                    <td className="border px-4 py-2">
+                    <td className="border px-4 py-2 text-center">
                       <button
                         onClick={() => handleUpdateClick(subCategory)}
-                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                        className="bg-blue-500 text-white px-4 py-2 rounded text-center"
                       >
                         Update
                       </button>
@@ -134,7 +134,7 @@ const UpdateSubCat = () => {
           </div>
         </div>
       )}
-    </AdminLayout>
+    </>
   );
 };
 

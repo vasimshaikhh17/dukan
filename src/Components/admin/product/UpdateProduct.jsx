@@ -195,7 +195,7 @@ const UpdateProduct = () => {
               <label className="block text-gray-700">Category</label>
               <select
                 name="category"
-                value={updateData.category}
+                value={updateData?.category || ""}
                 onChange={handleUpdateInputChange}
                 className="w-full px-3 py-2 border rounded"
               >
@@ -207,7 +207,7 @@ const UpdateProduct = () => {
                 {categories
 
                   .filter(
-                    (category) => category.title !== updateData.category.title
+                    (category) => category?.title !== updateData?.category?.title
                   ) // Filter out the selected category
                   .map((category) => (
                     <option key={category._id} value={category._id}>
@@ -220,7 +220,7 @@ const UpdateProduct = () => {
               <label className="block text-gray-700">Sub Category</label>
               <select
                 name="sub_category"
-                value={updateData.sub_category}
+                value={updateData?.sub_category || ""}
                 onChange={handleUpdateInputChange}
                 className="w-full px-3 py-2 border rounded"
               >
@@ -232,7 +232,7 @@ const UpdateProduct = () => {
                 {subCategories
                   .filter(
                     (subCategory) =>
-                      subCategory.title !== updateData.sub_category.title
+                      subCategory?.title !== updateData.sub_category?.title
                   ) // Filter out the selected category
                   .map((subCategory) => (
                     <option key={subCategory._id} value={subCategory._id}>
@@ -258,7 +258,7 @@ const UpdateProduct = () => {
               <label className="block text-gray-700">Brand</label>
               <select
                 name="brand"
-                value={updateData.brand}
+                value={updateData?.brand || ""}
                 onChange={handleUpdateInputChange}
                 className="w-full px-3 py-2 border rounded"
               >

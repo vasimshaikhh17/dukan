@@ -50,7 +50,7 @@ const CreateSubCat = () => {
   };
 
   return (
-    <AdminLayout>
+   
       <div className="p-2">
         <div className="p-2 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-4">
           <h2 className="text-2xl mb-4">Add New Sub-Category</h2>
@@ -101,7 +101,7 @@ const CreateSubCat = () => {
           {message && <div className="mt-4 text-red-600">{message}</div>}
         </div>
       </div>
-    </AdminLayout>
+ 
   );
 };
 

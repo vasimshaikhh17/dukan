@@ -7,14 +7,16 @@ import EmptyCart from "../layout/EmptyCart";
 import Layout from "../layout/Layout";
 import LayoutOrder from "../layout/LayoutOrder";
 
-const CartItems = () => {
+
+const CartItems = ( ) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [msg, setMsg] = useState("");
+
   const [cart, setCart] = useState([]);
+  const[orderSummary, setOrderSummary] = useState({});
   const [count, setCount] = useState();
   const bearerToken = JSON.parse(localStorage.getItem("userData"));
-
   // console.log(count,'countTdjskdnmsk')
 
   // console.log(cart,'cart')
@@ -35,7 +37,7 @@ const CartItems = () => {
         });
         setMsg("");
         setCart(response.data.products);
-
+        setOrderSummary(response.data);
         console.log(response,"main cart cart")
       } catch (error) {
         console.log(error, "err Cart");
@@ -182,13 +184,14 @@ const CartItems = () => {
   return (
     <>
       {location.pathname !== "/checkout" ? (
-        <LayoutOrder>
+        <LayoutOrder orderSummary={orderSummary} >
+  
           <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
             <h2 className="text-center md:text-2xl font-bold mb-6 sm:text-sm relative mt-6">
               Your Bag
               <span className="block w-16 h-1 bg-blue-500 rounded-lg absolute left-1/2 transform -translate-x-1/2 mt-2"></span>
             </h2>
-            {cart.map((carts, id) => (
+            {cart?.map((carts, id) => (
               <div key={id} className="space-y-6">
                 <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-2 mb-3">
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -268,9 +271,11 @@ const CartItems = () => {
           </div>
         </LayoutOrder>
       ) : (
-        cart.map((carts, id) => (
+
+        cart?.map((carts, id) => (
           <div key={id} className="space-y-6">
-            <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-2 mb-3">
+            
+            <div className="rounded-lg border border-gray-200 bg-red-500 p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 md:p-2 mb-3">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between md:gap-6 md:space-y-0">
                 <div className="md:w-1/4 mb-4 md:mb-0">
                   <img
@@ -340,6 +345,7 @@ const CartItems = () => {
             </div>
           </div>
         ))
+    
       )}
     </>
   );
